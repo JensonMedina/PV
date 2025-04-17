@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Enum;
 
 namespace Domain.Entities
 {
@@ -6,8 +7,11 @@ namespace Domain.Entities
     {
         #region Identificación
         public int Id { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string Nombre { get; set; }
+        [Column(TypeName = "varchar(50)")]
         public string DireccionIP { get; set; }
+        [Column(TypeName = "varchar(50)")]
         public string DireccionMAC { get; set; }
         #endregion
 
@@ -23,6 +27,7 @@ namespace Domain.Entities
 
         #region Configuración
         public TipoImpresora? TipoImpresora { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string? ImpresoraConfigurada { get; set; }
         #endregion
 

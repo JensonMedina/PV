@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Enum;
 
 namespace Domain.Entities
@@ -7,12 +8,16 @@ namespace Domain.Entities
     {
         #region Identificación
         public int Id { get; set; }
+        [Column(TypeName = "varchar(50)")]
         public string? CodigoBarras { get; set; }
         #endregion
 
         #region Datos Generales
+        [Column(TypeName = "varchar(100)")]
         public string Nombre { get; set; }
+        [Column(TypeName = "varchar(200)")]
         public string? Descripcion { get; set; }
+        [Column(TypeName = "varchar(50)")]
         public string? Marca { get; set; }
 
         //Relación con Categoria
@@ -43,9 +48,10 @@ namespace Domain.Entities
         #endregion
 
         #region Otros
-        public bool Activo { get; set; }
+        public bool Activo { get; set; } = true;
+        [Column(TypeName = "varchar(250)")]
         public string? ImagenUrl { get; set; }
-        public DateTime FechaCreacion { get; set; }
+        public DateTime FechaAlta { get; set; } = DateTime.Now;
         #endregion
 
         //Manejar Concurrencia
