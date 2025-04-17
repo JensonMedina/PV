@@ -20,11 +20,6 @@ namespace Domain.Entities
         public Negocio Negocio { get; set; }
         #endregion
 
-        #region Relación con Usuario
-        public int? UsuarioAsignadoId { get; set; }
-        public Usuario? Usuario { get; set; }
-        #endregion
-
         #region Configuración
         public TipoImpresora? TipoImpresora { get; set; }
         [Column(TypeName = "varchar(100)")]
