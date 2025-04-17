@@ -27,8 +27,8 @@ namespace Domain.Entities
         #region Información General
         public string? LogoUrl { get; set; }
         public Rubro Rubro { get; set; }
-        public DateTime FechaAlta { get; set; }
-        public bool EstadoActivo { get; set; } // true = activo, false = inactivo o suspendido
+        public DateTime FechaAlta { get; set; } = DateTime.Now;
+        public bool Activo { get; set; } = true; // true = activo, false = inactivo o suspendido
         #endregion
 
         #region Configuración
@@ -36,7 +36,7 @@ namespace Domain.Entities
         public string? Idioma { get; set; }
         public string? TimeZone { get; set; }
         public string? FormatoFecha { get; set; } // "dd/MM/yyyy", YYYY/MM/DD, etc.
-        public bool UsaFacturacion { get; set; }
+        public bool? UsaFacturacion { get; set; }
         public TipoFacturacion TipoFacturacion { get; set; } // "Electronica", "Manual", "Externa"
         #endregion
 

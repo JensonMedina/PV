@@ -18,7 +18,7 @@ namespace Domain.Entities
 
         #region Concurrencia
         [Timestamp]
-        public byte[] RowVersion { get; set; } = null!;
+        public byte[] RowVersion { get; set; }
         #endregion
     }
 }
