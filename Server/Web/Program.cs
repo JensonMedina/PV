@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 #region Agregamos el servicio del DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("BrunoConnectionLocal"),
+        builder.Configuration.GetConnectionString("BrunoConnectionLocal"), //ConnectionLocal (para valen y mateo)
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))
     )
 );
