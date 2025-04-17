@@ -1,6 +1,10 @@
 ﻿namespace Domain.Enum
 {
-    public class TipoFacturacion
+    public enum TipoFacturacion
     {
+        Manual,
+        Electronica,
+        Externa,
+        Ticketera
     }
 }

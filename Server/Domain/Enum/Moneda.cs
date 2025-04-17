@@ -1,6 +1,17 @@
 ﻿namespace Domain.Enum
 {
-    public class Moneda
+    public enum Moneda
     {
+        ARS,
+        USD,
+        EUR,
+        BRL,
+        CLP,
+        UYU,
+        COP,
+        MXN,
+        PYG,
+        BOB,
+        VES
     }
 }

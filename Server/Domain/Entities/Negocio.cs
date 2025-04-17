@@ -34,17 +34,14 @@ namespace Domain.Entities
         public Moneda Moneda { get; set; } // Ej: "ARS", "USD", etc.
         public string Idioma { get; set; }
         public string TimeZone { get; set; }
-        public string FormatoFecha { get; set; } // "dd/MM/yyyy", etc.
+        public string FormatoFecha { get; set; } // "dd/MM/yyyy", YYYY/MM/DD, etc.
         public bool UsaFacturacion { get; set; }
         public TipoFacturacion TipoFacturacion { get; set; } // "Electronica", "Manual", "Externa"
         #endregion
 
-        #region Cuenta y Suscripción
-        public PlanSaas PlanSaas { get; set; } // "Free", "Pro", "Enterprise"
-        public DateTime? FechaExpiracionPlan { get; set; }
-        public int LimiteUsuarios { get; set; }
-        public int LimiteProductos { get; set; }
+        #region Relación PlanSaas
+        public int IdPlanSaas { get; set; }
+        public PlanSaas PlanSaas { get; set; }
         #endregion
-
     }
 }
