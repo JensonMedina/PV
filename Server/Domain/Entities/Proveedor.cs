@@ -6,9 +6,10 @@ namespace Domain.Entities
     {
         #region Identificación
         public int Id { get; set; }
-        public string RazonSocial { get; set; }
-        public string TipoDocumento { get; set; } // CUIT, CUIL, DNI, etc.
-        public string NumeroDocumento { get; set; }
+        public string Nombre { get; set; }
+        public string? RazonSocial { get; set; }
+        public string? TipoDocumento { get; set; } // CUIT, CUIL, DNI, etc.
+        public string? NumeroDocumento { get; set; }
         #endregion
 
         #region Contacto
@@ -24,7 +25,7 @@ namespace Domain.Entities
 
         #region Datos Comerciales
         public DateTime FechaAlta { get; set; } = DateTime.UtcNow;
-        public int RubroId { get; set; }
+        public int? RubroId { get; set; }
         public Rubro? Rubro { get; set; } // Ej: Alimentos, Limpieza, Tecnología...
         public decimal? LimiteCredito { get; set; }
         public int? DiasPlazoPago { get; set; } // Ej: 15 días para pagar

@@ -8,8 +8,8 @@ namespace Domain.Entities
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
-        public string TipoDocumento { get; set; }
-        public string NumeroDocumento { get; set; }
+        public string? TipoDocumento { get; set; }
+        public string? NumeroDocumento { get; set; }
         public bool EsEmpresa { get; set; } = false;
         #endregion
 
@@ -23,7 +23,7 @@ namespace Domain.Entities
         #endregion
 
         #region Facturación
-        public bool EsConsumidorFinal { get; set; }
+        public bool EsConsumidorFinal { get; set; } = true;
         #endregion
 
         #region Datos Comerciales

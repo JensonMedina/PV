@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.Enum;
 
 namespace Domain.Entities
 {
@@ -10,8 +11,8 @@ namespace Domain.Entities
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Email { get; set; }
-        public string Telefono { get; set; } 
-        public string Dni { get; set; } 
+        public string? Telefono { get; set; } 
+        public string? Dni { get; set; } 
         #endregion
 
         #region Rol o tipo de usuario
@@ -19,7 +20,7 @@ namespace Domain.Entities
         #endregion
 
         #region Estado
-        public bool Activo { get; set; }
+        public bool Activo { get; set; } = true;
         public DateTime FechaAlta { get; set; } = DateTime.UtcNow;
         #endregion
 
@@ -29,12 +30,14 @@ namespace Domain.Entities
         #endregion
 
         #region Configuraciones Personales
-        public string? AvatarUrl { get; set; } //opcional
+        public string? AvatarUrl { get; set; } 
         #endregion
 
-        #region Datos para audicion
-        public DateTime UltimoLogin { get; set; }
-        public string IpUltimoLogin { get; set; }
+        #region Auditoría y Concurrencia
+        public DateTime? UltimoLogin { get; set; }
+        public string? IpUltimoLogin { get; set; }
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
         #endregion
     }
 }

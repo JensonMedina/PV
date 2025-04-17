@@ -25,7 +25,7 @@ namespace Domain.Entities
 
         //Empleado
         public int EmpleadoId { get; set; }
-        public Usuario Empleado { get; set; }
+        public Usuario Empleado { get; set; } //Usuario de tipo Empleado logueado al momento de registrar la venta
 
         //Cliente
         public int? ClienteId { get; set; }
@@ -34,9 +34,9 @@ namespace Domain.Entities
         #endregion
 
         #region Datos Comerciales
-        public DateTime Fecha { get; set; }
-        public decimal Subtotal { get; set; }
-        public decimal DescuentoTotal { get; set; }
+        public DateTime FechaAlta { get; set; } = DateTime.Now;
+        public decimal? Subtotal { get; set; }
+        public decimal? DescuentoTotal { get; set; }
         public decimal? Impuestos { get; set; }
         public decimal Total { get; set; }
         public FormaPago FormaPago { get; set; }

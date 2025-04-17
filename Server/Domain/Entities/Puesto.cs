@@ -22,14 +22,14 @@ namespace Domain.Entities
         #endregion
 
         #region Configuración
-        public TipoImpresora TipoImpresora { get; set; } // Ej: "Térmica", "Fiscal"
-        public string ImpresoraConfigurada { get; set; }
+        public TipoImpresora? TipoImpresora { get; set; }
+        public string? ImpresoraConfigurada { get; set; }
         #endregion
 
         #region Auditoría
-        public DateTime FechaAlta { get; set; }
+        public DateTime FechaAlta { get; set; } = DateTime.Now;
         public DateTime? UltimaConexion { get; set; }
-        public bool Activo { get; set; }
+        public bool Activo { get; set; } = true;
         #endregion
     }
 

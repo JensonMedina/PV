@@ -7,13 +7,13 @@ namespace Domain.Entities
     {
         #region Identificación
         public int Id { get; set; }
-        public string CodigoBarras { get; set; }
+        public string? CodigoBarras { get; set; }
         #endregion
 
         #region Datos Generales
         public string Nombre { get; set; }
-        public string Descripcion { get; set; }
-        public string Marca { get; set; }
+        public string? Descripcion { get; set; }
+        public string? Marca { get; set; }
 
         //Relación con Categoria
         public int? CategoriaId { get; set; }
@@ -29,10 +29,10 @@ namespace Domain.Entities
 
         #region Precios
         public decimal PrecioVenta { get; set; }
-        public decimal PrecioCosto { get; set; }
+        public decimal? PrecioCosto { get; set; }
         public decimal? Margen { get; set; }
-        public Moneda Moneda { get; set; }
-        public bool IncluyeImpuestos { get; set; }
+        public Moneda Moneda { get; set; } = Moneda.ARS;
+        public bool? IncluyeImpuestos { get; set; }
         #endregion
 
         #region Stock
@@ -44,7 +44,7 @@ namespace Domain.Entities
 
         #region Otros
         public bool Activo { get; set; }
-        public string ImagenUrl { get; set; }
+        public string? ImagenUrl { get; set; }
         public DateTime FechaCreacion { get; set; }
         #endregion
 

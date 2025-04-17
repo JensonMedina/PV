@@ -7,12 +7,12 @@ namespace Domain.Entities
     {
         #region Identificación
         public int Id { get; set; }
-        public DateTime Fecha { get; set; } = DateTime.UtcNow;
+        public DateTime FechaAlta { get; set; } = DateTime.UtcNow;
         #endregion
 
         #region Valores monetarios
         public decimal Subtotal { get; set; }
-        public decimal Descuento { get; set; }
+        public decimal? Descuento { get; set; }
         public decimal Total { get; set; }
         #endregion
 
@@ -35,8 +35,8 @@ namespace Domain.Entities
         #endregion
 
         #region Anulación
-        public int ComprobanteAnulacionId { get; set; }
-        public Comprobante ComprobanteAnulacion { get; set; }
+        public int? ComprobanteAnulacionId { get; set; }
+        public Comprobante? ComprobanteAnulacion { get; set; }
         #endregion
 
         #region Auditoría y control

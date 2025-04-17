@@ -6,8 +6,8 @@ namespace Domain.Entities
     {
         #region Identificación
         public int Id { get; set; }
-        public string MotivoAnulacion { get; set; }
-        public DateTime FechaAnulacion { get; set; }
+        public string? MotivoAnulacion { get; set; } //Si es un comprobante de anulación
+        public DateTime FechaAlta { get; set; } = DateTime.Now;
         public TipoComprobante TipoComprobante { get; set; }
         #endregion
     }
