@@ -1,0 +1,39 @@
+﻿namespace Domain.Enum
+{
+    public enum TipoUnidadMedida
+    {
+        Unidad,
+        Par,
+        Docena,
+        Gramo,
+        Kilogramo,
+        Miligramo,
+        Tonelada,
+        Mililitro,
+        Litro,
+        MetroCubico,
+        CentimetroCubico,
+        Milimetro,
+        Centimetro,
+        Metro,
+        Kilometro,
+        MetroCuadrado,
+        CentimetroCuadrado,
+        Minuto,
+        Hora,
+        Dia,
+        Semana,
+        Mes,
+        Caja,
+        Paquete,
+        Blister,
+        Frasco,
+        Rollo,
+        Tira,
+        Servicio,
+        Megabyte,
+        Gigabyte,
+        Terabyte
+    }
+
+}
