@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.Enum;
 
 namespace Domain.Entities
 {
@@ -6,11 +7,12 @@ namespace Domain.Entities
     {
         
         public int Id { get; set; }
+        public bool AfectaCaja { get; set; } = true;
 
         #region Relaciones
 
         //Comprobante
-        public int IdComprobante { get; set; }
+        public int ComprobanteId { get; set; }
         public Comprobante Comprobante { get; set; }
 
         //Negocio
@@ -40,10 +42,18 @@ namespace Domain.Entities
         public FormaPago FormaPago { get; set; }
         #endregion
 
+        #region Relación con VentaDetalle
+        public List<VentaDetalle> Detalles { get; set; }
+        #endregion
+
         #region Anulacion
         public int? ComprobanteAnulacionId { get; set; }
         public Comprobante? ComprobanteAnulacion { get; set; }
         #endregion
+
+        //Manejar Concurrencia
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 
 }

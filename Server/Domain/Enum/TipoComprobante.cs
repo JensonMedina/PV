@@ -3,6 +3,9 @@
     public enum TipoComprobante
     {
         ComprobanteVenta,
-        ComprobanteAnulacionVenta
+        ComprobanteAnulacionVenta,
+        ConsumoInterno,
+        ComprobanteCompra,
+        ComprobanteAnulacionCompra
     }
 }

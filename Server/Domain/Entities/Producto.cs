@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.Enum;
 
 namespace Domain.Entities
 {
@@ -46,6 +47,10 @@ namespace Domain.Entities
         public string ImagenUrl { get; set; }
         public DateTime FechaCreacion { get; set; }
         #endregion
+
+        //Manejar Concurrencia
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 
 }

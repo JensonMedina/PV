@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.Enum;
 
 namespace Domain.Entities
 {
@@ -43,5 +44,8 @@ namespace Domain.Entities
         public int IdPlanSaas { get; set; }
         public PlanSaas PlanSaas { get; set; }
         #endregion
+        //Manejar Concurrencia
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }
