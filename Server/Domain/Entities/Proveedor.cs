@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Domain.Enum;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
@@ -6,20 +8,29 @@ namespace Domain.Entities
     {
         #region Identificación
         public int Id { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string Nombre { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string? RazonSocial { get; set; }
-        public string? TipoDocumento { get; set; } // CUIT, CUIL, DNI, etc.
+        public TipoDocumento? TipoDocumento { get; set; }
+        [Column(TypeName = "varchar(20)")]
         public string? NumeroDocumento { get; set; }
         #endregion
 
         #region Contacto
+        [Column(TypeName = "varchar(20)")]
         public string? Telefono { get; set; }
+        [Column(TypeName = "varchar(255)")]
         public string? Email { get; set; }
+        [Column(TypeName = "varchar(150)")]
         public string? Direccion { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string? Ciudad { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string? Provincia { get; set; }
+        [Column(TypeName = "varchar(10)")]
         public string? CodigoPostal { get; set; }
-        public string? PersonaContacto { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string? Web { get; set; }
         #endregion
 
@@ -29,6 +40,7 @@ namespace Domain.Entities
         public Rubro? Rubro { get; set; } // Ej: Alimentos, Limpieza, Tecnología...
         public decimal? LimiteCredito { get; set; }
         public int? DiasPlazoPago { get; set; } // Ej: 15 días para pagar
+        [Column(TypeName = "varchar(500)")]
         public string? Observaciones { get; set; }
         #endregion
 

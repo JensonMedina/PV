@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Enum;
 
 namespace Domain.Entities
@@ -42,6 +43,7 @@ namespace Domain.Entities
         #region Auditoría y control
         [Timestamp]
         public byte[] RowVersion { get; set; }
+        [Column(TypeName = "varchar(500)")]
         public string? Observaciones { get; set; }
         #endregion
     }

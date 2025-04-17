@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Enum;
 
 namespace Domain.Entities
 {
@@ -6,11 +7,13 @@ namespace Domain.Entities
     {
         #region Identificación
         public int Id { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string Nombre { get; set; }
+        [Column(TypeName = "varchar(200)")]
         public string? Descripcion { get; set; }
         public double Costo { get; set; }
         public Periodo Periodo { get; set; }
-        public bool Activo { get; set; }
+        public bool Activo { get; set; } = true;
         #endregion
 
         #region Limites
