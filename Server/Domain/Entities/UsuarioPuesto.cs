@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class UsuariosPuestos
+    public class UsuarioPuesto
     {
         [Key, Column(Order = 0)]
         public int UsuarioId { get; set; }
