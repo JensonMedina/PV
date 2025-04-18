@@ -15,8 +15,8 @@ builder.Services.AddScoped<ILoggerApp, Logger>();
 #region Agregamos el servicio del DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("ValentinConnectionLocal"), //ConnectionLocal (para valen y mateo)
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ValentinConnectionLocal"))
+        builder.Configuration.GetConnectionString("JensonConnectionLocal"), 
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
     )
 );
 #endregion
