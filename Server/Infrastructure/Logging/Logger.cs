@@ -4,43 +4,68 @@ using System.IO;
 
 namespace Infrastructure.Logging
 {
-    public class Logger : ILogger
+    public class Logger : ILoggerApp
     {
-        #region Constructor Crea carpeta logs si no existe
-        private readonly string logFilePath = "Logs/logs.txt";
+        private static readonly object _lock = new object();
+        private readonly string logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+        private const long MaxFileSize = 5 * 1024 * 1024; // 5 MB
 
         public Logger()
         {
-            var folder = Path.GetDirectoryName(logFilePath);
-            if (!Directory.Exists(folder))
-                Directory.CreateDirectory(folder);
+            if (!Directory.Exists(logDirectory))
+            {
+                Directory.CreateDirectory(logDirectory);
+            }
         }
-        #endregion
-        #region Metodos para Info y Error
+
+        private string GetLogFilePath()
+        {
+            string date = DateTime.Now.ToString("yyyy-MM-dd");
+            string baseFileName = Path.Combine(logDirectory, $"logs-{date}");
+            int count = 0;
+            string logFilePath = $"{baseFileName}-{count}.txt";
+
+            while (File.Exists(logFilePath) && new FileInfo(logFilePath).Length >= MaxFileSize)
+            {
+                count++;
+                logFilePath = $"{baseFileName}-{count}.txt";
+            }
+
+            return logFilePath;
+        }
+
         public void LogInfo(string context, string message, string? additionalData = null)
         {
-            Log("INFO", context, message, additionalData);
+            WriteLog("INFO", context, message, additionalData);
         }
 
         public void LogError(string context, string message, string? additionalData = null)
         {
-            Log("ERROR", context, message, additionalData);
+            WriteLog("ERROR", context, message, additionalData);
         }
-        #endregion
 
-        #region Creacion o guardado del Log
-        private void Log(string level, string context, string message, string? additionalData)
+        private void WriteLog(string level, string context, string message, string? additionalData)
         {
-            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            string logLine = $"[{timestamp}] [{level}] {context}: {message}";
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string logLine = $"[{timestamp}] [Th - {Environment.CurrentManagedThreadId}] [{level}] {context}: {message}";
 
             if (!string.IsNullOrWhiteSpace(additionalData))
             {
                 logLine += $" [{additionalData}]";
             }
 
-            File.AppendAllText(logFilePath, logLine + Environment.NewLine);
+            lock (_lock)
+            {
+                try
+                {
+                    string logFilePath = GetLogFilePath();
+                    File.AppendAllText(logFilePath, logLine + Environment.NewLine);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al escribir en el log: {ex.Message}");
+                }
+            }
         }
-        #endregion
     }
 }
