@@ -33,6 +33,11 @@ namespace Domain.Entities
         public string? CodigoPostal { get; set; }
         #endregion
 
+        #region Relación con Negocio
+        public int NegocioId { get; set; }
+        public Negocio Negocio { get; set; }
+        #endregion
+
         #region Facturación
         public bool EsConsumidorFinal { get; set; } = true;
         #endregion

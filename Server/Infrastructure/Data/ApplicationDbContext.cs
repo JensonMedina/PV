@@ -1,8 +1,6 @@
 ﻿using Domain.Entities;
-using Infrastructure.Seed;
 using Infrastructure.Seeds;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace Infrastructure.Data
 {

@@ -10,16 +10,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-<<<<<<< HEAD
-=======
+
 builder.Services.AddScoped<ILoggerApp, Logger>();
->>>>>>> PDVS-4-Creacion_logger
 
 #region Agregamos el servicio del DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("MateoConnectionLocal"), //ConnectionLocal (para valen y mateo)
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MateoConnectionLocal"))
+        builder.Configuration.GetConnectionString("JensonConnectionLocal"), 
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
     )
 );
 #endregion
