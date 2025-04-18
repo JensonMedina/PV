@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -15,6 +16,8 @@ namespace Infrastructure.Data
         {
             modelBuilder.Entity<UsuarioPuesto>()
                 .HasKey(up => new { up.UsuarioId, up.PuestoId });
+            //llamamos ala funcion que se encarga de crear los datos iniciales
+            modelBuilder.SeedRubros();
         }
 
         #region Definicion de DbSets
