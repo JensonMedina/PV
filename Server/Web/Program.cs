@@ -7,6 +7,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+#region Agregamos el servicio del DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("JensonConnectionLocal"), //ConnectionLocal (para valen y mateo)
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
+    )
+);
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
