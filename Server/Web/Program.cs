@@ -1,3 +1,7 @@
+using Application.Common.Interfaces;
+using Infrastructure.Data;
+using Infrastructure.Logging;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ILoggerApp, Logger>();
+
+#region Agregamos el servicio del DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("ValentinConnectionLocal"), //ConnectionLocal (para valen y mateo)
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ValentinConnectionLocal"))
+    )
+);
+#endregion
 
 var app = builder.Build();
 
