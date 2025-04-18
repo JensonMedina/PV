@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250417212218_SeedUnidadesMedidas")]
-    partial class SeedUnidadesMedidas
+    [Migration("20250418171954_MigracionConUnidadesMedidasSeed")]
+    partial class MigracionConUnidadesMedidasSeed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Seeds
 {
@@ -25,7 +20,7 @@ namespace Infrastructure.Seeds
                new UnidadMedida { Id = 8, Nombre = "Mililitro", Abreviatura = "ml", TipoUnidadMedida = TipoUnidadMedida.Mililitro, Activo = true },
                new UnidadMedida { Id = 9, Nombre = "Litro", Abreviatura = "l", TipoUnidadMedida = TipoUnidadMedida.Litro, Activo = true },
                new UnidadMedida { Id = 10, Nombre = "Metro Cúbico", Abreviatura = "m³", TipoUnidadMedida = TipoUnidadMedida.MetroCubico, Activo = true },
-               new UnidadMedida { Id = 11, Nombre = "Centímetro Cúbico", Abreviatura = "cm³", TipoUnidadMedida = TipoUnidadMedida.CentimetroCubico, Activo= true },
+               new UnidadMedida { Id = 11, Nombre = "Centímetro Cúbico", Abreviatura = "cm³", TipoUnidadMedida = TipoUnidadMedida.CentimetroCubico, Activo = true },
                new UnidadMedida { Id = 12, Nombre = "Milímetro", Abreviatura = "mm", TipoUnidadMedida = TipoUnidadMedida.Milimetro, Activo = true },
                new UnidadMedida { Id = 13, Nombre = "Centímetro", Abreviatura = "cm", TipoUnidadMedida = TipoUnidadMedida.Centimetro, Activo = true },
                new UnidadMedida { Id = 14, Nombre = "Metro", Abreviatura = "m", TipoUnidadMedida = TipoUnidadMedida.Metro, Activo = true },
@@ -48,8 +43,6 @@ namespace Infrastructure.Seeds
                new UnidadMedida { Id = 31, Nombre = "Gigabyte", Abreviatura = "GB", TipoUnidadMedida = TipoUnidadMedida.Gigabyte, Activo = true },
                new UnidadMedida { Id = 32, Nombre = "Terabyte", Abreviatura = "TB", TipoUnidadMedida = TipoUnidadMedida.Terabyte, Activo = true }
            );
-
-
         }
     }
 }
