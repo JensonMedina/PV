@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Seeds;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -15,6 +16,12 @@ namespace Infrastructure.Data
         {
             modelBuilder.Entity<UsuarioPuesto>()
                 .HasKey(up => new { up.UsuarioId, up.PuestoId });
+
+            #region Agregamos los DataSeeds
+            base.OnModelCreating(modelBuilder);
+            //llamo ala funcion con  los datos de la clase UnidadesMedidasSeed
+            modelBuilder.SeedUnidadesMedidas();
+            #endregion
         }
 
         #region Definicion de DbSets
