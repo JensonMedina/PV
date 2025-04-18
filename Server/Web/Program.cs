@@ -1,4 +1,6 @@
+using Application.Common.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Logging;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+<<<<<<< HEAD
+=======
+builder.Services.AddScoped<ILoggerApp, Logger>();
+>>>>>>> PDVS-4-Creacion_logger
 
 #region Agregamos el servicio del DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
