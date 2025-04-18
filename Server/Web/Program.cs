@@ -12,8 +12,8 @@ builder.Services.AddSwaggerGen();
 #region Agregamos el servicio del DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("JensonConnectionLocal"), //ConnectionLocal (para valen y mateo)
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
+        builder.Configuration.GetConnectionString("MateoConnectionLocal"), //ConnectionLocal (para valen y mateo)
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MateoConnectionLocal"))
     )
 );
 #endregion
@@ -33,4 +33,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+app.Run();   

@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Seeds;
 
 
 namespace Infrastructure.Data
@@ -13,8 +14,13 @@ namespace Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<UsuarioPuesto>()
                 .HasKey(up => new { up.UsuarioId, up.PuestoId });
+
+            base.OnModelCreating(modelBuilder);
+            //llamo ala funcion con  los datos de la clase UnidadesMedidasSeed
+            modelBuilder.SeedUnidadesMedidas();
         }
 
         #region Definicion de DbSets
