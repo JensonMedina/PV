@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418213133_MigracionRelacionClienteNegocio")]
+    partial class MigracionRelacionClienteNegocio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -602,7 +605,7 @@ namespace Infrastructure.Migrations
                             Id = 1,
                             Activo = true,
                             Descripcion = "Productos comestibles, bebidas alcohólicas y no alcohólicas",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4715),
+                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(47),
                             Nombre = "Alimentos y Bebidas"
                         },
                         new
@@ -610,7 +613,7 @@ namespace Infrastructure.Migrations
                             Id = 2,
                             Activo = true,
                             Descripcion = "Artículos eléctricos para el hogar",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4717),
+                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(61),
                             Nombre = "Electrodomésticos"
                         },
                         new
@@ -618,7 +621,7 @@ namespace Infrastructure.Migrations
                             Id = 3,
                             Activo = true,
                             Descripcion = "Ropa y accesorios de moda",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4718),
+                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(63),
                             Nombre = "Indumentaria"
                         },
                         new
@@ -626,7 +629,7 @@ namespace Infrastructure.Migrations
                             Id = 4,
                             Activo = true,
                             Descripcion = "Productos de higiene y limpieza",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4720),
+                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(64),
                             Nombre = "Limpieza"
                         },
                         new
@@ -634,7 +637,7 @@ namespace Infrastructure.Migrations
                             Id = 5,
                             Activo = true,
                             Descripcion = "Herramientas y artículos de construcción",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4722),
+                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(65),
                             Nombre = "Ferretería"
                         },
                         new
@@ -642,7 +645,7 @@ namespace Infrastructure.Migrations
                             Id = 6,
                             Activo = true,
                             Descripcion = "Equipos informáticos, celulares, accesorios",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4723),
+                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(67),
                             Nombre = "Tecnología"
                         });
                 });
