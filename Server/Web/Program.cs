@@ -8,12 +8,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<Application.Common.Interfaces.ILogger, Infrastructure.Logging.Logger>();
 
 #region Agregamos el servicio del DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("JensonConnectionLocal"), //ConnectionLocal (para valen y mateo)
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
+        builder.Configuration.GetConnectionString("ValentinConnectionLocal"), //ConnectionLocal (para valen y mateo)
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ValentinConnectionLocal"))
     )
 );
 #endregion
