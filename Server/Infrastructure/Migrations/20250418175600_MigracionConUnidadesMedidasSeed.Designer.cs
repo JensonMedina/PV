@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418175600_MigracionConUnidadesMedidasSeed")]
+    partial class MigracionConUnidadesMedidasSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -590,56 +593,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Rubros");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Activo = true,
-                            Descripcion = "Productos comestibles, bebidas alcohólicas y no alcohólicas",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4715),
-                            Nombre = "Alimentos y Bebidas"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Activo = true,
-                            Descripcion = "Artículos eléctricos para el hogar",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4717),
-                            Nombre = "Electrodomésticos"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Activo = true,
-                            Descripcion = "Ropa y accesorios de moda",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4718),
-                            Nombre = "Indumentaria"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Activo = true,
-                            Descripcion = "Productos de higiene y limpieza",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4720),
-                            Nombre = "Limpieza"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Activo = true,
-                            Descripcion = "Herramientas y artículos de construcción",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4722),
-                            Nombre = "Ferretería"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Activo = true,
-                            Descripcion = "Equipos informáticos, celulares, accesorios",
-                            FechaAlta = new DateTime(2025, 4, 18, 15, 38, 8, 64, DateTimeKind.Local).AddTicks(4723),
-                            Nombre = "Tecnología"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.UnidadMedida", b =>
