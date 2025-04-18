@@ -16,11 +16,11 @@ namespace Infrastructure.Data
         {
             modelBuilder.Entity<UsuarioPuesto>()
                 .HasKey(up => new { up.UsuarioId, up.PuestoId });
-
             #region Agregamos los DataSeeds
             base.OnModelCreating(modelBuilder);
             //llamo ala funcion con  los datos de la clase UnidadesMedidasSeed
             modelBuilder.SeedUnidadesMedidas();
+            modelBuilder.SeedRubros();
             #endregion
         }
 
