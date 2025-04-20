@@ -1,4 +1,5 @@
 using Application.Common.Interfaces;
+using Application.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Logging;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoggerApp, Logger>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 #region Agregamos el servicio del DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("JensonConnectionLocal"), 
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
+        builder.Configuration.GetConnectionString("ValentinConnectionLocal"), 
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ValentinConnectionLocal"))
     )
 );
 #endregion
