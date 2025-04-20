@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
-        public interface IUnitOfWork : IDisposable
-        {
-            Task<int> CompleteAsync(); // Guarda todos los cambios en una transacción
-        }
-
+        Task<int> CompleteAsync(); // Guarda todos los cambios en una transacción
     }
 }
