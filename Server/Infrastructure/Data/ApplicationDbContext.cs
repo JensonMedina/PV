@@ -41,6 +41,9 @@ namespace Infrastructure.Data
         public DbSet<UsuarioPuesto> UsuariosPuestos { get; set; }
         public DbSet<Venta> Ventas { get; set; }
         public DbSet<VentaDetalle> VentasDetalles { get; set; }
+        public DbSet<ProductoNegocio> ProductosNegocios { get; set; }
+        public DbSet<HistoricoPrecio> HistoricosPrecios { get; set; }
+        public DbSet<HistoricoStock> HistoricoStocks { get; set; }
         #endregion
     }
 }

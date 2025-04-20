@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class HisoricoPrecio
+    public class HistoricoPrecio
     {
         public int Id { get; set; }
         public int ProductoNegocioId { get; set; }
