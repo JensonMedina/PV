@@ -18,8 +18,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 #region Agregamos el servicio del DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("ValentinConnectionLocal"), 
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ValentinConnectionLocal"))
+        builder.Configuration.GetConnectionString("BrunoConnectionLocal"), 
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))
+        
     )
 );
 #endregion
