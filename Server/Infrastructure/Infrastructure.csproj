@@ -10,7 +10,6 @@
     <Folder Include="Migrations\" />
     <Folder Include="Logging\" />
     <Folder Include="Services\" />
-	<Folder Include="Data\" />
 
   </ItemGroup>
 
