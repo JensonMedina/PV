@@ -5,20 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.Models.Response
 {
-    public class ProveedorDto
+    public class NegocioResponse
     {
+        public int Id { get; set; }
         public string Nombre { get; set; }
-        public string? RazonSocial { get; set; }
+        public string? Descripcion { get; set; }
         public TipoDocumento? TipoDocumento { get; set; }
         public string? NumeroDocumento { get; set; }
         public string? Email { get; set; }
         public string? Telefono { get; set; }
-        public RubroDto Rubro { get; set; }
-        public decimal? LimiteCredito { get; set; }
-        public int? DiasPlazoPago { get; set; }
-        public string? Observaciones { get; set; }
-        public bool Activo { get; set; }
+        public Moneda Moneda { get; set; }
+        public bool? UsaFacturacion { get; set; }
+        public TipoFacturacion TipoFacturacion { get; set; }
+        public int IdPlanSaas { get; set; }
     }
 }

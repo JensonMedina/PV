@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.Models.Response
 {
-    public class UnidadMedidaDto
+    public class UnidadMedidaResponse
     {
+        public int Id { get; set; }
         public string Nombre { get; set; }
         public string Abreviatura { get; set; }
         public TipoUnidadMedida TipoUnidadMedida { get; set; }

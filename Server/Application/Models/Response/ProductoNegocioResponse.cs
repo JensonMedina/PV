@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.Models.Response
 {
-    public class ProductoNegocioDto
+    public class ProductoNegocioResponse
     {
+        public int Id { get; set; }
         public int NegocioId { get; set; }
         public int ProductoId { get; set; }
         public decimal PrecioVenta { get; set; }

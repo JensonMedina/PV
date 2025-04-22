@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using Application.Models.Request;
+using Application.Models.Response;
+using AutoMapper;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,42 +15,45 @@ namespace Application.Mappings
         public DomainToDtoProfile()
         
         {
-            //cada entidad se se pasa a DTOs y viseversa
-            // Catálogos
-            CreateMap<Domain.Entities.Rubro, DTOs.RubroDto>().ReverseMap();
-            CreateMap<Domain.Entities.Categoria, DTOs.CategoriaDto>().ReverseMap();
-            CreateMap<Domain.Entities.UnidadMedida, DTOs.UnidadMedidaDto>().ReverseMap();
+            // ==== Request -> Domain ====
+            CreateMap<RubroRequest, Rubro>();
+            CreateMap<CategoriaRequest, Categoria>();
+            CreateMap<UnidadMedidaRequest, UnidadMedida>();
+            CreateMap<ProductoRequest, Producto>();
+            CreateMap<ProductoNegocioRequest, ProductoNegocio>();
+            CreateMap<VentaDetalleRequest, VentaDetalle>();
+            CreateMap<VentaRequest, Venta>();
+            CreateMap<CompraDetalleRequest, CompraDetalle>();
+            CreateMap<CompraRequest, Compra>();
+            CreateMap<ClienteRequest, Cliente>();
+            CreateMap<ComprobanteRequest, Comprobante>();
+            CreateMap<HistoricoPrecioRequest, HistoricoPrecio>();
+            CreateMap<HistoricoStockRequest, HistoricoStock>();
+            CreateMap<NegocioRequest, Negocio>();
+            CreateMap<PlanSaasRequest, PlanSaas>();
+            CreateMap<ProveedorRequest, Proveedor>();
+            CreateMap<PuestoRequest, Puesto>();
+            CreateMap<UsuarioRequest, Usuario>();
 
-            // Productos e inventario
-            CreateMap<Domain.Entities.Producto, DTOs.ProductoDto>().ReverseMap();
-            CreateMap<Domain.Entities.ProductoNegocio, DTOs.ProductoNegocioDto>().ReverseMap();
-
-            // Transacciones
-            CreateMap<Domain.Entities.Venta, DTOs.VentaDto>().ReverseMap();
-            CreateMap<Domain.Entities.VentaDetalle, DTOs.VentaDetalleDto>().ReverseMap();
-            CreateMap<Domain.Entities.Compra, DTOs.CompraDto>().ReverseMap();
-            CreateMap<Domain.Entities.CompraDetalle, DTOs.CompraDetalleDto>().ReverseMap();
-            CreateMap<Domain.Entities.Comprobante, DTOs.ComprobanteDto>().ReverseMap();
-
-            // Clientes y proveedores
-            CreateMap<Domain.Entities.Cliente, DTOs.ClienteDto>().ReverseMap();
-            CreateMap<Domain.Entities.Proveedor, DTOs.ProveedorDto>().ReverseMap();
-            
-
-            // Negocio y plan SaaS
-            CreateMap<Domain.Entities.Negocio, DTOs.NegocioDto>().ReverseMap();
-            CreateMap<Domain.Entities.PlanSaas, DTOs.PlanSaasDto>().ReverseMap();
-
-            // Puestos y Usuarios
-            CreateMap<Domain.Entities.Puesto, DTOs.PuestoDto>().ReverseMap();
-            CreateMap<Domain.Entities.Usuario, DTOs.UsuarioDto>().ReverseMap();
-
-            // Históricos
-            CreateMap<Domain.Entities.HistoricoPrecio, DTOs.HistoricoPrecioDto>().ReverseMap();
-            CreateMap<Domain.Entities.HistoricoStock, DTOs.HistoricoStockDto>().ReverseMap();
-
-
-
+            // ==== Domain -> Response ====
+            CreateMap<Rubro, RubroResponse>();
+            CreateMap<Categoria, CategoriaResponse>();
+            CreateMap<UnidadMedida, UnidadMedidaResponse>();
+            CreateMap<Producto, ProductoResponse>();
+            CreateMap<ProductoNegocio, ProductoNegocioResponse>();
+            CreateMap<VentaDetalle, VentaDetalleResponse>();
+            CreateMap<Venta, VentaResponse>();
+            CreateMap<CompraDetalle, CompraDetalleResponse>();
+            CreateMap<Compra, CompraResponse>();
+            CreateMap<Cliente, ClienteResponse>();
+            CreateMap<Comprobante, ComprobanteResponse>();
+            CreateMap<HistoricoPrecio, HistoricoPrecioResponse>();
+            CreateMap<HistoricoStock, HistoricoStockResponse>();
+            CreateMap<Negocio, NegocioResponse>();
+            CreateMap<PlanSaas, PlanSaasResponse>();
+            CreateMap<Proveedor, ProveedorResponse>();
+            CreateMap<Puesto, PuestoResponse>();
+            CreateMap<Usuario, UsuarioResponse>();
         }
     }
 }
