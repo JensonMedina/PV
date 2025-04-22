@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.Models.Response
 {
-    public class ComprobanteDto
+    public class ComprobanteResponse
     {
+        public int Id { get; set; }
         public TipoComprobante TipoComprobante { get; set; }
         public DateTime FechaAlta { get; set; }
         public string? MotivoAnulacion { get; set; }
