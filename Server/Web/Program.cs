@@ -5,7 +5,6 @@ using Infrastructure.Logging;
 using Microsoft.EntityFrameworkCore;
 using Application.Mappings;
 using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args); 
 //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -26,8 +25,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
 
-        builder.Configuration.GetConnectionString("MateoConnectionLocal"), 
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MateoConnectionLocal"))
+        builder.Configuration.GetConnectionString("BrunoConnectionLocal"), 
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))
     )
 );
 #endregion
