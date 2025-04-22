@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250420155817_MigracionConModificacionModeloDatos")]
+    partial class MigracionConModificacionModeloDatos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,50 +247,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Comprobante");
                 });
 
-            modelBuilder.Entity("Domain.Entities.HistoricoPrecio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<decimal>("Precio")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int>("ProductoNegocioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductoNegocioId");
-
-                    b.ToTable("HistoricosPrecios");
-                });
-
-            modelBuilder.Entity("Domain.Entities.HistoricoStock", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("ProductoNegocioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Stock")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductoNegocioId");
-
-                    b.ToTable("HistoricoStocks");
-                });
-
             modelBuilder.Entity("Domain.Entities.Negocio", b =>
                 {
                     b.Property<int>("Id")
@@ -473,56 +432,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Productos");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProductoNegocio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaAlta")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("GestionaStock")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("Moneda")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NegocioId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("PrecioCosto")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("PrecioVenta")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int>("ProductoId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp(6)");
-
-                    b.Property<int>("StockActual")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StockMaximo")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StockMinimo")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NegocioId");
-
-                    b.HasIndex("ProductoId");
-
-                    b.ToTable("ProductosNegocios");
-                });
-
             modelBuilder.Entity("Domain.Entities.Proveedor", b =>
                 {
                     b.Property<int>("Id")
@@ -665,7 +574,7 @@ namespace Infrastructure.Migrations
                             Id = 1,
                             Activo = true,
                             Descripcion = "Productos comestibles, bebidas alcohólicas y no alcohólicas",
-                            FechaAlta = new DateTime(2025, 4, 20, 13, 7, 58, 342, DateTimeKind.Local).AddTicks(6923),
+                            FechaAlta = new DateTime(2025, 4, 20, 12, 58, 16, 476, DateTimeKind.Local).AddTicks(5361),
                             Nombre = "Alimentos y Bebidas"
                         },
                         new
@@ -673,7 +582,7 @@ namespace Infrastructure.Migrations
                             Id = 2,
                             Activo = true,
                             Descripcion = "Artículos eléctricos para el hogar",
-                            FechaAlta = new DateTime(2025, 4, 20, 13, 7, 58, 342, DateTimeKind.Local).AddTicks(6927),
+                            FechaAlta = new DateTime(2025, 4, 20, 12, 58, 16, 476, DateTimeKind.Local).AddTicks(5363),
                             Nombre = "Electrodomésticos"
                         },
                         new
@@ -681,7 +590,7 @@ namespace Infrastructure.Migrations
                             Id = 3,
                             Activo = true,
                             Descripcion = "Ropa y accesorios de moda",
-                            FechaAlta = new DateTime(2025, 4, 20, 13, 7, 58, 342, DateTimeKind.Local).AddTicks(6928),
+                            FechaAlta = new DateTime(2025, 4, 20, 12, 58, 16, 476, DateTimeKind.Local).AddTicks(5365),
                             Nombre = "Indumentaria"
                         },
                         new
@@ -689,7 +598,7 @@ namespace Infrastructure.Migrations
                             Id = 4,
                             Activo = true,
                             Descripcion = "Productos de higiene y limpieza",
-                            FechaAlta = new DateTime(2025, 4, 20, 13, 7, 58, 342, DateTimeKind.Local).AddTicks(6930),
+                            FechaAlta = new DateTime(2025, 4, 20, 12, 58, 16, 476, DateTimeKind.Local).AddTicks(5366),
                             Nombre = "Limpieza"
                         },
                         new
@@ -697,7 +606,7 @@ namespace Infrastructure.Migrations
                             Id = 5,
                             Activo = true,
                             Descripcion = "Herramientas y artículos de construcción",
-                            FechaAlta = new DateTime(2025, 4, 20, 13, 7, 58, 342, DateTimeKind.Local).AddTicks(6931),
+                            FechaAlta = new DateTime(2025, 4, 20, 12, 58, 16, 476, DateTimeKind.Local).AddTicks(5368),
                             Nombre = "Ferretería"
                         },
                         new
@@ -705,7 +614,7 @@ namespace Infrastructure.Migrations
                             Id = 6,
                             Activo = true,
                             Descripcion = "Equipos informáticos, celulares, accesorios",
-                            FechaAlta = new DateTime(2025, 4, 20, 13, 7, 58, 342, DateTimeKind.Local).AddTicks(6933),
+                            FechaAlta = new DateTime(2025, 4, 20, 12, 58, 16, 476, DateTimeKind.Local).AddTicks(5369),
                             Nombre = "Tecnología"
                         });
                 });
@@ -1224,28 +1133,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Producto");
                 });
 
-            modelBuilder.Entity("Domain.Entities.HistoricoPrecio", b =>
-                {
-                    b.HasOne("Domain.Entities.ProductoNegocio", "ProductoNegocio")
-                        .WithMany()
-                        .HasForeignKey("ProductoNegocioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductoNegocio");
-                });
-
-            modelBuilder.Entity("Domain.Entities.HistoricoStock", b =>
-                {
-                    b.HasOne("Domain.Entities.ProductoNegocio", "ProductoNegocio")
-                        .WithMany()
-                        .HasForeignKey("ProductoNegocioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductoNegocio");
-                });
-
             modelBuilder.Entity("Domain.Entities.Negocio", b =>
                 {
                     b.HasOne("Domain.Entities.PlanSaas", "PlanSaas")
@@ -1296,25 +1183,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Rubro");
 
                     b.Navigation("UnidadMedida");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ProductoNegocio", b =>
-                {
-                    b.HasOne("Domain.Entities.Negocio", "Negocio")
-                        .WithMany()
-                        .HasForeignKey("NegocioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Producto", "Producto")
-                        .WithMany()
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Negocio");
-
-                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("Domain.Entities.Proveedor", b =>

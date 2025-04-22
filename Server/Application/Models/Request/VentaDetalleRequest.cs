@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Models.Request
+{
+    public class VentaDetalleRequest
+    {
+        [Required, Range(1, int.MaxValue)]
+        public int ProductoId { get; set; }
+
+        [Range(1, int.MaxValue)]
+        public int? Cantidad { get; set; }
+
+        [Range(0, double.MaxValue)]
+        public double? Peso { get; set; }
+
+        [Required, Range(0, double.MaxValue)]
+        public double Importe { get; set; }
+    }
+}
