@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
+	<Folder Include="Models\" />
+	<Folder Include="Mappings\" />
+	<Folder Include="Interfaces\" />
+	<Folder Include="Common\" />
   </ItemGroup>
 
   <ItemGroup>
