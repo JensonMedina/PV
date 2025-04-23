@@ -1,54 +1,130 @@
-using Application.Common.Interfaces;
 using Application.Interfaces;
 using Infrastructure.Data;
-using Infrastructure.Logging;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Application.Mappings;
-using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Domain.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-var builder = WebApplication.CreateBuilder(args); 
-//----------------------------------------------------------------------------------------------------------------------------------------------
-// AutoMapper, la funcion ADDautoMapper se encarga de escanear el assembly y registrar todos los perfiles que encuentre en (DomainToDtoProfile 
-builder.Services.AddAutoMapper(typeof(DomainToDtoProfile).Assembly);
-//----------------------------------------------------------------------------------------------------------------------------------------------
+var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
+// Servicios
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-#region Agregamos el servicio del DbContext
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpContextAccessor();
+// DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-
-        builder.Configuration.GetConnectionString("BrunoConnectionLocal"), 
+        builder.Configuration.GetConnectionString("BrunoConnectionLocal"),
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))
     )
 );
+
+// Identity
+builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+// JWT
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["AuthenticationService:Issuer"],
+        ValidAudience = builder.Configuration["AuthenticationService:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["AuthenticationService:Key"]))
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine("JWT Authentication failed: " + context.Exception.Message);
+            return Task.CompletedTask;
+        }
+    };
+});
+
+#region  Autorización
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdministradorPolicy", policy =>
+        policy.RequireClaim("tipo_usuario", "Administrador"));
+    options.AddPolicy("EmpleadoPolicy", policy =>
+        policy.RequireClaim("tipo_usuario", "Empleado"));
+});
+#endregion
+#region Swagger
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Ingrese su token JWT como: Bearer {su token aquí}"
+    });
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 #endregion
 
-var app = builder.Build();
-//---------------------------------------------------------------------------
-// si no tira excepcion es porque la configuracion de automapper es correcta
-var mapper = app.Services.GetRequiredService<IMapper>();
-mapper.ConfigurationProvider.AssertConfigurationIsValid();
-//-----------------------------------------------------------------------------
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) 
+var app = builder.Build();
+
+
+// Configuración del pipeline
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
