@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
 using Microsoft.AspNetCore.Mvc;
+using Application.Common;
 
 namespace WebAPI.Controllers
 {
@@ -18,23 +19,21 @@ namespace WebAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
-            var response = await _authService.RegisterAsync(request);
-            if (!response.IsSuccessful)
-                return BadRequest(response);
+            var result = await _authService.RegisterAsync(request);
+            if (!result.Success)
+                return StatusCode(result.StatusCode, result);  
 
-            return Ok(response);
+            return Ok(result);  
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var response = await _authService.LoginAsync(request);
-            if (!response.IsSuccessful)
-                return Unauthorized(response);
+            var result = await _authService.LoginAsync(request);
+            if (!result.Success)
+                return StatusCode(result.StatusCode, result);  
 
-            return Ok(response);
+            return Ok(result); 
         }
-
-
     }
 }

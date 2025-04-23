@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Application.Common.Interfaces;
+using Infrastructure.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpContextAccessor();
