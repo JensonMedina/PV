@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.Models.Request
 {
@@ -11,6 +6,7 @@ namespace Application.Models.Request
     {
         [Required, StringLength(100)]
         public string Nombre { get; set; }
+        public DateTime FechaAlta { get; set; }
 
         [StringLength(250)]
         public string? Descripcion { get; set; }

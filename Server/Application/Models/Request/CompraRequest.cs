@@ -1,10 +1,5 @@
 ﻿using Domain.Enum;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Models.Request
 {
@@ -51,6 +46,6 @@ namespace Application.Models.Request
         public string? Observaciones { get; set; }
 
         [Required, MinLength(1)]
-        public List<CompraDetalleRequest> Detalles { get; set; }
+        public List<CompraDetalleRequest> Detalles { get; set; }  
     }
 }
