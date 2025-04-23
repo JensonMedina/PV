@@ -3,16 +3,10 @@ using Application.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Logging;
 using Microsoft.EntityFrameworkCore;
-using Application.Mappings;
-using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 using Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args); 
-//----------------------------------------------------------------------------------------------------------------------------------------------
-// AutoMapper, la funcion ADDautoMapper se encarga de escanear el assembly y registrar todos los perfiles que encuentre en (DomainToDtoProfile 
-builder.Services.AddAutoMapper(typeof(DomainToDtoProfile).Assembly);
-//----------------------------------------------------------------------------------------------------------------------------------------------
+
 
 // Add services to the container.
 
@@ -23,7 +17,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-#region Inyecciï¿½n de repositorios
+
+
+#region InyecciÃ³n de repositorios
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<ICompraDetalleRepository, CompraDetalleRepository>();
@@ -56,20 +52,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 #endregion
 
 var app = builder.Build();
-//---------------------------------------------------------------------------
-// si no tira excepcion es porque la configuracion de automapper es correcta
-var mapper = app.Services.GetRequiredService<IMapper>();
-try
-{
-    mapper.ConfigurationProvider.AssertConfigurationIsValid();
-}
-catch (AutoMapperConfigurationException ex)
-{
-    // Esto te mostrará exactamente qué CreateMap está fallando
-    Console.WriteLine("AutoMapper ERROR:");
-    Console.WriteLine(ex.Message);
-    throw;
-}//-----------------------------------------------------------------------------
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) 
