@@ -3,15 +3,9 @@ using Application.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Logging;
 using Microsoft.EntityFrameworkCore;
-using Application.Mappings;
-using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args); 
-//----------------------------------------------------------------------------------------------------------------------------------------------
-// AutoMapper, la funcion ADDautoMapper se encarga de escanear el assembly y registrar todos los perfiles que encuentre en (DomainToDtoProfile 
-builder.Services.AddAutoMapper(typeof(DomainToDtoProfile).Assembly);
-//----------------------------------------------------------------------------------------------------------------------------------------------
+
 
 // Add services to the container.
 
@@ -33,11 +27,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 #endregion
 
 var app = builder.Build();
-//---------------------------------------------------------------------------
-// si no tira excepcion es porque la configuracion de automapper es correcta
-var mapper = app.Services.GetRequiredService<IMapper>();
-mapper.ConfigurationProvider.AssertConfigurationIsValid();
-//-----------------------------------------------------------------------------
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) 

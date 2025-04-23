@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Infrastructure.Data;
-using System;
 
 public class UnitOfWork : IUnitOfWork
 {
