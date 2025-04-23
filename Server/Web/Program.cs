@@ -11,22 +11,25 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Servicios
+
+#region Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpContextAccessor();
-// DbContext
+#endregion
+#region DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("BrunoConnectionLocal"),
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))
     )
 );
+#endregion
 
-// Identity
+#region IdentityCore
 builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
 {
     options.Password.RequireDigit = true;
@@ -36,8 +39,9 @@ builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+#endregion
 
-// JWT
+#region JWT
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -67,10 +71,12 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
-
+#endregion
 #region  Autorización
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy("DueñoPolicy", policy =>
+        policy.RequireClaim("tipo_usuario", "Dueño"));
     options.AddPolicy("AdministradorPolicy", policy =>
         policy.RequireClaim("tipo_usuario", "Administrador"));
     options.AddPolicy("EmpleadoPolicy", policy =>
@@ -87,7 +93,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Ingrese su token JWT como: Bearer {su token aquí}"
+        Description = "Ingrese su token JWT: "
     });
     options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
@@ -106,6 +112,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 #endregion
 
+#region CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -113,7 +120,7 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod()
                           .AllowAnyHeader());
 });
-
+#endregion
 var app = builder.Build();
 
 
