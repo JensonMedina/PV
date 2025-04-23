@@ -36,8 +36,17 @@ var app = builder.Build();
 //---------------------------------------------------------------------------
 // si no tira excepcion es porque la configuracion de automapper es correcta
 var mapper = app.Services.GetRequiredService<IMapper>();
-mapper.ConfigurationProvider.AssertConfigurationIsValid();
-//-----------------------------------------------------------------------------
+try
+{
+    mapper.ConfigurationProvider.AssertConfigurationIsValid();
+}
+catch (AutoMapperConfigurationException ex)
+{
+    // Esto te mostrará exactamente qué CreateMap está fallando
+    Console.WriteLine("AutoMapper ERROR:");
+    Console.WriteLine(ex.Message);
+    throw;
+}//-----------------------------------------------------------------------------
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) 
