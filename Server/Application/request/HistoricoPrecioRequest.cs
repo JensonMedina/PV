@@ -11,6 +11,6 @@ namespace Application.Models.Request
         public decimal Precio { get; set; }
 
         [Required]
-        public DateTime Fecha { get; set; }
+        public DateTime Fecha{ get; set; }
     }
 }

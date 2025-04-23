@@ -2,15 +2,15 @@
 
 namespace Application.Models.Request
 {
-    public class HistoricoPrecioRequest
+    public class HistoricoStockRequest
     {
         [Required, Range(1, int.MaxValue)]
         public int ProductoNegocioId { get; set; }
 
-        [Required, Range(0, double.MaxValue)]
-        public decimal Precio { get; set; }
+        [Required, Range(0, int.MaxValue)]
+        public int StockAnterior { get; set; }
 
         [Required]
-        public DateTime Fecha { get; set; }
+        public DateTime FechaCambio { get; set; }
     }
 }
