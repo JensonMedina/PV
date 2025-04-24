@@ -1,0 +1,16 @@
+﻿namespace Application.Models.Response
+{
+    public class ProductoNegocioResponse
+    {
+        public int Id { get; set; }
+        public int NegocioId { get; set; }
+        public int ProductoId { get; set; }
+        public decimal PrecioVenta { get; set; }
+        public decimal? PrecioCosto { get; set; }
+        public bool GestionaStock { get; set; }
+        public int StockActual { get; set; }
+        public int? StockMinimo { get; set; }
+        public int? StockMaximo { get; set; }
+        public DateTime FechaAlta { get; set; }
+    }
+}
