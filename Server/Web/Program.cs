@@ -14,16 +14,47 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
+
+
 #region Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpContextAccessor();
 #endregion
 #region DbContext
+
+
+
+#region InyecciÃ³n de repositorios
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<ICompraDetalleRepository, CompraDetalleRepository>();
+builder.Services.AddScoped<ICompraRepository, CompraRepository>();
+builder.Services.AddScoped<IComprobanteRepository, ComprobanteRepository>();
+builder.Services.AddScoped<IHistoricoPrecioRepository, HistoricoPrecioRepository>();
+builder.Services.AddScoped<IHistoricoStockRepository, HistoricoStockRepository>();
+builder.Services.AddScoped<INegocioRepository, NegocioRepository>();
+builder.Services.AddScoped<IPlanSaasRepository, PlanSaasRepository>();
+builder.Services.AddScoped<IProductoNegocioRepository, ProductoNegocioRepository>();
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
+builder.Services.AddScoped<IPuestoRepository, PuestoRepository>();
+builder.Services.AddScoped<IRubroRepository, RubroRepository>();
+builder.Services.AddScoped<IUnidadMedidaRepository, UnidadMedidaRepository>();
+builder.Services.AddScoped<IUsuarioPuestoRepository, UsuarioPuestoRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IVentaDetalleRepository, VentaDetalleRepository>();
+builder.Services.AddScoped<IVentaRepository, VentaRepository>();
+#endregion
+
+
+#region Agregamos el servicio del DbContext
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("BrunoConnectionLocal"),
@@ -75,11 +106,11 @@ builder.Services.AddAuthentication(options =>
     };
 });
 #endregion
-#region  Autorización
+#region  Autorizacion
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("DueñoPolicy", policy =>
-        policy.RequireClaim("tipo_usuario", "Dueño"));
+    options.AddPolicy("DueÃ±oPolicy", policy =>
+        policy.RequireClaim("tipo_usuario", "DueÃ±o"));
     options.AddPolicy("AdministradorPolicy", policy =>
         policy.RequireClaim("tipo_usuario", "Administrador"));
     options.AddPolicy("EmpleadoPolicy", policy =>
@@ -127,8 +158,9 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 
-// Configuración del pipeline
-if (app.Environment.IsDevelopment())
+
+if (app.Environment.IsDevelopment()) 
+
 {
     app.UseSwagger();
     app.UseSwaggerUI();
