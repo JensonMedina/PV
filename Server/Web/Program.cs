@@ -51,8 +51,8 @@ builder.Services.AddScoped<IVentaRepository, VentaRepository>();
 #region DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("JensonConnectionLocal"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
+        builder.Configuration.GetConnectionString("MateoConnectionLocal"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MateoConnectionLocal"))
     )
 );
 #endregion
@@ -155,6 +155,7 @@ var app = builder.Build();
 // Configuracion del pipeline
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

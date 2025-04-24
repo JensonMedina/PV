@@ -10,6 +10,7 @@ namespace Application.Mappings
         {
             Nombre = request.Nombre,
             Apellido = request.Apellido,
+            Email = request.Email,
             TipoDocumento = request.TipoDocumento,
             NumeroDocumento = request.NumeroDocumento,
             Telefono = request.Telefono,
@@ -21,7 +22,10 @@ namespace Application.Mappings
             LimiteCredito = request.LimiteCredito,
             SaldoActual = request.SaldoActual,
             Observaciones = request.Observaciones,
-            PuntosFidelidad = request.PuntosFidelidad
+            PuntosFidelidad = request.PuntosFidelidad,
+            NegocioId = request.NegocioId,
+            
+            
         };
 
         public static ClienteResponse ToResponse(Cliente entity) => new()

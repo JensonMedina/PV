@@ -7,10 +7,14 @@ namespace Application.Models.Request
     {
         [Required, StringLength(100)]
         public string Nombre { get; set; }
+        [Required]
+        public int NegocioId { get; set; }
 
         [Required, StringLength(100)]
         public string Apellido { get; set; }
 
+        [Required, EmailAddress, StringLength(255)]
+        public string Email { get; set; }
         public TipoDocumento? TipoDocumento { get; set; }
 
         [StringLength(20)]
