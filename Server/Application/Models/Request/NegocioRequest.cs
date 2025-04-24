@@ -5,15 +5,15 @@ namespace Application.Models.Request
 {
     public class NegocioRequest
     {
-        [Required, StringLength(150)]
+        [Required, StringLength(100)]
         public string Nombre { get; set; }
 
-        [StringLength(500)]
+        [StringLength(200)]
         public string? Descripcion { get; set; }
 
         public TipoDocumento? TipoDocumento { get; set; }
 
-        [StringLength(50)]
+        [StringLength(20)]
         public string? NumeroDocumento { get; set; }
 
         [EmailAddress]
@@ -23,13 +23,12 @@ namespace Application.Models.Request
         public string? Telefono { get; set; }
 
         [Required]
-        public Domain.Enum.Moneda Moneda { get; set; }
+        public Moneda Moneda { get; set; }
 
-        public bool? UsaFacturacion { get; set; }
-
-        public Domain.Enum.TipoFacturacion TipoFacturacion { get; set; }
-
-        [Required, Range(1, int.MaxValue)]
         public int IdPlanSaas { get; set; }
+
+
+        [Required]
+        public int RubroId { get; set; }
     }
 }

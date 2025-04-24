@@ -13,13 +13,13 @@ namespace Application.Models.Request
 
         public TipoDocumento? TipoDocumento { get; set; }
 
-        [StringLength(50)]
+        [StringLength(20)]
         public string? NumeroDocumento { get; set; }
 
         [Phone]
         public string? Telefono { get; set; }
 
-        [StringLength(200)]
+        [StringLength(255)]
         public string? Direccion { get; set; }
 
         [StringLength(100)]
@@ -28,7 +28,7 @@ namespace Application.Models.Request
         [StringLength(100)]
         public string? Provincia { get; set; }
 
-        [StringLength(20)]
+        [StringLength(10)]
         public string? CodigoPostal { get; set; }
 
         public bool EsConsumidorFinal { get; set; }
@@ -44,9 +44,5 @@ namespace Application.Models.Request
 
         [Range(0, int.MaxValue)]
         public int? PuntosFidelidad { get; set; }
-
-        public DateTime? UltimaCompra { get; set; }
-
-        public bool Activo { get; set; }
     }
 }

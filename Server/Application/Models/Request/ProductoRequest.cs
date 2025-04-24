@@ -4,13 +4,13 @@ namespace Application.Models.Request
 {
     public class ProductoRequest
     {
-        [Required, StringLength(150)]
+        [Required, StringLength(100)]
         public string Nombre { get; set; }
 
-        [StringLength(500)]
+        [StringLength(200)]
         public string? Descripcion { get; set; }
 
-        [StringLength(100)]
+        [StringLength(50)]
         public string? Marca { get; set; }
 
         [Required, Range(1, int.MaxValue)]
@@ -22,7 +22,7 @@ namespace Application.Models.Request
         [Required, Range(1, int.MaxValue)]
         public int UnidadMedidaId { get; set; }
 
-        [Url, StringLength(200)]
+        [Url, StringLength(250)]
         public string? ImagenUrl { get; set; }
 
         public bool EsPrivado { get; set; }
