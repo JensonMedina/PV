@@ -24,6 +24,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpContextAccessor();
 #endregion
+builder.Services.AddScoped<IClienteService, ClienteService>();
 
 #region Inyección de repositorios
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
