@@ -47,13 +47,20 @@ namespace Infrastructure.Services
         {
             try
             {
+                var cliente = await _unitOfWork.Clientes.GetByIdAsync<int>(id);
+                if (cliente == null || !cliente.Activo)
+                    return Result<string>.NotFound("Cliente no encontrado");
+
                 await _unitOfWork.Clientes.SoftDeleteAsync<int>(id);
                 await _unitOfWork.CompleteAsync();
+
                 return Result<string>.Ok("Cliente eliminado");
             }
             catch (Exception ex)
             {
-                _logger.LogError(nameof(DeleteClienteAsync), $"Error eliminando {id}",  ex.Message );
+                _logger.LogError(nameof(DeleteClienteAsync),
+                              $"Error eliminando cliente {id}",
+                                ex.Message );
                 return Result<string>.Error("Error eliminando cliente");
             }
         }
