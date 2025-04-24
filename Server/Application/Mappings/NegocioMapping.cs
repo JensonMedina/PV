@@ -15,8 +15,6 @@ namespace Application.Mappings
             Email = request.Email,
             Telefono = request.Telefono,
             Moneda = request.Moneda,
-            UsaFacturacion = request.UsaFacturacion,
-            TipoFacturacion = request.TipoFacturacion,
             IdPlanSaas = request.IdPlanSaas
         };
 
@@ -25,13 +23,12 @@ namespace Application.Mappings
             Id = entity.Id,
             Nombre = entity.Nombre,
             Descripcion = entity.Descripcion,
-            TipoDocumento = entity.TipoDocumento,
+            TipoDocumento = entity.TipoDocumento.ToString(),
             NumeroDocumento = entity.NumeroDocumento,
             Email = entity.Email,
             Telefono = entity.Telefono,
-            Moneda = entity.Moneda,
-            UsaFacturacion = entity.UsaFacturacion,
-            TipoFacturacion = entity.TipoFacturacion,
+            Moneda = entity.Moneda.ToString(),
+            TipoFacturacion = entity.TipoFacturacion.ToString(),
             IdPlanSaas = entity.IdPlanSaas
         };
     }

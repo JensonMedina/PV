@@ -31,13 +31,9 @@ namespace Application.Mappings
             Descripcion = entity.Descripcion,
             Marca = entity.Marca,
             CategoriaId = entity.CategoriaId,
-            Categoria = CategoriaMapping.ToResponse(entity.Categoria),
             RubroId = entity.RubroId,
-            Rubro = RubroMapping.ToResponse(entity.Rubro),
             UnidadMedidaId = entity.UnidadMedidaId,
-            UnidadMedida = UnidadMedidaMapping.ToResponse(entity.UnidadMedida),
             ImagenUrl = entity.ImagenUrl,
-            EsPrivado = entity.EsPrivado,
             NegocioId = entity.NegocioId
         };
     }

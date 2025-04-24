@@ -7,7 +7,6 @@
             DireccionMAC= request.DireccionMAC,
             DireccionIP= request.DireccionIP,
             Nombre = request.Nombre,
-            Activo = request.Activo,
             TipoImpresora= request.TipoImpresora,
             ImpresoraConfigurada=request.ImpresoraConfigurada,
 
@@ -22,8 +21,7 @@
             Activo = entity.Activo,
             DireccionIP= entity.DireccionIP,
             DireccionMAC= entity.DireccionMAC,
-            ImpresoraConfigurada = entity.ImpresoraConfigurada,
-            TipoImpresora= entity.TipoImpresora,
+            ImpresoraConfigurada = entity.ImpresoraConfigurada
         };
     }
 }

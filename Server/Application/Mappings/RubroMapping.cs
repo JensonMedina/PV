@@ -9,9 +9,7 @@ namespace Application.Mappings
         public static Rubro ToEntity(RubroRequest request) => new()
         {
             Nombre = request.Nombre,
-            Descripcion = request.Descripcion,
-            Activo = request.Activo,
-            FechaAlta = request.FechaAlta
+            Descripcion = request.Descripcion
         };
 
         public static RubroResponse ToResponse(Rubro entity) => new()
@@ -19,8 +17,6 @@ namespace Application.Mappings
             Id = entity.Id,
             Nombre = entity.Nombre,
             Descripcion = entity.Descripcion,
-            Activo = entity.Activo,
-            FechaAlta = entity.FechaAlta
         };
     }
 }

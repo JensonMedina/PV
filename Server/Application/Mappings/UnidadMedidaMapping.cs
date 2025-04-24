@@ -19,7 +19,7 @@ namespace Application.Mappings
             Id = entity.Id,
             Nombre = entity.Nombre,
             Abreviatura = entity.Abreviatura,
-            TipoUnidadMedida = entity.TipoUnidadMedida,
+            TipoUnidadMedida = entity.TipoUnidadMedida.ToString(),
             Activo = entity.Activo
         };
     }

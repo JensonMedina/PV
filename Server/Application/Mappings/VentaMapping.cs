@@ -12,7 +12,6 @@ namespace Application.Mappings
             PuestoId = request.PuestoId,
             EmpleadoId = request.EmpleadoId,
             ClienteId = request.ClienteId,
-            FechaAlta = request.FechaAlta,
             Subtotal = request.Subtotal,
             DescuentoTotal = request.DescuentoTotal,
             Impuestos = request.Impuestos,

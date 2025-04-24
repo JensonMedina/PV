@@ -16,7 +16,6 @@ namespace Application.Mappings
             StockActual = request.StockActual,
             StockMinimo = request.StockMinimo,
             StockMaximo = request.StockMaximo,
-            FechaAlta = request.FechaAlta
         };
 
         public static ProductoNegocioResponse ToResponse(ProductoNegocio entity) => new()

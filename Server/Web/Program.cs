@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Application.Common.Interfaces;
 using Infrastructure.Logging;
 using Domain.Interfaces;
 
@@ -52,8 +51,8 @@ builder.Services.AddScoped<IVentaRepository, VentaRepository>();
 #region DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("BrunoConnectionLocal"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))
+        builder.Configuration.GetConnectionString("JensonConnectionLocal"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
     )
 );
 #endregion

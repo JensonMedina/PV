@@ -21,9 +21,7 @@ namespace Application.Mappings
             LimiteCredito = request.LimiteCredito,
             SaldoActual = request.SaldoActual,
             Observaciones = request.Observaciones,
-            PuntosFidelidad = request.PuntosFidelidad,
-            UltimaCompra = request.UltimaCompra,
-            Activo = request.Activo
+            PuntosFidelidad = request.PuntosFidelidad
         };
 
         public static ClienteResponse ToResponse(Cliente entity) => new()
@@ -31,7 +29,6 @@ namespace Application.Mappings
             Id = entity.Id,
             Nombre = entity.Nombre,
             Apellido = entity.Apellido,
-            TipoDocumento = entity.TipoDocumento,
             NumeroDocumento = entity.NumeroDocumento,
             Telefono = entity.Telefono,
             Direccion = entity.Direccion,
