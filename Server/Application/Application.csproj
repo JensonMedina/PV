@@ -8,9 +8,8 @@
 
 	<ItemGroup>
 		<Folder Include="Mappings\" />
-		<Folder Include="Services\" />
 		<Folder Include="Common\" />
-		<Folder Include="Interfaces\" />
+		<Folder Include="Services\" />
 	</ItemGroup>
 
 	<ItemGroup>
