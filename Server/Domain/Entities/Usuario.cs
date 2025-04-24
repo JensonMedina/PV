@@ -1,20 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Enum;
-
+using Microsoft.AspNetCore.Identity;
 namespace Domain.Entities
 {
-    public class Usuario
+    public class Usuario : IdentityUser<int>
     {
-        public int Id { get; set; }
 
         #region Datos Personales
         [Column(TypeName = "varchar(50)")]
         public string Nombre { get; set; }
         [Column(TypeName = "varchar(50)")]
         public string Apellido { get; set; }
-        [Column(TypeName = "varchar(100)")]
-        public string Email { get; set; }
+
         [Column(TypeName = "varchar(20)")]
         public string? Telefono { get; set; }
         public TipoDocumento? TipoDocumento { get; set; }
@@ -32,8 +30,8 @@ namespace Domain.Entities
         #endregion
 
         #region Relaciones
-        public int NegocioId { get; set; }
-        public Negocio Negocio { get; set; }
+        public int? NegocioId { get; set; }
+        public Negocio? Negocio { get; set; }
         #endregion
 
         #region Configuraciones Personales
@@ -45,8 +43,7 @@ namespace Domain.Entities
         public DateTime? UltimoLogin { get; set; }
         [Column(TypeName = "varchar(50)")]
         public string? IpUltimoLogin { get; set; }
-        [Timestamp]
-        public byte[] RowVersion { get; set; }
+        public DateTime RowVersion { get; set; }
         #endregion
     }
 }
