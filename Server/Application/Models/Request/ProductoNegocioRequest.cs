@@ -27,7 +27,5 @@ namespace Application.Models.Request
         [Range(0, int.MaxValue)]
         public int? StockMaximo { get; set; }
 
-        [Required]
-        public DateTime FechaAlta { get; set; }
     }
 }

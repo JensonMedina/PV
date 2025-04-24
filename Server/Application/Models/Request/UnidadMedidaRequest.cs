@@ -5,7 +5,7 @@ namespace Application.Models.Request
 {
     public class UnidadMedidaRequest
     {
-        [Required, StringLength(50)]
+        [Required, StringLength(100)]
         public string Nombre { get; set; }
 
         [Required, StringLength(10)]

@@ -17,9 +17,6 @@ namespace Application.Models.Request
         [Range(1, int.MaxValue)]
         public int? ClienteId { get; set; }
 
-        [Required]
-        public DateTime FechaAlta { get; set; }
-
         [Range(0, double.MaxValue)]
         public decimal? Subtotal { get; set; }
 
@@ -36,6 +33,6 @@ namespace Application.Models.Request
         public FormaPago FormaPago { get; set; }
 
         [Required, MinLength(1)]
-        public List<VentaDetalleRequest> Detalles { get; set; }
+        public List<VentaDetalleRequest> Detalles { get; set; } = new List<VentaDetalleRequest>();
     }
 }

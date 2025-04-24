@@ -7,12 +7,9 @@ namespace Application.Models.Request
         [Required, StringLength(100)]
         public string Nombre { get; set; }
 
-        [StringLength(250)]
+        [StringLength(200)]
         public string? Descripcion { get; set; }
 
-        public bool Activo { get; set; }
 
-        [Required]
-        public DateTime FechaAlta { get; set; }
     }
 }
