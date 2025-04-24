@@ -1,4 +1,4 @@
-using Application.Common.Interfaces;
+using Application.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Logging;
 using Microsoft.EntityFrameworkCore;
