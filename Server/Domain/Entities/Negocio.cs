@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Enum;
 
 namespace Domain.Entities
@@ -40,7 +39,7 @@ namespace Domain.Entities
         #region Información General
         [Column(TypeName = "varchar(250)")]
         public string? LogoUrl { get; set; }
-        public Rubro Rubro { get; set; }
+        public int RubroId { get; set; }
         public DateTime FechaAlta { get; set; } = DateTime.Now;
         public bool Activo { get; set; } = true; // true = activo, false = inactivo o suspendido
         #endregion
@@ -53,10 +52,15 @@ namespace Domain.Entities
 
         #region Relación PlanSaas
         public int IdPlanSaas { get; set; }
-        public PlanSaas PlanSaas { get; set; }
         #endregion
+
+        #region Facturación Automática
+        public bool DebitoAutomaticoActivo { get; set; } = false;
+        public DateTime? FechaProximoDebito { get; set; }
+        public int IdMedioPagoDefault { get; set; } // Referencia al medio de pago predeterminado
+        #endregion
+
         //Manejar Concurrencia
-        [Timestamp]
-        public byte[] RowVersion { get; set; }
+        public DateTime RowVersion { get; set; }
     }
 }

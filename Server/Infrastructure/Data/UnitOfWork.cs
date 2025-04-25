@@ -26,7 +26,7 @@ public class UnitOfWork : IUnitOfWork
     public IVentaDetalleRepository VentasDetalles { get; }
     public IVentaRepository Ventas { get; }
     #endregion
-    public UnitOfWork(ApplicationDbContext context)
+    public UnitOfWork(ApplicationDbContext context, INegocioRepository negocioRepository)
     {
         _context = context;
         #region inyeccion repositorios
@@ -37,7 +37,7 @@ public class UnitOfWork : IUnitOfWork
         Comprobantes = new ComprobanteRepository(_context);
         HistoricosPrecios = new HistoricoPrecioRepository(_context);
         HistoricoStocks = new HistoricoStockRepository(_context);
-        Negocios = new NegocioRepository(_context);
+        Negocios = negocioRepository;
         PlanesSaas = new PlanSaasRepository(_context);
         ProductosNegocios = new ProductoNegocioRepository(_context);
         Productos = new ProductoRepository(_context);

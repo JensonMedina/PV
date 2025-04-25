@@ -14,7 +14,7 @@ namespace Application.Mappings
             NumeroDocumento = request.NumeroDocumento,
             Email = request.Email,
             Telefono = request.Telefono,
-            Moneda = request.Moneda,
+            Moneda = request.Moneda ?? Domain.Enum.Moneda.ARS,
             IdPlanSaas = request.IdPlanSaas
         };
 

@@ -48,13 +48,21 @@ builder.Services.AddScoped<IVentaRepository, VentaRepository>();
 #endregion
 
 
+
+
 #region DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
+{
+    var _logger = serviceProvider.GetRequiredService<ILoggerApp>();
+
     options.UseMySql(
-        builder.Configuration.GetConnectionString("JensonConnectionLocal"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
-    )
-);
+            builder.Configuration.GetConnectionString("JensonConnectionLocal"),
+            ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
+        )
+        .EnableSensitiveDataLogging()
+        .LogTo(log => _logger.LogInfo("EFCore", log), LogLevel.Information); // Ahora sí, usando una instancia
+});
+
 #endregion
 
 #region IdentityCore
