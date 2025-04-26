@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Application.Interfaces; // Acá estaría IProveedorService
+﻿using Application.Common;
+using Application.Interfaces;
+using Application.Models.Request;
 using Domain.Entities;
+using Domain.Enum;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
@@ -18,11 +21,39 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegistrarProveedor([FromBody] Proveedor proveedor)
+        public async Task<IActionResult> RegistrarProveedor([FromBody] ProveedorRequest proveedorRequest)
         {
-            // desde proveedor service
-            return Ok();
+            string contexto = $"{this.GetType().Name} - {nameof(RegistrarProveedor)}";
+
+            try
+            {
+                _loggerApp.LogInfo(contexto, "Iniciando método.");
+                await _proveedorService.RegistrarProveedorAsync(proveedorRequest);
+
+                _loggerApp.LogInfo(contexto, "Registro de proveedor finalizado exitosamente.", $"ProveedorNombre: {proveedorRequest.Nombre}");
+
+                return Ok(Result<Object>.Ok());
+            }
+            catch (ExceptionApp ex)
+            {
+                switch (ex.Type)
+                {
+                    case ExceptionType.NotFound:
+                        _loggerApp.LogError(contexto, ex.Message);
+                        return NotFound(Result<object>.NotFound());
+                    default:
+                        _loggerApp.LogError(contexto, "Error inesperado creando el proveedor.", ex.Message);
+                        return StatusCode(500, Result<string>.Error("Ocurrió un error inesperado al registrar el proveedor.", ex.Message));
+                }
+            }
+            catch (Exception ex)
+            {
+                _loggerApp.LogError(nameof(RegistrarProveedor), "Error al registrar proveedor.", ex.ToString());
+
+                return StatusCode(500, Result<string>.Error("Ocurrió un error inesperado al registrar el proveedor.", ex.Message));
+            }
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ConsultarProveedorPorId(int id)

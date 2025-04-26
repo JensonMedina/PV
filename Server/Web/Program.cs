@@ -9,6 +9,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Infrastructure.Logging;
 using Domain.Interfaces;
+using Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProveedorService, ProveedorService>();
+
 builder.Services.AddHttpContextAccessor();
 #endregion
 
