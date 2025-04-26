@@ -9,5 +9,6 @@ namespace Infrastructure.Data
         public PlanSaasRepository(ApplicationDbContext context) : base(context)
         {
         }
+
     }
 }

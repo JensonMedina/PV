@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250425232832_CorrecionPropiedadIdPlanSaasDuplicadaEnNegocios")]
+    partial class CorrecionPropiedadIdPlanSaasDuplicadaEnNegocios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,6 +330,12 @@ namespace Infrastructure.Migrations
                     b.Property<int>("IdMedioPagoDefault")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdPlanSaas")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdRubro")
+                        .HasColumnType("int");
+
                     b.Property<string>("LogoUrl")
                         .HasColumnType("varchar(250)");
 
@@ -343,17 +352,11 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Pais")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("PlanSaasId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Provincia")
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("RowVersion")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("RubroId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Telefono")
                         .HasColumnType("varchar(20)");
@@ -368,10 +371,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PlanSaasId");
-
-                    b.HasIndex("RubroId");
 
                     b.ToTable("Negocios");
                 });
@@ -669,7 +668,7 @@ namespace Infrastructure.Migrations
                             Id = 1,
                             Activo = true,
                             Descripcion = "Productos comestibles, bebidas alcohólicas y no alcohólicas",
-                            FechaAlta = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FechaAlta = new DateTime(2025, 4, 25, 20, 28, 32, 94, DateTimeKind.Local).AddTicks(7440),
                             Nombre = "Alimentos y Bebidas"
                         },
                         new
@@ -677,7 +676,7 @@ namespace Infrastructure.Migrations
                             Id = 2,
                             Activo = true,
                             Descripcion = "Artículos eléctricos para el hogar",
-                            FechaAlta = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FechaAlta = new DateTime(2025, 4, 25, 20, 28, 32, 94, DateTimeKind.Local).AddTicks(7452),
                             Nombre = "Electrodomésticos"
                         },
                         new
@@ -685,7 +684,7 @@ namespace Infrastructure.Migrations
                             Id = 3,
                             Activo = true,
                             Descripcion = "Ropa y accesorios de moda",
-                            FechaAlta = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FechaAlta = new DateTime(2025, 4, 25, 20, 28, 32, 94, DateTimeKind.Local).AddTicks(7454),
                             Nombre = "Indumentaria"
                         },
                         new
@@ -693,7 +692,7 @@ namespace Infrastructure.Migrations
                             Id = 4,
                             Activo = true,
                             Descripcion = "Productos de higiene y limpieza",
-                            FechaAlta = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FechaAlta = new DateTime(2025, 4, 25, 20, 28, 32, 94, DateTimeKind.Local).AddTicks(7455),
                             Nombre = "Limpieza"
                         },
                         new
@@ -701,7 +700,7 @@ namespace Infrastructure.Migrations
                             Id = 5,
                             Activo = true,
                             Descripcion = "Herramientas y artículos de construcción",
-                            FechaAlta = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FechaAlta = new DateTime(2025, 4, 25, 20, 28, 32, 94, DateTimeKind.Local).AddTicks(7456),
                             Nombre = "Ferretería"
                         },
                         new
@@ -709,7 +708,7 @@ namespace Infrastructure.Migrations
                             Id = 6,
                             Activo = true,
                             Descripcion = "Equipos informáticos, celulares, accesorios",
-                            FechaAlta = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FechaAlta = new DateTime(2025, 4, 25, 20, 28, 32, 94, DateTimeKind.Local).AddTicks(7457),
                             Nombre = "Tecnología"
                         });
                 });
@@ -1424,25 +1423,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("ProductoNegocio");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Negocio", b =>
-                {
-                    b.HasOne("Domain.Entities.PlanSaas", "PlanSaas")
-                        .WithMany()
-                        .HasForeignKey("PlanSaasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Rubro", "Rubro")
-                        .WithMany()
-                        .HasForeignKey("RubroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PlanSaas");
-
-                    b.Navigation("Rubro");
                 });
 
             modelBuilder.Entity("Domain.Entities.Producto", b =>

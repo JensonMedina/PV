@@ -9,15 +9,17 @@ namespace Application.Models.Request
         public string Nombre { get; set; }
         [StringLength(200)]
         public string? Descripcion { get; set; }
+        [Required]
         public TipoDocumento? TipoDocumento { get; set; }
-        [StringLength(20)]
+        [Required, StringLength(20)]
         public string? NumeroDocumento { get; set; }
-        [EmailAddress]
+        [Required, EmailAddress]
         public string Email { get; set; }
-        [Phone]
+        [Required, Phone]
         public string Telefono { get; set; }
         [Required]
         public Moneda? Moneda { get; set; }
+        [Required]
         public int IdPlanSaas { get; set; }
         [Required]
         public int RubroId { get; set; }

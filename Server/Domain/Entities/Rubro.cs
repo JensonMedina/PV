@@ -11,7 +11,7 @@ namespace Domain.Entities
         [Column(TypeName = "varchar(200)")]
         public string? Descripcion { get; set; }
         public bool Activo { get; set; } = true;
-        public DateTime FechaAlta { get; set; } = DateTime.Now;
+        public DateTime FechaAlta { get; set; }
         #endregion
     }
 }
