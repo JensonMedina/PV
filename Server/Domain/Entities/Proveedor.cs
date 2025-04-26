@@ -38,6 +38,8 @@ namespace Domain.Entities
         public DateTime FechaAlta { get; set; } = DateTime.UtcNow;
         public int? RubroId { get; set; }
         public Rubro? Rubro { get; set; } // Ej: Alimentos, Limpieza, Tecnología...
+        public int? NegocioId { get; set; }
+        public Negocio? Negocio { get; set; }
         public decimal? LimiteCredito { get; set; }
         public int? DiasPlazoPago { get; set; } // Ej: 15 días para pagar
         [Column(TypeName = "varchar(500)")]

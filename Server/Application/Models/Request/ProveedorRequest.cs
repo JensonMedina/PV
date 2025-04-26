@@ -39,6 +39,8 @@ namespace Application.Models.Request
 
         [Required]
         public int RubroId { get; set; }
+        [Required]
+        public int NegocioId { get; set; }
 
         [Range(0, double.MaxValue)]
         public decimal? LimiteCredito { get; set; }

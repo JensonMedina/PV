@@ -15,6 +15,7 @@ namespace Application.Mappings
             Email = request.Email,
             Telefono = request.Telefono,
             RubroId = request.RubroId,
+            NegocioId = request.NegocioId,
             LimiteCredito = request.LimiteCredito,
             DiasPlazoPago = request.DiasPlazoPago,
             Observaciones = request.Observaciones,
