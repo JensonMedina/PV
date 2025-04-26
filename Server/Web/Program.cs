@@ -22,9 +22,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddHttpContextAccessor();
 #endregion
-builder.Services.AddScoped<IClienteService, ClienteService>();
 
 #region Inyección de repositorios
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();

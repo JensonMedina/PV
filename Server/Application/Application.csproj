@@ -5,13 +5,13 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<Folder Include="Mappings\" />
 		<Folder Include="Common\" />
 		<Folder Include="Services\" />
+		<Folder Include="Interfaces\" />
+		<Folder Include="Models\" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\Domain\Domain.csproj" />
 	</ItemGroup>

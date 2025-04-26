@@ -18,6 +18,7 @@ namespace Application.Models.Request
         public TipoDocumento? TipoDocumento { get; set; }
 
         [StringLength(20)]
+        [RegularExpression(@"^\d{7,11}$", ErrorMessage = "El número de documento debe tener entre 7 y 11 dígitos.")]
         public string? NumeroDocumento { get; set; }
 
         [Phone]
