@@ -123,6 +123,29 @@ namespace Application.Services
                 throw;
             }
         }
+
+        public async Task Disable(int id)
+        {
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método Disable. Se intenta dehabilitar el negocio con Id: {id}");
+
+            try
+            {
+                #region Validar si exite el negocio
+                _ = await ValidarNegocio(id);
+                #endregion
+
+                #region Llamos al repositorio
+                await _unitOfWork.Negocios.SoftDeleteAsync(id);
+                await _unitOfWork.CompleteAsync();
+                _logger.LogInfo(this.GetType().Name, "Se terminó de ejecutar con éxito el método Disable");
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método Disable. Error: {ex}");
+                throw;
+            }
+        }
         /// <summary>
         /// Método usado para validar la existencia de un negocio a partir de un id
         /// </summary>

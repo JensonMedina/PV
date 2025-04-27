@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    [Route("v1/[controller]")]
+    [Route("v1/negocio")]
     [ApiController]
     public class NegocioController : ControllerBase
     {
@@ -17,7 +17,7 @@ namespace Web.Controllers
             _logger = logger;
             _serviceManager = serviceManager;
         }
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] NegocioRequest newNegocio)
         {
             _logger.LogInfo(this.GetType().Name, $"Ejecutando endpoint Register. Intentando registrar el negocio {newNegocio.Nombre}");
@@ -44,7 +44,7 @@ namespace Web.Controllers
                 return StatusCode(500, Result<object>.Error("Error interno del servidor. Por favor intente más tarde."));
             }
         }
-        [HttpPut]
+        [HttpPut("modify")]
         public async Task<IActionResult> Modify([FromBody] NegocioModifiedRequest request)
         {
             _logger.LogInfo(this.GetType().Name, $"Ejecutando endpoint Modify. Intentando modificar el negocio con Id: {request.Id}");
@@ -68,6 +68,33 @@ namespace Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(this.GetType().Name, $"Error no controlado en Modify: {ex.Message}");
+                return StatusCode(500, Result<object>.Error("Error interno del servidor. Por favor intente más tarde."));
+            }
+        }
+        [HttpDelete("disable")]
+        public async Task<IActionResult> Disable([FromQuery]int id)
+        {
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando endpoint Disable. Intentando dehabilitar el negocio con Id: {id}");
+            try
+            {
+                await _serviceManager.NegocioService.Disable(id);
+                _logger.LogInfo(this.GetType().Name, $"Ejecutando endpoint Disable. Se deshabilitó con éxito el negocio con Id: {id}");
+                return Ok(Result<object>.Ok($"Se deshabilitó con éxito el negocio con Id: {id}"));
+            }
+            catch (ExceptionApp ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Error controlado en Disable: {ex.Message}");
+                switch (ex.Type)
+                {
+                    case ExceptionType.NotFound:
+                        return NotFound(Result<object>.NotFound(ex.Message));
+                    default:
+                        return StatusCode(500, Result<object>.Error("Se produjo un error inesperado al procesar la solicitud."));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Error no controlado en Disable: {ex.Message}");
                 return StatusCode(500, Result<object>.Error("Error interno del servidor. Por favor intente más tarde."));
             }
         }
