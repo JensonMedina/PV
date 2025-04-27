@@ -82,5 +82,71 @@ namespace Application.Services
                 throw; //lanzamos la exception para poder trasladarla hasta llegar al cliente
             }
         }
+        /// <summary>
+        /// Método usado para modificar un negocio
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="negocioRequest"></param>
+        /// <returns></returns>
+        public async Task Modify(NegocioModifiedRequest negocioRequest)
+        {
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método Modify. Se intenta modificar el negocio con Id: {negocioRequest.Id}");
+            
+            try
+            {
+                #region Validar si exite el negocio
+                Negocio negocio = await ValidarNegocio(negocioRequest.Id);
+                #endregion
+
+                #region Mapeamos
+                try
+                {
+                    _logger.LogInfo(this.GetType().Name, $"Ejecutando método Modify. Mapeando de NegocioModifiedRequest a Negocio");
+                    negocio = NegocioMapping.ModifiedToEntity(negocioRequest, negocio);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(this.GetType().Name, $"Ocurrió un error al intentar mapear de NegocioModifiedRequest a Negocio. Error: {ex.ToString()}");
+                    throw;
+                }
+                #endregion
+
+                #region Llamos al repositorio
+                _unitOfWork.Negocios.UpdateAsync(negocio);
+                await _unitOfWork.CompleteAsync();
+                _logger.LogInfo(this.GetType().Name, "Se terminó de ejecutar con éxito el método Modify");
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método Modify. Error: {ex.ToString()}");
+                throw;
+            }
+        }
+        /// <summary>
+        /// Método usado para validar la existencia de un negocio a partir de un id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Negocio> ValidarNegocio(int id)
+        {
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método ValidarNegocio. Se consulta la existencia del negocio con Id: {id}");
+            Negocio? negocio = null;
+            try
+            {
+                negocio = await _unitOfWork.Negocios.GetByIdAsync(id);
+                if (negocio == null)
+                {
+                    _logger.LogInfo(this.GetType().Name, $"Ejecutando método ValidarNegocio. No se encontró el negocio con Id: {id}");
+                    throw ExceptionApp.NotFound($"No se encontró el negocio con id: {id}");
+                }
+                return negocio;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método ValidarNegocio. Error: {ex.ToString()}");
+                throw; //lanzamos la exception para poder trasladarla hasta llegar al cliente
+            }
+        }
     }
 }

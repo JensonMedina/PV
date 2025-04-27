@@ -5,7 +5,6 @@
         TarjetaDebito,
         CuentaBancaria,
         PayPal,
-        MercadoPago,
-        Otro
+        MercadoPago
     }
 }

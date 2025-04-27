@@ -6,10 +6,9 @@ namespace Infrastructure.Data
 {
     public class NegocioRepository : EFRepository<Negocio>, INegocioRepository
     {
-        private readonly ILoggerApp _logger;
-        public NegocioRepository(ApplicationDbContext context, ILoggerApp logger) : base(context)
+        public NegocioRepository(ApplicationDbContext context, ILoggerApp logger) : base(context, logger)
         {
-            _logger = logger;
+            
         }
 
         /// <summary>

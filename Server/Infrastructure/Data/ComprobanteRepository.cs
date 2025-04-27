@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Interfaces;
 
 namespace Infrastructure.Data
@@ -6,7 +7,7 @@ namespace Infrastructure.Data
     public class ComprobanteRepository : EFRepository<Comprobante>, IComprobanteRepository
     {
 
-        public ComprobanteRepository(ApplicationDbContext context) : base(context)
+        public ComprobanteRepository(ApplicationDbContext context, ILoggerApp logger) : base(context, logger)
         {
         }
     }

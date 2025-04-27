@@ -5,8 +5,9 @@ namespace Application.Models.Request
 {
     public class MedioPagoRequest
     {
+        [Required, Range(0, 4)]
         public TipoMedioPago TipoMedioPago { get; set; }
-        [StringLength(255)]
+        [Required, StringLength(255)]
         public string NombreTitular { get; set; }
         [StringLength(255)]
         public string? TokenProveedor { get; set; }

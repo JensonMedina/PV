@@ -47,8 +47,8 @@ namespace Domain.Entities
 
         #region Configuración
         public Moneda Moneda { get; set; } // Ej: "ARS", "USD", etc.
-        public bool? UsaFacturacion { get; set; }
-        public TipoFacturacion TipoFacturacion { get; set; } // "Electronica", "Manual", "Externa"
+        public bool? UsaFacturacion { get; set; } = false;
+        public TipoFacturacion? TipoFacturacion { get; set; } // "Electronica", "Manual", "Externa"
         #endregion
 
         #region Relación PlanSaas
