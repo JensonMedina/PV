@@ -20,9 +20,11 @@ namespace Application.Models.Request
         [Required]
         public Moneda? Moneda { get; set; }
         [Required]
-        public int IdPlanSaas { get; set; }
+        public int PlanSaasId { get; set; }
         [Required]
         public int RubroId { get; set; }
         public bool DebitoAutomaticoActivo { get; set; }
+        [Required]
+        public MedioPagoRequest MedioPagoRequest { get; set; }
     }
 }

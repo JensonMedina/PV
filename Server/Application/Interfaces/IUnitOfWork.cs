@@ -22,6 +22,7 @@ namespace Application.Interfaces
         IUsuarioRepository Usuarios { get; }
         IVentaDetalleRepository VentasDetalles { get; }
         IVentaRepository Ventas { get; }
+        IMedioPagoRepository MedioPagos { get; }
         Task<int> CompleteAsync(); // Guarda todos los cambios en una transacción
     }
 }

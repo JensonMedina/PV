@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250426140235_MigracionConDbSetMedioPago")]
+    partial class MigracionConDbSetMedioPago
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -297,7 +300,7 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("Activo")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime>("FechaAlta")
+                    b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("FechaExpiracion")
@@ -309,18 +312,18 @@ namespace Infrastructure.Migrations
                     b.Property<int>("NegocioId")
                         .HasColumnType("int");
 
-                    b.Property<string>("NombreTitular")
+                    b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("TipoMedioPago")
+                    b.Property<int>("Tipo")
                         .HasColumnType("int");
 
                     b.Property<string>("TokenProveedor")
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("UltimosDigitos")
-                        .HasColumnType("varchar(4)");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -463,39 +466,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PlanesSaas");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Activo = true,
-                            Costo = 5000.0,
-                            Descripcion = "Para pequeños negocios o emprendimientos.",
-                            LimiteProductos = 1000,
-                            LimiteUsuarios = 2,
-                            Nombre = "Plan Básico",
-                            Periodo = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Activo = true,
-                            Costo = 7000.0,
-                            Descripcion = "Para negocios medianos.",
-                            LimiteProductos = 1200,
-                            LimiteUsuarios = 5,
-                            Nombre = "Plan Profesional",
-                            Periodo = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Activo = true,
-                            Costo = 8000.0,
-                            Descripcion = "Para negocios grandes o cadenas de tiendas.",
-                            Nombre = "Plan Premium",
-                            Periodo = 1
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Producto", b =>

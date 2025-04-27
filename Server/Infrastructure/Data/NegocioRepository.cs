@@ -16,6 +16,7 @@ namespace Infrastructure.Data
         /// Método usado para registar en bd un negocio nuevo
         /// </summary>
         /// <param name="newNegocio"></param>
+        /// <returns></returns>
         public async Task Register(Negocio newNegocio)
         {
             _logger.LogInfo(this.GetType().Name, $"Ejecutando método Register. Se intenta registrar el negocio:{newNegocio.Nombre}");

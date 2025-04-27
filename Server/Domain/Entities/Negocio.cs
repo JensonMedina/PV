@@ -39,7 +39,7 @@ namespace Domain.Entities
         #region Información General
         [Column(TypeName = "varchar(250)")]
         public string? LogoUrl { get; set; }
-        
+        public int RubroId { get; set; }
         public Rubro Rubro { get; set; }
         public DateTime FechaAlta { get; set; }
         public bool Activo { get; set; } = true; // true = activo, false = inactivo o suspendido
@@ -52,13 +52,13 @@ namespace Domain.Entities
         #endregion
 
         #region Relación PlanSaas
+        public int PlanSaasId { get; set; }
         public PlanSaas PlanSaas { get; set; }
         #endregion
 
         #region Facturación Automática
         public bool DebitoAutomaticoActivo { get; set; } = false;
         public DateTime? FechaProximoDebito { get; set; }
-        public int IdMedioPagoDefault { get; set; } // Referencia al medio de pago predeterminado
         #endregion
 
         //Manejar Concurrencia

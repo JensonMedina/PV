@@ -15,6 +15,8 @@ namespace Application.Mappings
             Email = request.Email,
             Telefono = request.Telefono,
             Moneda = request.Moneda ?? Domain.Enum.Moneda.ARS,
+            RubroId = request.RubroId,
+            PlanSaasId = request.PlanSaasId,
 
         };
 

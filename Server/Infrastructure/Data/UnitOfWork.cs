@@ -25,8 +25,9 @@ public class UnitOfWork : IUnitOfWork
     public IUsuarioRepository Usuarios { get; }
     public IVentaDetalleRepository VentasDetalles { get; }
     public IVentaRepository Ventas { get; }
+    public IMedioPagoRepository MedioPagos { get; }
     #endregion
-    public UnitOfWork(ApplicationDbContext context, INegocioRepository negocioRepository)
+    public UnitOfWork(ApplicationDbContext context, INegocioRepository negocioRepository, IMedioPagoRepository medioPagos)
     {
         _context = context;
         #region inyeccion repositorios
@@ -49,6 +50,7 @@ public class UnitOfWork : IUnitOfWork
         Usuarios = new UsuarioRepository(_context);
         VentasDetalles = new VentaDetalleRepository(_context);
         Ventas = new VentaRepository(_context);
+        MedioPagos = medioPagos;
         #endregion
     }
 

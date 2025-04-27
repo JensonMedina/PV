@@ -1,8 +1,8 @@
-﻿using Application.Interfaces;
+﻿using Application.Common;
+using Application.Interfaces;
 using Application.Mappings;
 using Application.Models.Request;
 using Domain.Entities;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Services
 {
@@ -10,46 +10,40 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILoggerApp _logger;
-        public NegocioService(IUnitOfWork unitOfWork, ILoggerApp logger)
+        private readonly IRubroService _rubroService;
+        private readonly IPlanSaasService _planSaasService;
+        private readonly IMedioPagoService _medioPagoService;
+        public NegocioService(
+         IUnitOfWork unitOfWork,
+         ILoggerApp logger,
+         IRubroService rubroService,
+         IPlanSaasService planSaasService,
+         IMedioPagoService medioPagoService)
         {
-            _logger = logger;
             _unitOfWork = unitOfWork;
+            _logger = logger;
+            _rubroService = rubroService;
+            _planSaasService = planSaasService;
+            _medioPagoService = medioPagoService;
         }
 
+        /// <summary>
+        /// Método usado para registrar un negocio por primera vez
+        /// </summary>
+        /// <param name="newNegocio"></param>
+        /// <returns></returns>
         public async Task Register(NegocioRequest newNegocio)
         {
-            _logger.LogInfo(this.GetType().Name, $"Ejecutando método Register. Se intenta registrar el negocio:{newNegocio.Nombre}");
-            object? negocio = null;
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método Register. Se intenta registrar el negocio: {newNegocio.Nombre}");
+            Negocio? negocio = null;
             try
             {
                 #region Validar Rubro
-                //cuando este hecho el repositorio de Rubro
+                var rubro = await _rubroService.ValidarRubro(newNegocio.RubroId);
                 #endregion
 
                 #region Validar PlanSaas
-                try
-                {
-                    _logger.LogInfo(this.GetType().Name, $"Validando que existe el PlanSaas con id: {newNegocio.IdPlanSaas}");
-                    var plansass = await _unitOfWork.PlanesSaas.GetByIdAsync(newNegocio.IdPlanSaas);
-                    if (plansass is null)
-                    {
-                        _logger.LogInfo(this.GetType().Name, $"No se encontró el PlanSaas con id: {newNegocio.IdPlanSaas}");
-                        throw new Exception();
-                    }
-                    _logger.LogInfo(this.GetType().Name, $"Se encontró con éxito el PlanSaas con id: {newNegocio.IdPlanSaas} - Plan: {plansass.Nombre}");
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método Register al validar si existe el PlanSaas con id {newNegocio.IdPlanSaas}. Error: {ex.Message}");
-                    throw; //lanzamos la exception para poder trasladarla hasta llegar al cliente
-                }
-                #endregion
-
-                #region Validar Datos de cobro
-                //Cuando este realizada la lógica
-                #endregion
-
-                #region Registrar en bd los datos de cobro
+                var plansaas = await _planSaasService.ValidarPlanSaas(newNegocio.PlanSaasId);
                 #endregion
 
                 #region mapeamos de Request a entidad
@@ -65,13 +59,26 @@ namespace Application.Services
                 }
                 #endregion
 
-                await _unitOfWork.Negocios.Register((Negocio)negocio);
+                #region Invocamos al repositorio del Negocio
+                await _unitOfWork.Negocios.Register(negocio);
                 await _unitOfWork.CompleteAsync();
                 _logger.LogInfo(this.GetType().Name, "Se terminó de ejecutar con éxito el método Register");
+                #endregion
+
+                #region Validar y registrar medio de pago
+                await _medioPagoService.Register(newNegocio.MedioPagoRequest, negocio);
+                #endregion
             }
             catch (Exception ex)
             {
-                _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método Register al intentar registrar el negocio {newNegocio.Nombre}. Error: {ex.Message}");
+                var errorDetails = $@"
+                Ocurrió un error en el método: {this.GetType().Name} - Register
+                Negocio: {newNegocio.Nombre}
+                Mensaje de Error: {ex.Message}
+                StackTrace: {ex.StackTrace}
+                InnerException: {(ex.InnerException != null ? ex.InnerException.Message : "No hay InnerException")}
+                ";
+                _logger.LogError(this.GetType().Name, errorDetails);
                 throw; //lanzamos la exception para poder trasladarla hasta llegar al cliente
             }
         }

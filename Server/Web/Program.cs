@@ -24,7 +24,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 #endregion
 
-#region Services
+#region Inyección de Servicios
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter>();
@@ -35,6 +35,10 @@ builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<INegocioService, NegocioService>();
+builder.Services.AddScoped<IRubroService, RubroService>();
+builder.Services.AddScoped<IPlanSaasService, PlanSaasService>();
+builder.Services.AddScoped<IServiceManager, ServiceManager>();
+builder.Services.AddScoped<IMedioPagoService, MedioPagoService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ValidationFilter>();
 builder.Services.AddScoped<ValidationFilter>();
@@ -62,6 +66,7 @@ builder.Services.AddScoped<IUsuarioPuestoRepository, UsuarioPuestoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IVentaDetalleRepository, VentaDetalleRepository>();
 builder.Services.AddScoped<IVentaRepository, VentaRepository>();
+builder.Services.AddScoped<IMedioPagoRepository, MedioPagoRepository>();
 #endregion
 
 
