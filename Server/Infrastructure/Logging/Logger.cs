@@ -44,6 +44,11 @@ namespace Infrastructure.Logging
             WriteLog("ERROR", context, message, additionalData);
         }
 
+        public void LogWarning(string context, string message, string? additionalData = null)
+        {
+            WriteLog("WARNING", context, message, additionalData);
+        }
+
         private void WriteLog(string level, string context, string message, string? additionalData)
         {
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
