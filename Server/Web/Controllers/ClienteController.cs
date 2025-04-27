@@ -22,173 +22,115 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResponse<ClienteResponse>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            _logger.LogInfo(this.GetType().Name, $"Ejecutando endpoint GetAll. Intentando Obtener todos");
-
+            string contexto = $"{GetType().Name} - {nameof(GetAll)}";
+            _logger.LogInfo(contexto, "Iniciando método GetAll");
             try
             {
                 var result = await _clienteService.GetClientesAsync(pageNumber, pageSize);
+                _logger.LogInfo(contexto, $"GetAll finalizado. Total registros: {result.TotalCount}");
                 return Ok(Result<PagedResponse<ClienteResponse>>.Ok(result));
-
             }
             catch (ExceptionApp ex)
             {
-                switch (ex.Type)
-                {
-
-                    case ExceptionType.NotFound:
-                        _logger.LogError(nameof(GetAll), " clientes no  encontrados", ex.Message);
-                        return NotFound(Result<object>.NotFound());
-                    default:
-                        _logger.LogError(nameof(GetAll), "Error inesperado creando cliente", ex.Message);
-                        return StatusCode(500, Result<object>.Error());
-                }
+                _logger.LogError(contexto, ex.Message);
+                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : StatusCode(500, Result<object>.Error());
             }
             catch (Exception ex)
             {
+                _logger.LogError(contexto, $"Error inesperado GetAll. Error: {ex.Message}");
                 return StatusCode(500, Result<object>.Error());
-
-
             }
-
         }
-  //---------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ClienteResponse>> GetById([FromRoute] int id)
         {
-            _logger.LogInfo(this.GetType().Name, $"Ejecutando endpoint GetById. Intentando Obtener el Id");
+            string contexto = $"{GetType().Name} - {nameof(GetById)}";
+            _logger.LogInfo(contexto, "Iniciando método GetById");
             try
             {
                 var cliente = await _clienteService.GetClienteByIdAsync(id);
-                return Ok(Result<ClienteResponse>.Ok(cliente, "cliente encontrado"));
+                _logger.LogInfo(contexto, $"GetById finalizado. Id:{id}");
+                return Ok(Result<ClienteResponse>.Ok(cliente));
             }
             catch (ExceptionApp ex)
             {
-                switch (ex.Type)
-                { 
-                    case ExceptionType.NotFound:
-                        _logger.LogError(nameof(GetById), $"Cliente con el id:{id} no existe", ex.Message);
-                        return NotFound(Result<object>.NotFound($"Cliente con el id:{id} no existe"));
-                    //case ExceptionType.BadRequest:
-                    //    _logger.LogError(nameof(Create), "Id ingresado incorrectamente", ex.Message);
-                    //    return BadRequest(Result<object>.BadRequest());
-                    default:
-                        _logger.LogError(nameof(GetById), "Error inesperado creando cliente", ex.Message);
-                        return StatusCode(500, Result<object>.Error());
-                }
+                _logger.LogError(contexto, ex.Message);
+                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : StatusCode(500, Result<object>.Error());
             }
             catch (Exception ex)
             {
+                _logger.LogError(contexto, $"Error inesperado GetById. Error: {ex.Message}");
                 return StatusCode(500, Result<object>.Error());
             }
-
         }
- //---------------------------------------------------------------------------------------------------------------------------------------------------------
 
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] ClienteRequest clienteRequest)
+        public async Task<ActionResult> Create([FromBody] ClienteRequest request)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(Create)}";
+            string contexto = $"{GetType().Name} - {nameof(Create)}";
+            _logger.LogInfo(contexto, "Iniciando método Create");
 
             try
             {
-                _logger.LogInfo(contexto, "iniciando metodo");
-                await _clienteService.CreateClienteAsync(clienteRequest);
-                _logger.LogInfo(contexto, "Finalizado");
+                await _clienteService.CreateClienteAsync(request);
+                _logger.LogInfo(contexto, "Create finalizado");
                 return Ok(Result<object>.Ok());
             }
             catch (ExceptionApp ex)
             {
-                switch (ex.Type)
-                {
-
-                    case ExceptionType.NotFound:
-                        _logger.LogError(contexto, ex.Message);
-
-                        return NotFound(Result<object>.NotFound());
-                    default:
-                        _logger.LogError(contexto, "Error inesperado creando cliente", ex.Message);
-
-                        return StatusCode(500, Result<object>.Error());
-                }
+                _logger.LogError(contexto, ex.Message);
+                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : BadRequest(Result<object>.BadRequest());
             }
             catch (Exception ex)
             {
-                _logger.LogError(contexto, "Error inesperado creando cliente", ex.Message);
+                _logger.LogError(contexto, $"Error inesperado Create. Error: {ex.Message}");
                 return StatusCode(500, Result<object>.Error());
             }
         }
- //---------------------------------------------------------------------------------------------------------------------------------------------------------
-
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update([FromRoute] int id, [FromBody] ClienteRequest request)
         {
-            _logger.LogInfo(this.GetType().Name, $"Ejecutando Update . Intentando Actualizar campos");
-
+            string contexto = $"{GetType().Name} - {nameof(Update)}";
+            _logger.LogInfo(contexto, "Iniciando método Update");
             try
             {
                 await _clienteService.UpdateClienteAsync(id, request);
+                _logger.LogInfo(contexto, $"Update finalizado. Id:{id}");
                 return Ok(Result<object>.Ok());
             }
             catch (ExceptionApp ex)
             {
-                switch (ex.Type)
-                {
-
-                    case ExceptionType.NotFound:
-                        _logger.LogError(nameof(Update), $"No fue encontrado el cliente con el id: {id}", ex.Message);
-                        return NotFound(Result<object>.NotFound());
-                    default:
-                        _logger.LogError(nameof(Update), "Error inesperado actualizando cliente", ex.Message);
-                        return StatusCode(500, Result<object>.Error());
-                }
+                _logger.LogError(contexto, ex.Message);
+                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : BadRequest(Result<object>.BadRequest());
             }
             catch (Exception ex)
             {
+                _logger.LogError(contexto, $"Error inesperado Update. Error: {ex.Message}");
                 return StatusCode(500, Result<object>.Error());
-
-
             }
-
         }
-//---------------------------------------------------------------------------------------------------------------------------------------------------------
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(Delete)}";
+            string contexto = $"{GetType().Name} - {nameof(Delete)}";
+            _logger.LogInfo(contexto, "Iniciando método Delete");
             try
             {
-                _logger.LogInfo(contexto, "Iniciando");
                 await _clienteService.DeleteClienteAsync(id);
-                _logger.LogInfo(contexto, "Finalizado");
-
+                _logger.LogInfo(contexto, $"Delete finalizado. Id:{id}");
                 return Ok(Result<object>.Ok());
             }
             catch (ExceptionApp ex)
             {
-                switch (ex.Type)
-                { 
-                    case ExceptionType.NotFound:
-                        _logger.LogError(contexto, ex.Message);
-
-                        return NotFound(Result<object>.NotFound());
-                    default:
-                        _logger.LogError(contexto, "Error inesperado Eliminando cliente", ex.Message);
-
-                        return StatusCode(500, Result<object>.Error());
-                }
+                _logger.LogError(contexto, ex.Message);
+                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : StatusCode(500, Result<object>.Error());
             }
             catch (Exception ex)
             {
-                _logger.LogError(contexto, "Error inesperado Eliminando cliente", ex.Message);
-
+                _logger.LogError(contexto, $"Error inesperado Delete. Error: {ex.Message}");
                 return StatusCode(500, Result<object>.Error());
-
-
             }
-
-
         }
     }
 }
