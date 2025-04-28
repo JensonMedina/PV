@@ -23,7 +23,7 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResponse<PuestoResponse>>> GetAll(int pageNumber = 1, int pageSize = 10)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(PuestoController)}";
+            string contexto = $"{this.GetType().Name} - {nameof(GetAll)}";
             _logger.LogInfo(contexto, "Inicializando método.");
 
             try
@@ -39,23 +39,23 @@ namespace Web.Controllers
 
                     case ExceptionType.NotFound:
                         _logger.LogError(contexto, "Puestos no encontrados", ex.Message);
-                        return NotFound(Result<object>.NotFound());
+                        return NotFound(Result<object>.NotFound(ex.Message));
                     default:
                         _logger.LogError(contexto, "Error inesperado creando puesto", ex.Message);
-                        return StatusCode(500, Result<object>.Error());
+                        return StatusCode(500, Result<object>.Error(ex.Message));
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(contexto, $"Error inesperado: {ex.Message}");
-                return StatusCode(500, Result<object>.Error());
+                return StatusCode(500, Result<object>.Error(ex.Message));
             }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PuestoResponse>> GetById(int id)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(PuestoController)}";
+            string contexto = $"{this.GetType().Name} - {nameof(GetById)}";
             _logger.LogInfo(contexto, $"Recuperando puesto con ID {id}.");
 
             try
@@ -71,23 +71,23 @@ namespace Web.Controllers
 
                     case ExceptionType.NotFound:
                         _logger.LogError(contexto, "Puesto no encontrado", ex.Message);
-                        return NotFound(Result<object>.NotFound());
+                        return NotFound(Result<object>.NotFound(ex.Message));
                     default:
                         _logger.LogError(contexto, "Error inesperado buscando puesto", ex.Message);
-                        return StatusCode(500, Result<object>.Error());
+                        return StatusCode(500, Result<object>.Error(ex.Message));
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(contexto, $"Error inesperado: {ex.Message}");
-                return StatusCode(500, Result<object>.Error());
+                return StatusCode(500, Result<object>.Error(ex.Message));
             }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] PuestoRequest request)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(PuestoController)}";
+            string contexto = $"{this.GetType().Name} - {nameof(Create)}";
             _logger.LogInfo(contexto, "Creando nuevo puesto.");
 
             try
@@ -102,26 +102,26 @@ namespace Web.Controllers
                 {
                     case ExceptionType.BadRequest:
                         _logger.LogError(contexto, ex.Message);
-                        return NotFound(Result<object>.NotFound());
+                        return NotFound(Result<object>.NotFound(ex.Message));
                     case ExceptionType.NotFound:
                         _logger.LogError(contexto, ex.Message);
-                        return NotFound(Result<object>.NotFound());
+                        return NotFound(Result<object>.NotFound(ex.Message));
                     default:
                         _logger.LogError(contexto, "Error inesperado buscando puesto", ex.Message);
-                        return StatusCode(500, Result<object>.Error());
+                        return StatusCode(500, Result<object>.Error(ex.Message));
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(contexto, $"Error inesperado: {ex.Message}");
-                return StatusCode(500, Result<object>.Error());
+                return StatusCode(500, Result<object>.Error(ex.Message));
             }
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<PuestoResponse>> Update(int id, [FromBody] PuestoRequest request)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(PuestoController)}";
+            string contexto = $"{this.GetType().Name} - {nameof(Update)}";
             _logger.LogInfo(contexto, $"Actualizando puesto con ID {id}.");
 
             try
@@ -136,26 +136,26 @@ namespace Web.Controllers
                 {
                     case ExceptionType.BadRequest:
                         _logger.LogError(contexto, ex.Message);
-                        return NotFound(Result<object>.NotFound());
+                        return NotFound(Result<object>.NotFound(ex.Message));
                     case ExceptionType.NotFound:
                         _logger.LogError(contexto, ex.Message);
-                        return NotFound(Result<object>.NotFound());
+                        return NotFound(Result<object>.NotFound(ex.Message));
                     default:
                         _logger.LogError(contexto, "Error inesperado buscando puesto", ex.Message);
-                        return StatusCode(500, Result<object>.Error());
+                        return StatusCode(500, Result<object>.Error(ex.Message));
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(contexto, $"Error inesperado: {ex.Message}");
-                return StatusCode(500, Result<object>.Error());
+                return StatusCode(500, Result<object>.Error(ex.Message));
             }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(PuestoController)}";
+            string contexto = $"{this.GetType().Name} - {nameof(Delete)}";
             _logger.LogInfo(contexto, $"Eliminando puesto con ID {id}.");
 
             try
@@ -170,19 +170,19 @@ namespace Web.Controllers
                 {
                     case ExceptionType.BadRequest:
                         _logger.LogError(contexto, ex.Message);
-                        return NotFound(Result<object>.NotFound());
+                        return NotFound(Result<object>.NotFound(ex.Message));
                     case ExceptionType.NotFound:
                         _logger.LogError(contexto, ex.Message);
-                        return NotFound(Result<object>.NotFound());
+                        return NotFound(Result<object>.NotFound(ex.Message));
                     default:
                         _logger.LogError(contexto, "Error inesperado buscando puesto", ex.Message);
-                        return StatusCode(500, Result<object>.Error());
+                        return StatusCode(500, Result<object>.Error(ex.Message));
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(contexto, $"Error inesperado: {ex.Message}");
-                return StatusCode(500, Result<object>.Error());
+                return StatusCode(500, Result<object>.Error(ex.Message));
             }
         }
     }

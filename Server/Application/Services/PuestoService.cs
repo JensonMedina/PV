@@ -19,7 +19,7 @@ namespace Application.Services
 
         public async Task<PagedResponse<PuestoResponse>> GetAllAsync(int pageNumber, int pageSize)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(PuestoService)}";
+            string contexto = $"{this.GetType().Name} - {nameof(GetAllAsync)}";
 
             _logger.LogInfo(contexto, "Inicializando método");
 
@@ -69,7 +69,7 @@ namespace Application.Services
 
         public async Task<PuestoResponse?> GetByIdAsync(int id)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(PuestoService)}";
+            string contexto = $"{this.GetType().Name} - {nameof(GetByIdAsync)}";
 
             _logger.LogInfo(contexto, "Inicializando método");
 
@@ -100,7 +100,7 @@ namespace Application.Services
 
         public async Task<PuestoResponse> AddAsync(PuestoRequest request)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(PuestoService)}";
+            string contexto = $"{this.GetType().Name} - {nameof(AddAsync)}";
             _logger.LogInfo(contexto, "Inicializando método.");
 
             try
@@ -123,7 +123,7 @@ namespace Application.Services
 
                 if (negocio == null)
                 {
-                    _logger.LogError(contexto, $"No se encontró un negocio con ID {request.NegocioId}.");
+                    _logger.LogError(contexto, $"No existe un negocio con ID {request.NegocioId}.");
                     throw ExceptionApp.NotFound($"No existe el negocio con ID {request.NegocioId}.");
                 }
                 #endregion
@@ -146,7 +146,7 @@ namespace Application.Services
 
         public async Task<PuestoResponse> UpdateAsync(int id, PuestoRequest request)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(PuestoService)}";
+            string contexto = $"{this.GetType().Name} - {nameof(UpdateAsync)}";
             _logger.LogInfo(contexto, "Inicializando método.");
 
             try
@@ -176,12 +176,17 @@ namespace Application.Services
                 }
                 #endregion
 
-                puesto.Nombre = request.Nombre;
-                puesto.DireccionIP = request.DireccionIP;
-                puesto.DireccionMAC = request.DireccionMAC;
-                puesto.TipoImpresora = request.TipoImpresora;
-                puesto.ImpresoraConfigurada = request.ImpresoraConfigurada;
-                puesto.NegocioId = request.NegocioId;
+                if (request.Nombre != puesto.Nombre)
+                    puesto.Nombre = request.Nombre;
+
+                if (request.TipoImpresora != puesto.TipoImpresora)
+                    puesto.TipoImpresora = request.TipoImpresora;
+
+                if (request.ImpresoraConfigurada != puesto.ImpresoraConfigurada)
+                    puesto.ImpresoraConfigurada = request.ImpresoraConfigurada;
+
+                if (request.NegocioId > 0 && request.NegocioId != puesto.NegocioId)
+                    puesto.NegocioId = request.NegocioId;
 
                 await _unitOfWork.Puestos.UpdateAsync(puesto);
                 await _unitOfWork.CompleteAsync();
@@ -219,7 +224,7 @@ namespace Application.Services
                     throw ExceptionApp.BadRequest($"El puesto con ID {id} ya fue dado de baja anteriormente.");
                 }
                 #endregion
-                await _unitOfWork.Puestos.SoftDeleteAsync(puesto);
+                await _unitOfWork.Puestos.SoftDeleteAsync(puesto.Id);
                 await _unitOfWork.CompleteAsync();
 
                 _logger.LogInfo(contexto, $"Se dio de baja el puesto con ID {id} correctamente.");
