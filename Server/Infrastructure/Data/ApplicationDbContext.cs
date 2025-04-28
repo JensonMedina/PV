@@ -49,6 +49,7 @@ namespace Infrastructure.Data
             #region DataSeeds
             modelBuilder.SeedUnidadesMedidas();
             modelBuilder.SeedRubros();
+            modelBuilder.SeedPlanesSaas();
 
             #endregion
         }
@@ -72,6 +73,7 @@ namespace Infrastructure.Data
         public DbSet<ProductoNegocio> ProductosNegocios { get; set; }
         public DbSet<HistoricoPrecio> HistoricosPrecios { get; set; }
         public DbSet<HistoricoStock> HistoricoStocks { get; set; }
+        public DbSet<MedioPago> MediosPagos { get; set; }
         #endregion
     }
 }

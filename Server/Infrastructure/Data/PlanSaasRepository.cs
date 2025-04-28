@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Interfaces;
 
 namespace Infrastructure.Data
@@ -6,8 +7,9 @@ namespace Infrastructure.Data
     public class PlanSaasRepository : EFRepository<PlanSaas>, IPlanSaasRepository
     {
 
-        public PlanSaasRepository(ApplicationDbContext context) : base(context)
+        public PlanSaasRepository(ApplicationDbContext context, ILoggerApp logger) : base(context, logger)
         {
         }
+
     }
 }
