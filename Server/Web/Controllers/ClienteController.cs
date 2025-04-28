@@ -33,7 +33,12 @@ namespace Web.Controllers
             catch (ExceptionApp ex)
             {
                 _logger.LogError(contexto, ex.Message);
-                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : StatusCode(500, Result<object>.Error());
+                return ex.Type switch
+                {
+                    ExceptionType.BadRequest => BadRequest(Result<object>.BadRequest(ex.Message)),
+                    ExceptionType.NotFound => NotFound(Result<object>.NotFound(ex.Message)),
+                    _ => StatusCode(500, Result<object>.Error(ex.Message))
+                };
             }
             catch (Exception ex)
             {
@@ -80,7 +85,13 @@ namespace Web.Controllers
             catch (ExceptionApp ex)
             {
                 _logger.LogError(contexto, ex.Message);
-                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : BadRequest(Result<object>.BadRequest());
+                return ex.Type switch
+                {
+                    ExceptionType.ValidationError => BadRequest(Result<object>.BadRequest(ex.Message)),
+                    ExceptionType.Conflict => Conflict(Result<object>.Conflict(ex.Message)),
+                    ExceptionType.Unauthorized => StatusCode(401, Result<object>.Unauthorized(ex.Message)),
+                    _ => BadRequest(Result<object>.BadRequest(ex.Message))
+                };
             }
             catch (Exception ex)
             {
@@ -102,7 +113,12 @@ namespace Web.Controllers
             catch (ExceptionApp ex)
             {
                 _logger.LogError(contexto, ex.Message);
-                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : BadRequest(Result<object>.BadRequest());
+                return ex.Type switch
+                {
+                    ExceptionType.NotFound => NotFound(Result<object>.NotFound(ex.Message)),
+                    ExceptionType.ValidationError => BadRequest(Result<object>.BadRequest(ex.Message)),
+                    _ => BadRequest(Result<object>.BadRequest(ex.Message))
+                };
             }
             catch (Exception ex)
             {

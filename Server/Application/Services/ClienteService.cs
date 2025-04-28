@@ -24,21 +24,23 @@ namespace Infrastructure.Services
             string contexto = $"{GetType().Name} - {nameof(CreateClienteAsync)}";
             _logger.LogInfo(contexto, "Iniciando método CreateClienteAsync");
 
-            if (!Enum.IsDefined(typeof(TipoDocumento), newCliente.TipoDocumento))
+
+            var negocio = await _unitOfWork.Negocios.GetByIdAsync(newCliente.NegocioId);
+            if (negocio == null)
             {
-                _logger.LogError(contexto, $"TipoDocumento inválido: {newCliente.TipoDocumento}");
-                throw ExceptionApp.BadRequest($"TipoDocumento no válido: {newCliente.TipoDocumento}");
+                _logger.LogError(contexto, $"Negocio no encontrado. Id:{newCliente.NegocioId}");
+                throw ExceptionApp.NotFound($"El negocio con Id {newCliente.NegocioId} no existe");
+            }
+
+            var existeEmail = await _unitOfWork.Clientes.ExistsByEmailAsync(newCliente.Email);
+            if (existeEmail)
+            {
+                _logger.LogError(contexto, $"Email ya registrado: {newCliente.Email}");
+                throw ExceptionApp.Conflict($"El correo {newCliente.Email} ya está en uso");
             }
 
             try
             {
-                _logger.LogInfo(contexto, $"Consultando negocio con id:{newCliente.NegocioId}");
-                var negocio = await _unitOfWork.Negocios.GetByIdAsync(newCliente.NegocioId);
-                if (negocio == null)
-                {
-                    _logger.LogError(contexto, $"No se encontró el negocio con id:{newCliente.NegocioId}");
-                    throw ExceptionApp.NotFound($"El negocio con Id: {newCliente.NegocioId} no existe");
-                }
 
                 var entidad = ClienteMapping.ToEntity(newCliente);
                 var creado = await _unitOfWork.Clientes.AddAsync(entidad);
@@ -46,14 +48,11 @@ namespace Infrastructure.Services
 
                 _logger.LogInfo(contexto, $"Cliente creado con éxito. Id:{creado.Id}");
             }
-            catch (ExceptionApp)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
-                _logger.LogError(contexto, $"Error inesperado creando cliente. Error: {ex.Message}");
+                _logger.LogError(contexto, $"Error inesperado creando cliente: {ex.Message}");
                 throw;
+
             }
         }
 
@@ -62,6 +61,8 @@ namespace Infrastructure.Services
         {
             string contexto = $"{GetType().Name} - {nameof(DeleteClienteAsync)}";
             _logger.LogInfo(contexto, "Iniciando método DeleteClienteAsync");
+            if (id <= 0)
+                throw ExceptionApp.BadRequest("Id debe ser mayor que cero");
             try
             {
                 _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
@@ -83,6 +84,8 @@ namespace Infrastructure.Services
             {
                 _logger.LogError(contexto, $"Error inesperado eliminando cliente. Error: {ex.Message}");
                 throw;
+
+
             }
         }
 
@@ -90,6 +93,9 @@ namespace Infrastructure.Services
         {
             string contexto = $"{GetType().Name} - {nameof(GetClienteByIdAsync)}";
             _logger.LogInfo(contexto, "Iniciando método GetClienteByIdAsync");
+            if (id <= 0)
+                throw ExceptionApp.BadRequest("Id debe ser mayor que cero");
+
             try
             {
                 _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
@@ -118,6 +124,11 @@ namespace Infrastructure.Services
         {
             string contexto = $"{GetType().Name} - {nameof(GetClientesAsync)}";
             _logger.LogInfo(contexto, "Iniciando método GetClientesAsync");
+
+
+            if (pageNumber <= 0 || pageSize <= 0)
+                throw ExceptionApp.BadRequest("PageNumber y PageSize deben ser mayores que cero");
+
             try
             {
                 _logger.LogInfo(contexto, $"Obteniendo página {pageNumber} (size={pageSize}, onlyActive={onlyActive})");
@@ -149,20 +160,27 @@ namespace Infrastructure.Services
         {
             string contexto = $"{GetType().Name} - {nameof(UpdateClienteAsync)}";
             _logger.LogInfo(contexto, "Iniciando método UpdateClienteAsync");
+
+            _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
+            var entidad = await _unitOfWork.Clientes.GetByIdAsync(id);
+            if (entidad == null || !entidad.Activo)
+            {
+                _logger.LogError(contexto, $"Cliente no encontrado o inactivo con id:{id}");
+                throw ExceptionApp.NotFound($"El cliente con Id: {id} no existe");
+            }
+            if (!string.Equals(entidad.Email, req.Email, StringComparison.OrdinalIgnoreCase))
+            {
+                var existeEmail = await _unitOfWork.Clientes.ExistsByEmailAsync(req.Email);
+                if (existeEmail)
+                {
+                    _logger.LogError(contexto, $"Email ya registrado: {req.Email}");
+                    throw ExceptionApp.Conflict($"El correo {req.Email} ya está en uso");
+                }
+            }
+
             try
             {
-                _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
-                var entidad = await _unitOfWork.Clientes.GetByIdAsync(id);
-                if (entidad == null || !entidad.Activo)
-                {
-                    _logger.LogError(contexto, $"Cliente no encontrado o inactivo con id:{id}");
-                    throw ExceptionApp.NotFound($"El cliente con Id: {id} no existe");
-                }
-                if (!Enum.IsDefined(typeof(TipoDocumento), req.TipoDocumento))
-                {
-                    _logger.LogError(contexto, $"TipoDocumento inválido: {req.TipoDocumento}");
-                    throw ExceptionApp.BadRequest($"TipoDocumento no válido: {req.TipoDocumento}");
-                }
+
                 // Mapeo manual de propiedades
                 entidad.Nombre = req.Nombre;
                 entidad.Apellido = req.Apellido;

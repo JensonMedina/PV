@@ -6,7 +6,7 @@ namespace Application.Common
     {
         public ExceptionType Type { get; }
 
-        public ExceptionApp(string message, ExceptionType type) : base(message) 
+        public ExceptionApp(string message, ExceptionType type) : base(message)
         {
             Type = type;
         }
@@ -19,5 +19,31 @@ namespace Application.Common
         {
             return new ExceptionApp(message, ExceptionType.BadRequest);
         }
+        public static ExceptionApp Unauthorized(string message)
+        {
+            return new ExceptionApp(message, ExceptionType.Unauthorized);
+        }
+        public static ExceptionApp Forbidden(string message)
+        {
+            return new ExceptionApp(message, ExceptionType.Forbidden);
+        }
+        public static ExceptionApp Conflict(string message)
+        {
+            return new ExceptionApp(message, ExceptionType.Conflict);
+
+        }
+        public static ExceptionApp ValidationError(string message)
+        {
+            return new ExceptionApp(message, ExceptionType.ValidationError);
+        }
+        public static ExceptionApp InternalServerError(string message)
+        {
+            return new ExceptionApp(message, ExceptionType.InternalServerError);
+        }
+        public static ExceptionApp Error(string message)
+        {
+            return new ExceptionApp(message, ExceptionType.InternalServerError);
+        }
+
     }
 }

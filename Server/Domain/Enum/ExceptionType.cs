@@ -5,6 +5,10 @@
         NotFound,
         BadRequest,
         ValidationError,
-        Unauthorized
+        Unauthorized,
+        Forbidden,
+        Conflict,
+        InternalServerError,
+        Error
     }
 }
