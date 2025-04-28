@@ -95,7 +95,7 @@ namespace Application.Services
             try
             {
                 #region Validar si exite el negocio
-                Negocio negocio = await ValidarNegocio(negocioRequest.Id);
+                Negocio negocio = await ValidateNegocio(negocioRequest.Id);
                 #endregion
 
                 #region Mapeamos
@@ -131,7 +131,7 @@ namespace Application.Services
             try
             {
                 #region Validar si exite el negocio
-                _ = await ValidarNegocio(id);
+                _ = await ValidateNegocio(id);
                 #endregion
 
                 #region Llamos al repositorio
@@ -151,7 +151,7 @@ namespace Application.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Negocio> ValidarNegocio(int id)
+        public async Task<Negocio> ValidateNegocio(int id)
         {
             _logger.LogInfo(this.GetType().Name, $"Ejecutando método ValidarNegocio. Se consulta la existencia del negocio con Id: {id}");
             Negocio? negocio = null;

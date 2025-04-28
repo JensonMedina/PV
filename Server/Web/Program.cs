@@ -41,7 +41,6 @@ builder.Services.AddScoped<IServiceManager, ServiceManager>();
 builder.Services.AddScoped<IMedioPagoService, MedioPagoService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ValidationFilter>();
-builder.Services.AddScoped<ValidationFilter>();
 #endregion
 
 
