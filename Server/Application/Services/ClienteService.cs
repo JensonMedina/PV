@@ -93,18 +93,17 @@ namespace Infrastructure.Services
         {
             string contexto = $"{GetType().Name} - {nameof(GetClienteByIdAsync)}";
             _logger.LogInfo(contexto, "Iniciando método GetClienteByIdAsync");
-            if (id <= 0)
-                throw ExceptionApp.BadRequest("Id debe ser mayor que cero");
 
             try
             {
+                if (id <= 0)
+                    throw ExceptionApp.BadRequest("Id debe ser mayor que cero");
+
                 _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
-                var entidad = await _unitOfWork.Clientes.GetByIdAsync<int>(id);
+                var entidad = await _unitOfWork.Clientes.GetByIdAsync(id);
                 if (entidad == null || !entidad.Activo)
-                {
-                    _logger.LogError(contexto, $"Cliente no encontrado o inactivo con id:{id}");
                     throw ExceptionApp.NotFound($"El cliente con Id: {id} no existe");
-                }
+
                 var dto = ClienteMapping.ToResponse(entidad);
                 _logger.LogInfo(contexto, $"Cliente recuperado con éxito. Id:{id}");
                 return dto;
@@ -120,20 +119,34 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<PagedResponse<ClienteResponse>> GetClientesAsync(int pageNumber, int pageSize, bool onlyActive = true)
+        public async Task<PagedResponse<ClienteResponse>> GetClientesAsync(int pageNumber, int pageSize, bool onlyActive = true, int negocioId = 0)
         {
             string contexto = $"{GetType().Name} - {nameof(GetClientesAsync)}";
             _logger.LogInfo(contexto, "Iniciando método GetClientesAsync");
 
-
             if (pageNumber <= 0 || pageSize <= 0)
                 throw ExceptionApp.BadRequest("PageNumber y PageSize deben ser mayores que cero");
+            if (negocioId <= 0)
+                throw ExceptionApp.BadRequest("NegocioId debe ser mayor que cero");
+
+            // Verifico que exista el negocio
+            var negocio = await _unitOfWork.Negocios.GetByIdAsync(negocioId);
+            if (negocio == null)
+            {
+                _logger.LogError(contexto, $"Negocio no encontrado. Id:{negocioId}");
+                throw ExceptionApp.NotFound($"El negocio con Id {negocioId} no existe");
+            }
 
             try
             {
-                _logger.LogInfo(contexto, $"Obteniendo página {pageNumber} (size={pageSize}, onlyActive={onlyActive})");
-                var (entidades, total) = await _unitOfWork.Clientes.GetPageAsync(pageNumber, pageSize, onlyActive);
+                _logger.LogInfo(contexto,
+                    $"Obteniendo página {pageNumber} (size={pageSize}, onlyActive={onlyActive}) para negocio {negocioId}");
+
+                var (entidades, total) = await _unitOfWork.Clientes
+                    .GetPageByNegocioAsync(negocioId, pageNumber, pageSize, onlyActive);
+
                 var dtos = entidades.Select(ClienteMapping.ToResponse);
+
                 var paged = new PagedResponse<ClienteResponse>
                 {
                     Items = dtos,
@@ -141,7 +154,10 @@ namespace Infrastructure.Services
                     PageSize = pageSize,
                     TotalCount = total
                 };
-                _logger.LogInfo(contexto, $"Página {pageNumber} obtenida con éxito. Total registros: {total}");
+
+                _logger.LogInfo(contexto,
+                    $"Página {pageNumber} obtenida con éxito. Total registros: {total} para negocio {negocioId}");
+
                 return paged;
             }
             catch (ExceptionApp)

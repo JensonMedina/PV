@@ -20,13 +20,20 @@ namespace Web.Controllers
             _logger = _loggerApp;
         }
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<ClienteResponse>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [HttpGet]
+        public async Task<ActionResult<PagedResponse<ClienteResponse>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int negocioId = 0)
         {
             string contexto = $"{GetType().Name} - {nameof(GetAll)}";
             _logger.LogInfo(contexto, "Iniciando método GetAll");
+
             try
             {
-                var result = await _clienteService.GetClientesAsync(pageNumber, pageSize);
+                var result = await _clienteService.GetClientesAsync(
+                    pageNumber,
+                    pageSize,
+                    onlyActive: true,
+                    negocioId);
+
                 _logger.LogInfo(contexto, $"GetAll finalizado. Total registros: {result.TotalCount}");
                 return Ok(Result<PagedResponse<ClienteResponse>>.Ok(result));
             }
@@ -52,6 +59,14 @@ namespace Web.Controllers
         {
             string contexto = $"{GetType().Name} - {nameof(GetById)}";
             _logger.LogInfo(contexto, "Iniciando método GetById");
+
+            if (id <= 0)
+            {
+                var msg = "Id debe ser mayor que cero";
+                _logger.LogError(contexto, msg);
+                return BadRequest(Result<object>.BadRequest(msg));
+            }
+
             try
             {
                 var cliente = await _clienteService.GetClienteByIdAsync(id);
@@ -61,7 +76,12 @@ namespace Web.Controllers
             catch (ExceptionApp ex)
             {
                 _logger.LogError(contexto, ex.Message);
-                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : StatusCode(500, Result<object>.Error());
+                return ex.Type switch
+                {
+                    ExceptionType.BadRequest => BadRequest(Result<object>.BadRequest(ex.Message)),
+                    ExceptionType.NotFound => NotFound(Result<object>.NotFound(ex.Message)),
+                    _ => StatusCode(500, Result<object>.Error(ex.Message))
+                };
             }
             catch (Exception ex)
             {

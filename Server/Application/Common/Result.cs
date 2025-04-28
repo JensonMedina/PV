@@ -47,6 +47,12 @@
                 Errors = null
             };
         }
+
+
+
+
+
+
         /// <summary>
         /// Constructor para respuesta con error de tipo BadRquest
         /// </summary>
@@ -88,6 +94,17 @@
                 Data = default,
                 StatusCode = 404,
                 Errors = null
+            };
+        }
+        public static Result<T> Conflict(string message = "Error de conflicto", object errors = null, int statusCode = 409)
+        {
+            return new Result<T>
+            {
+                Success = false,
+                Message = message,
+                Data = default,
+                StatusCode = statusCode,
+                Errors = errors
             };
         }
 
