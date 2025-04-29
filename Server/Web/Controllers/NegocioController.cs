@@ -34,6 +34,8 @@ namespace Web.Controllers
                 {
                     case ExceptionType.NotFound:
                         return NotFound(Result<object>.NotFound(ex.Message));
+                    case ExceptionType.BadRequest:
+                        return BadRequest(Result<object>.BadRequest(ex.Message));
                     default:
                         return StatusCode(500, Result<object>.Error("Se produjo un error inesperado al procesar la solicitud."));
                 }
@@ -61,6 +63,8 @@ namespace Web.Controllers
                 {
                     case ExceptionType.NotFound:
                         return NotFound(Result<object>.NotFound(ex.Message));
+                    case ExceptionType.BadRequest:
+                        return BadRequest(Result<object>.BadRequest(ex.Message));
                     default:
                         return StatusCode(500, Result<object>.Error("Se produjo un error inesperado al procesar la solicitud."));
                 }
@@ -72,7 +76,7 @@ namespace Web.Controllers
             }
         }
         [HttpDelete("disable")]
-        public async Task<IActionResult> Disable([FromQuery]int id)
+        public async Task<IActionResult> Disable([FromQuery] int id)
         {
             _logger.LogInfo(this.GetType().Name, $"Ejecutando endpoint Disable. Intentando dehabilitar el negocio con Id: {id}");
             try
@@ -88,6 +92,8 @@ namespace Web.Controllers
                 {
                     case ExceptionType.NotFound:
                         return NotFound(Result<object>.NotFound(ex.Message));
+                    case ExceptionType.BadRequest:
+                        return BadRequest(Result<object>.BadRequest(ex.Message));
                     default:
                         return StatusCode(500, Result<object>.Error("Se produjo un error inesperado al procesar la solicitud."));
                 }

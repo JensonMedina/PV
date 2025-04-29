@@ -5,41 +5,59 @@ namespace Application.Models.Request
 {
     public class NegocioRequest
     {
-        [Required, StringLength(100)]
+        [Required(ErrorMessage = "El nombre es obligatorio."), StringLength(100, ErrorMessage = "El nombre no puede superar los 100 caracteres.")]
         public string Nombre { get; set; }
-        [StringLength(200)]
+
+        [StringLength(200, ErrorMessage = "La descripción no puede superar los 200 caracteres.")]
         public string? Descripcion { get; set; }
-        [Required, Range(0,2)]
+
+        [Range(0, 2, ErrorMessage = "El tipo de documento debe ser un valor entre 0 y 2.")]
         public TipoDocumento? TipoDocumento { get; set; }
-        [Required, StringLength(20)]
+
+        [StringLength(20, ErrorMessage = "El número de documento no puede superar los 20 caracteres.")]
         public string? NumeroDocumento { get; set; }
-        [Required, EmailAddress]
+
+        [Required(ErrorMessage = "El correo electrónico es obligatorio."), EmailAddress(ErrorMessage = "El formato del correo electrónico es incorrecto.")]
         public string Email { get; set; }
-        [Required, Phone]
-        public string Telefono { get; set; }
-        [Required, Range(0, 10)]
+
+        [Phone(ErrorMessage = "El formato del teléfono es incorrecto.")]
+        public string? Telefono { get; set; }
+
+        [Range(0, 10, ErrorMessage = "La moneda debe ser un valor entre 0 y 10.")]
         public Moneda? Moneda { get; set; } = Domain.Enum.Moneda.ARS;
+
         public bool? UsaFacturacion { get; set; } = false;
-        [Range(0, 3)]
+
+        [Range(0, 3, ErrorMessage = "El tipo de facturación debe ser un valor entre 0 y 3.")]
         public TipoFacturacion? TipoFacturacion { get; set; } = null;
-        [StringLength(100)]
+
+        [StringLength(100, ErrorMessage = "La calle no puede superar los 100 caracteres.")]
         public string? Calle { get; set; } = null;
-        [StringLength(10)]
+
+        [StringLength(10, ErrorMessage = "La altura no puede superar los 10 caracteres.")]
         public string? Altura { get; set; } = null;
-        [StringLength(100)]
+
+        [StringLength(100, ErrorMessage = "La ciudad no puede superar los 100 caracteres.")]
         public string? Ciudad { get; set; } = null;
-        [StringLength(100)]
+
+        [StringLength(100, ErrorMessage = "La provincia no puede superar los 100 caracteres.")]
         public string? Provincia { get; set; } = null;
-        [StringLength(50)]
+
+        [StringLength(50, ErrorMessage = "El país no puede superar los 50 caracteres.")]
         public string? Pais { get; set; } = null;
-        [StringLength(10)]
+
+        [StringLength(10, ErrorMessage = "El código postal no puede superar los 10 caracteres.")]
         public string? CodigoPostal { get; set; } = null;
-        [Required]
+
+        [Required(ErrorMessage = "El plan SaaS es obligatorio.")]
         public int PlanSaasId { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "El rubro es obligatorio.")]
         public int RubroId { get; set; }
-        public bool DebitoAutomaticoActivo { get; set; } = false;
-        [Required]
+
+        public bool? DebitoAutomaticoActivo { get; set; } = false;
+
+        [Required(ErrorMessage = "La información del medio de pago es obligatoria.")]
         public MedioPagoRequest MedioPagoRequest { get; set; }
     }
 }

@@ -13,7 +13,12 @@ namespace Application.Services
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Rubro?> ValidarRubro(int id)
+        /// <summary>
+        /// Método para validar un rubro a partir de un id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Rubro?> ValidateRubro(int id)
         {
             _logger.LogInfo(this.GetType().Name, "Ejecutando método ValidarRubro");
             try
