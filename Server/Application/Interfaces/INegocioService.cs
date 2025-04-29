@@ -7,7 +7,7 @@ namespace Application.Interfaces
     {
         Task Register(NegocioRequest newNegocio);
         Task Modify(NegocioModifiedRequest negocioRequest);
-        Task<Negocio> ValidateNegocio(int id);
+        Task<Negocio> ValidateById(int id);
         Task Disable(int id);
     }
 }

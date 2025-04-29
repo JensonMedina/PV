@@ -13,7 +13,12 @@ namespace Application.Services
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
-        public async Task<PlanSaas?> ValidarPlanSaas(int id)
+        /// <summary>
+        /// Método para encontrar un plan saas a partir de un id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<PlanSaas?> ValidatePlanSaas(int id)
         {
             _logger.LogInfo(this.GetType().Name, "Ejecutando método ValidarPlanSaas");
             try

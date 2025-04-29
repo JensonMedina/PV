@@ -4,6 +4,6 @@ namespace Application.Interfaces
 {
     public interface IPlanSaasService
     {
-        Task<PlanSaas?> ValidarPlanSaas(int id);
+        Task<PlanSaas?> ValidatePlanSaas(int id);
     }
 }

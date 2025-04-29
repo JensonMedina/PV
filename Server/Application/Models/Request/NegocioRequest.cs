@@ -9,15 +9,15 @@ namespace Application.Models.Request
         public string Nombre { get; set; }
         [StringLength(200)]
         public string? Descripcion { get; set; }
-        [Required, Range(0,2)]
+        [Range(0,2)]
         public TipoDocumento? TipoDocumento { get; set; }
-        [Required, StringLength(20)]
+        [StringLength(20)]
         public string? NumeroDocumento { get; set; }
         [Required, EmailAddress]
         public string Email { get; set; }
-        [Required, Phone]
+        [Phone]
         public string Telefono { get; set; }
-        [Required, Range(0, 10)]
+        [Range(0, 10)]
         public Moneda? Moneda { get; set; } = Domain.Enum.Moneda.ARS;
         public bool? UsaFacturacion { get; set; } = false;
         [Range(0, 3)]
