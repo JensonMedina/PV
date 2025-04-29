@@ -12,9 +12,9 @@ namespace Application.Interfaces
     public interface IPuestoService
     {
         Task<PagedResponse<PuestoResponse>> GetAllAsync(int negocioId, int pageNumber, int pageSize);
-        Task<PuestoResponse?> GetByIdAsync(int id);
+        Task<PuestoResponse?> GetByIdAsync(int negocioId, int id);
         Task<PuestoResponse> AddAsync(PuestoRequest request);
         Task<PuestoResponse> UpdateAsync(int id, PuestoRequest request);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(int negocioId, int id);
     }
 }

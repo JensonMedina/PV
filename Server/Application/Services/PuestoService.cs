@@ -39,7 +39,6 @@ namespace Application.Services
             try
             {
                 var (puestos, totalItems) = await _unitOfWork.Puestos.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive: true);
-
                 #region Validaciones
                 if (totalItems == 0)
                 {
@@ -67,7 +66,7 @@ namespace Application.Services
             }
         }
 
-        public async Task<PuestoResponse?> GetByIdAsync(int id)
+        public async Task<PuestoResponse?> GetByIdAsync(int negocioId, int id)
         {
             string contexto = $"{this.GetType().Name} - {nameof(GetByIdAsync)}";
 
@@ -84,7 +83,11 @@ namespace Application.Services
                     throw ExceptionApp.NotFound($"No se encontró el puesto con ID {id}.");
                 }
                 #endregion
-
+                if (puesto.NegocioId != negocioId)
+                {
+                    _logger.LogError(contexto, "El puesto no pertenece al negocio indicado.");
+                    throw ExceptionApp.BadRequest("El puesto no pertenece al negocio indicado.");
+                }
                 var response = PuestoMapping.ToResponse(puesto);
 
                 _logger.LogInfo(contexto, $"Se obtuvo el puesto con ID {id}.");
@@ -163,32 +166,22 @@ namespace Application.Services
                 }
 
                 // Solo validamos IP si ha cambiado
-                if (request.DireccionIP != puesto.DireccionIP && puestosExistentes.Any(p => p.DireccionIP == request.DireccionIP))
+                if (puestosExistentes.Any(p => p.DireccionIP == request.DireccionIP))
                 {
                     _logger.LogError(contexto, $"Ya existe un puesto con la misma IP: {request.DireccionIP}");
                     throw ExceptionApp.BadRequest($"Ya existe un puesto registrado con la misma Dirección IP.");
                 }
 
-                if (request.DireccionMAC != puesto.DireccionMAC && puestosExistentes.Any(p => p.DireccionMAC == request.DireccionMAC))
+                if (puestosExistentes.Any(p => p.DireccionMAC == request.DireccionMAC))
                 {
                     _logger.LogError(contexto, $"Ya existe un puesto con la misma Dirección MAC: {request.DireccionMAC}");
                     throw ExceptionApp.BadRequest($"Ya existe un puesto registrado con la misma Dirección MAC.");
                 }
                 #endregion
 
-                if (request.Nombre != puesto.Nombre)
-                    puesto.Nombre = request.Nombre;
+                var puestoUpdated = PuestoMapping.UpdatePuesto(puesto, request);
 
-                if (request.TipoImpresora != puesto.TipoImpresora)
-                    puesto.TipoImpresora = request.TipoImpresora;
-
-                if (request.ImpresoraConfigurada != puesto.ImpresoraConfigurada)
-                    puesto.ImpresoraConfigurada = request.ImpresoraConfigurada;
-
-                if (request.NegocioId > 0 && request.NegocioId != puesto.NegocioId)
-                    puesto.NegocioId = request.NegocioId;
-
-                await _unitOfWork.Puestos.UpdateAsync(puesto);
+                await _unitOfWork.Puestos.UpdateAsync(puestoUpdated);
                 await _unitOfWork.CompleteAsync();
 
                 _logger.LogInfo(contexto, $"Se actualizó el puesto con id {id} correctamente.");
@@ -202,7 +195,7 @@ namespace Application.Services
             }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int negocioId, int id)
         {
             string contexto = $"{this.GetType().Name} - {nameof(DeleteAsync)}";
             _logger.LogInfo(contexto, "Inicializando método.");
@@ -223,11 +216,19 @@ namespace Application.Services
                     _logger.LogError(contexto, $"El puesto con ID {id} ya está inactivo.");
                     throw ExceptionApp.BadRequest($"El puesto con ID {id} ya fue dado de baja anteriormente.");
                 }
-                #endregion
-                await _unitOfWork.Puestos.SoftDeleteAsync(puesto.Id);
-                await _unitOfWork.CompleteAsync();
 
-                _logger.LogInfo(contexto, $"Se dio de baja el puesto con ID {id} correctamente.");
+                if (puesto.NegocioId == negocioId) 
+                { 
+                    await _unitOfWork.Puestos.SoftDeleteAsync(puesto.Id);
+                    await _unitOfWork.CompleteAsync();
+                    _logger.LogInfo(contexto, $"Se dio de baja el puesto con ID {id} correctamente.");
+                }
+                else
+                {
+                    throw ExceptionApp.BadRequest($"El puesto no pertenece al negocio indicado.");
+                }
+                #endregion
+
             }
             catch (Exception ex)
             {

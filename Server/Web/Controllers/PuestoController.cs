@@ -153,14 +153,14 @@ namespace Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int negocioId, int id)
         {
             string contexto = $"{this.GetType().Name} - {nameof(Delete)}";
             _logger.LogInfo(contexto, $"Eliminando puesto con ID {id}.");
 
             try
             {
-                await _puestoService.DeleteAsync(id);
+                await _puestoService.DeleteAsync(negocioId, id);
                 _logger.LogInfo(contexto, $"Puesto con ID {id} eliminado correctamente.");
                 return Ok(Result<object>.Ok("Puesto eliminado correctamente."));
             }
