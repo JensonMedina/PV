@@ -73,7 +73,7 @@ builder.Services.AddScoped<IMedioPagoRepository, MedioPagoRepository>();
 
 #region DbContext
 
-builder.Services.AddDbContext<ApplicationDbContext>(opts => opts.UseMySql(builder.Configuration.GetConnectionString("JensonConnectionLocal"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))));
+builder.Services.AddDbContext<ApplicationDbContext>(opts => opts.UseMySql(builder.Configuration.GetConnectionString("BrunoConnectionLocal"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))));
 //builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
 //{
 //    var _logger = serviceProvider.GetRequiredService<ILoggerApp>();
@@ -130,12 +130,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 #endregion
-#region  Autorizacion
+
 #region  Autorizacion
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("DueñoPolicy", policy =>
-        policy.RequireClaim("tipo_usuario", "Dueño"));
     options.AddPolicy("DueñoPolicy", policy =>
         policy.RequireClaim("tipo_usuario", "Dueño"));
     options.AddPolicy("AdministradorPolicy", policy =>
