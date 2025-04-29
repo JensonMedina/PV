@@ -6,12 +6,16 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<Folder Include="Migrations\" />
-		<Folder Include="Data\" />
-		<Folder Include="Services\" />
 
-	</ItemGroup>
+
+  <ItemGroup>
+  <Folder Include="Migrations\" />
+  <Folder Include="Services\" />
+	<Folder Include="Data\" />
+	<Folder Include="Logging\" />
+	<Folder Include="Seeds\" />
+  </ItemGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />

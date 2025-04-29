@@ -1,17 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Interfaces;
 
 namespace Application.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
-        public interface IUnitOfWork : IDisposable
-        {
-            Task<int> CompleteAsync(); // Guarda todos los cambios en una transacción
-        }
-
+        ICategoriaRepository Categorias { get; }
+        IClienteRepository Clientes { get; }
+        ICompraDetalleRepository ComprasDetalles { get; }
+        ICompraRepository Compras { get; }
+        IComprobanteRepository Comprobantes { get; }
+        IHistoricoPrecioRepository HistoricosPrecios { get; }
+        IHistoricoStockRepository HistoricoStocks { get; }
+        INegocioRepository Negocios { get; }
+        IPlanSaasRepository PlanesSaas { get; }
+        IProductoNegocioRepository ProductosNegocios { get; }
+        IProductoRepository Productos { get; }
+        IPuestoRepository Puestos { get; }
+        IProveedorRepository Proveedores { get; }
+        IRubroRepository Rubros { get; }
+        IUnidadMedidaRepository UnidadesMedidas { get; }
+        IUsuarioPuestoRepository UsuariosPuestos { get; }
+        IUsuarioRepository Usuarios { get; }
+        IVentaDetalleRepository VentasDetalles { get; }
+        IVentaRepository Ventas { get; }
+        Task<int> CompleteAsync(); // Guarda todos los cambios en una transacción
     }
 }
