@@ -52,7 +52,7 @@ namespace Domain.Entities
         #endregion
 
         #region Relación PlanSaas
-        public int IdPlanSaas { get; set; }
+        public int PlanSaasId { get; set; }
         public PlanSaas PlanSaas { get; set; }
         #endregion
         //Manejar Concurrencia

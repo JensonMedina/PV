@@ -25,7 +25,7 @@ namespace Application.Models.Request
         [Required]
         public Moneda Moneda { get; set; }
 
-        public int IdPlanSaas { get; set; }
+        public int PlanSaasId { get; set; }
 
 
         [Required]

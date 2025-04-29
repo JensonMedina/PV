@@ -11,7 +11,7 @@ namespace Application.Interfaces
 {
     public interface IPuestoService
     {
-        Task<PagedResponse<PuestoResponse>> GetAllAsync(int pageNumber, int pageSize);
+        Task<PagedResponse<PuestoResponse>> GetAllAsync(int negocioId, int pageNumber, int pageSize);
         Task<PuestoResponse?> GetByIdAsync(int id);
         Task<PuestoResponse> AddAsync(PuestoRequest request);
         Task<PuestoResponse> UpdateAsync(int id, PuestoRequest request);

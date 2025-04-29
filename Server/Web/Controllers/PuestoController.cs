@@ -21,14 +21,14 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<PuestoResponse>>> GetAll(int pageNumber = 1, int pageSize = 10)
+        public async Task<ActionResult<PagedResponse<PuestoResponse>>> GetAll(int negocioId, int pageNumber = 1, int pageSize = 10)
         {
             string contexto = $"{this.GetType().Name} - {nameof(GetAll)}";
             _logger.LogInfo(contexto, "Inicializando método.");
 
             try
             {
-                var response = await _puestoService.GetAllAsync(pageNumber, pageSize);
+                var response = await _puestoService.GetAllAsync(negocioId, pageNumber, pageSize);
                 _logger.LogInfo(contexto, $"Se recuperaron {response.Data.Count()} puestos.");
                 return Ok(Result<PagedResponse<PuestoResponse>>.Ok(response));
             }

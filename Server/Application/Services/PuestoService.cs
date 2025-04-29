@@ -17,7 +17,7 @@ namespace Application.Services
             _logger = logger;
         }
 
-        public async Task<PagedResponse<PuestoResponse>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<PagedResponse<PuestoResponse>> GetAllAsync(int negocioId, int pageNumber, int pageSize)
         {
             string contexto = $"{this.GetType().Name} - {nameof(GetAllAsync)}";
 
@@ -38,7 +38,7 @@ namespace Application.Services
             #endregion
             try
             {
-                var (puestos, totalItems) = await _unitOfWork.Puestos.GetPageAsync(pageNumber, pageSize, onlyActive: true);
+                var (puestos, totalItems) = await _unitOfWork.Puestos.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive: true);
 
                 #region Validaciones
                 if (totalItems == 0)
