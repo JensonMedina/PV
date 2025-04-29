@@ -131,8 +131,11 @@ builder.Services.AddAuthentication(options =>
 });
 #endregion
 #region  Autorizacion
+#region  Autorizacion
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy("DueñoPolicy", policy =>
+        policy.RequireClaim("tipo_usuario", "Dueño"));
     options.AddPolicy("DueñoPolicy", policy =>
         policy.RequireClaim("tipo_usuario", "Dueño"));
     options.AddPolicy("AdministradorPolicy", policy =>
