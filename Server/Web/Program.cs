@@ -12,6 +12,7 @@ using Domain.Interfaces;
 using Application.Services;
 using Application.Common;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
