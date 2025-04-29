@@ -33,9 +33,9 @@ namespace Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
+        public async Task<AuthResponse> Register(RegisterRequest request)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(RegisterAsync)}";
+            string contexto = $"{this.GetType().Name} - {nameof(Register)}";
 
             var user = new Usuario
             {
@@ -66,7 +66,7 @@ namespace Infrastructure.Services
 
             try
             {
-                return await GenerateAuthResponseAsync(user);
+                return await GenerateAuthResponse(user);
             }
             catch (Exception ex)
             {
@@ -75,9 +75,9 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<AuthResponse> LoginAsync(LoginRequest request)
+        public async Task<AuthResponse> Login(LoginRequest request)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(LoginAsync)}";
+            string contexto = $"{this.GetType().Name} - {nameof(Login)}";
 
             try
             {
@@ -111,7 +111,7 @@ namespace Infrastructure.Services
                 _logger.LogInfo(contexto, "Login exitoso para usuario",
                     $"Email: {request.Email}, Password: {MaskPassword(request.Password)}");
 
-                return await GenerateAuthResponseAsync(usuario);
+                return await GenerateAuthResponse(usuario);
             }
             catch (ExceptionApp)
             {
@@ -126,9 +126,9 @@ namespace Infrastructure.Services
             }
         }
 
-        private async Task<AuthResponse> GenerateAuthResponseAsync(Usuario user)
+        private async Task<AuthResponse> GenerateAuthResponse(Usuario user)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(GenerateAuthResponseAsync)}";
+            string contexto = $"{this.GetType().Name} - {nameof(GenerateAuthResponse)}";
 
             if (user == null)
             {

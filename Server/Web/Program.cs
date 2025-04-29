@@ -56,8 +56,8 @@ builder.Services.AddScoped<IVentaRepository, VentaRepository>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("BrunoConnectionLocal"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))
+        builder.Configuration.GetConnectionString("JensonConnectionLocal"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
     )
 );
 #endregion
