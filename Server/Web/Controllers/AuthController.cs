@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("v1/auth")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -23,7 +23,7 @@ namespace WebAPI.Controllers
             _logger.LogInfo(contexto, $"Ejecutando endpoint Register. Intentando registrar el usuario: {request.Nombre} - {request.Email}");
             try
             {
-                var response = await _authService.RegisterAsync(request);
+                var response = await _authService.Register(request);
                 _logger.LogInfo(contexto, $"Usuario registrado correctamente. Usuario: {request.Nombre} - {request.Email}");
                 return Ok(Result<object>.Ok(response));
             }
@@ -55,7 +55,7 @@ namespace WebAPI.Controllers
             _logger.LogInfo(contexto, $"Ejecutando endpoint Login. Intentando autenticar el usuario: {request.Email}");
             try
             {
-                var response = await _authService.LoginAsync(request);
+                var response = await _authService.Login(request);
                 _logger.LogInfo(contexto, $"Login exitoso para el usuario: {request.Email}");
                 return Ok(Result<object>.Ok(response));
             }
