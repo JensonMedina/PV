@@ -6,14 +6,17 @@ namespace Application.Models.Request
 {
     public class PuestoRequest
     {
-        [Required, StringLength(100)]
+        [Required(ErrorMessage = "El nombre del puesto es obligatorio.")]
+        [StringLength(100, ErrorMessage = "El nombre no puede superar los 100 caracteres.")]
         public string Nombre { get; set; }
 
-        [RegularExpression(@"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")]
+        [RegularExpression(@"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$",
+            ErrorMessage = "La dirección IP debe tener un formato válido (por ejemplo, 192.168.1.1).")]
         [DefaultValue("000.0.0.00")]
         public string DireccionIP { get; set; }
 
-        [RegularExpression(@"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")]
+        [RegularExpression(@"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$",
+            ErrorMessage = "La dirección MAC debe tener un formato válido (por ejemplo, AA:BB:CC:DD:EE:FF).")]
         [DefaultValue("AA:0A:0a:AA:0a:Aa")]
         public string DireccionMAC { get; set; }
 
@@ -23,8 +26,7 @@ namespace Application.Models.Request
         [DefaultValue(null)]
         public string? ImpresoraConfigurada { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El ID del negocio es obligatorio.")]
         public int NegocioId { get; set; }
-
     }
 }

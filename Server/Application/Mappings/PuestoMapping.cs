@@ -42,7 +42,8 @@ namespace Application.Mappings
 
         public static Puesto UpdatePuesto(Puesto entity, PuestoRequest response)
         {
-            if (!string.IsNullOrWhiteSpace(response.DireccionIP) && response.DireccionIP != "000.0.0.00")
+            //no tienen sentido estas validaciones por la manera en la que esta definido directamente el dto. Directamente no me deja no mandar nombre, ip y mac. Entonces para que se valida si es null ?
+            if (!string.IsNullOrWhiteSpace(response.DireccionIP) && response.DireccionIP != "000.0.0.00") 
                 entity.DireccionIP = response.DireccionIP;
 
             if (!string.IsNullOrWhiteSpace(response.DireccionMAC) && response.DireccionMAC != "AA:0A:0a:AA:0a:Aa")
@@ -58,5 +59,7 @@ namespace Application.Mappings
 
             return entity;
         }
+
+        //Las validaciones de los valores por defecto realmente tampoco hace falta, estos valores te los pone swagger solamente, si probas con postman no se mandan esos valores, del front directamente te los van a mandar en null, por lo que lo correcto seria solamente validar si es null
     }
 }
