@@ -12,18 +12,14 @@ namespace Application.Models.Request
 
         [RegularExpression(@"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$",
             ErrorMessage = "La dirección IP debe tener un formato válido (por ejemplo, 192.168.1.1).")]
-        [DefaultValue("000.0.0.00")]
-        public string DireccionIP { get; set; }
+        public string? DireccionIP { get; set; }
 
         [RegularExpression(@"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$",
             ErrorMessage = "La dirección MAC debe tener un formato válido (por ejemplo, AA:BB:CC:DD:EE:FF).")]
-        [DefaultValue("AA:0A:0a:AA:0a:Aa")]
-        public string DireccionMAC { get; set; }
+        public string? DireccionMAC { get; set; }
 
         [Range(0, 5, ErrorMessage = "El tipo de impresora debe estar entre 0 y 5.")]
         public TipoImpresora? TipoImpresora { get; set; }
-
-        [DefaultValue(null)]
         public string? ImpresoraConfigurada { get; set; }
 
         [Required(ErrorMessage = "El ID del negocio es obligatorio.")]

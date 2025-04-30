@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Logging;
 
 public class UnitOfWork : IUnitOfWork
 {
@@ -25,6 +26,7 @@ public class UnitOfWork : IUnitOfWork
     public IUsuarioRepository Usuarios { get; }
     public IVentaDetalleRepository VentasDetalles { get; }
     public IVentaRepository Ventas { get; }
+
     #endregion
     public UnitOfWork(ApplicationDbContext context)
     {

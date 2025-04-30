@@ -43,16 +43,15 @@ namespace Application.Mappings
         public static Puesto UpdatePuesto(Puesto entity, PuestoRequest response)
         {
             //no tienen sentido estas validaciones por la manera en la que esta definido directamente el dto. Directamente no me deja no mandar nombre, ip y mac. Entonces para que se valida si es null ?
-            if (!string.IsNullOrWhiteSpace(response.DireccionIP) && response.DireccionIP != "000.0.0.00") 
+            if (!string.IsNullOrWhiteSpace(response.DireccionIP)) 
                 entity.DireccionIP = response.DireccionIP;
 
-            if (!string.IsNullOrWhiteSpace(response.DireccionMAC) && response.DireccionMAC != "AA:0A:0a:AA:0a:Aa")
+            if (!string.IsNullOrWhiteSpace(response.DireccionMAC))
                 entity.DireccionMAC = response.DireccionMAC;
 
-            if (!string.IsNullOrWhiteSpace(response.Nombre) && response.Nombre != "string")
-                entity.Nombre = response.Nombre;
+            entity.Nombre = response.Nombre;
 
-            if (!string.IsNullOrWhiteSpace(response.ImpresoraConfigurada) && response.ImpresoraConfigurada != "string")
+            if (!string.IsNullOrWhiteSpace(response.ImpresoraConfigurada))
                 entity.ImpresoraConfigurada = response.ImpresoraConfigurada;
 
             entity.NegocioId = response.NegocioId;
