@@ -4,7 +4,6 @@ using Application.Mappings;
 using Application.Models.Request;
 using Application.Models.Response;
 using Domain.Entities;
-using System.Security.Cryptography;
 
 namespace Application.Services
 {
@@ -117,20 +116,16 @@ namespace Application.Services
                 throw;
             }
         }
-        private async Task<bool> ValidateByMac(string mac)
+        private async Task<Puesto?> GetByMac(string mac)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(ValidateByMac)}";
+            string contexto = $"{this.GetType().Name} - {nameof(GetByMac)}";
 
             _logger.LogInfo(contexto, "Inicializando método");
 
             try
             {
-                bool puesto = await _unitOfWork.Puestos.GetByMac(mac);
-                if(puesto)
-                {
-                    _logger.LogError(contexto, $"Ya existe un puesto con direccionMAC: {mac}");
-                    throw ExceptionApp.NotFound($"Ya existe un puesto con direccionMAC: {mac}");
-                }
+                Puesto? puesto = await _unitOfWork.Puestos.GetByMac(mac);
+                
                 _logger.LogInfo(contexto, "Fin método");
                 return puesto;
             }
@@ -140,23 +135,15 @@ namespace Application.Services
                 throw;
             }
         }
-        private async Task<bool> ValidateByIp(string ip)
+        private async Task<Puesto?> GetByIp(string ip)
         {
-            string contexto = $"{this.GetType().Name} - {nameof(ValidateByIp)}";
-
+            string contexto = $"{this.GetType().Name} - {nameof(GetByIp)}";
             _logger.LogInfo(contexto, "Inicializando método");
-
             try
             {
-                bool ipExist = await _unitOfWork.Puestos.GetByIp(ip);
-                if (ipExist)
-                {
-                    _logger.LogError(contexto, $"Ya existe un puesto con direccionIP: {ip}");
-                    throw ExceptionApp.NotFound($"Ya existe un puesto con direccionIP: {ip}");
-                }
+                Puesto? puestoExistente = await _unitOfWork.Puestos.GetByIp(ip);
                 _logger.LogInfo(contexto, "Fin método");
-                return ipExist;
-
+                return puestoExistente;
             }
             catch (Exception ex)
             {
@@ -182,11 +169,21 @@ namespace Application.Services
 
                 if (request.DireccionIP is not null)
                 {
-                    bool puestoExistente = await ValidateByIp(request.DireccionIP);
+                    Puesto? puestoExistente = await GetByIp(request.DireccionIP);
+                    if (puestoExistente is not null)
+                    {
+                        _logger.LogError(contexto, $"Ya existe un puesto con direccionIP: {request.DireccionIP}");
+                        throw ExceptionApp.BadRequest($"Ya existe un puesto con direccionIP: {request.DireccionIP}");
+                    }
                 }
                 if (request.DireccionMAC is not null)
                 { 
-                    bool puestoExistente = await ValidateByMac(request.DireccionMAC);
+                    Puesto? puestoExistente = await GetByMac(request.DireccionMAC);
+                    if (puestoExistente is not null)
+                    {
+                        _logger.LogError(contexto, $"Ya existe un puesto con direccionMAC: {request.DireccionMAC}");
+                        throw ExceptionApp.NotFound($"Ya existe un puesto con direccionMAC: {request.DireccionMAC}");
+                    }
                 }
                 #endregion
 
@@ -225,7 +222,7 @@ namespace Application.Services
                     throw ExceptionApp.BadRequest("El id de negocio no es válido.");
                 }
 
-                var puesto = await _unitOfWork.Puestos.GetById(id, request.NegocioId);
+                Puesto? puesto = await _unitOfWork.Puestos.GetById(id, request.NegocioId);
                 if (puesto == null)
                 {
                     _logger.LogError(contexto, $"No se encontró el puesto con ID {id}.");
@@ -234,11 +231,21 @@ namespace Application.Services
 
                 if (request.DireccionIP is not null)
                 {
-                    bool puestoExistente = await ValidateByIp(request.DireccionIP);
+                    Puesto? puestoExistente = await GetByIp(request.DireccionIP);
+                    if (puestoExistente is not null && !puestoExistente.Id.Equals(puesto.Id))
+                    {
+                        _logger.LogError(contexto, $"Ya existe un puesto con direccionIP: {request.DireccionIP}");
+                        throw ExceptionApp.BadRequest($"Ya existe un puesto con direccionIP: {request.DireccionIP}");
+                    }
                 }
                 if (request.DireccionMAC is not null)
                 {
-                    bool puestoExistente = await ValidateByMac(request.DireccionMAC);                  
+                    Puesto? puestoExistente = await GetByMac(request.DireccionMAC);
+                    if (puestoExistente is not null && !puestoExistente.Id.Equals(puesto.Id))
+                    {
+                        _logger.LogError(contexto, $"Ya existe un puesto con direccionMAC: {request.DireccionMAC}");
+                        throw ExceptionApp.NotFound($"Ya existe un puesto con direccionMAC: {request.DireccionMAC}");
+                    }
                 }
                 #endregion
 

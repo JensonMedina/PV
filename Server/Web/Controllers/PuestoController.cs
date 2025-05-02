@@ -3,7 +3,6 @@ using Application.Interfaces;
 using Application.Models.Request;
 using Application.Models.Response;
 using Domain.Enum;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -142,7 +141,7 @@ namespace Web.Controllers
                 {
                     case ExceptionType.BadRequest:
                         _logger.LogError(contexto, ex.Message);
-                        return NotFound(Result<object>.NotFound(ex.Message));
+                        return BadRequest(Result<object>.NotFound(ex.Message));
                     case ExceptionType.NotFound:
                         _logger.LogError(contexto, ex.Message);
                         return NotFound(Result<object>.NotFound(ex.Message));

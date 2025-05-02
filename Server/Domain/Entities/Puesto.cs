@@ -10,9 +10,9 @@ namespace Domain.Entities
         [Column(TypeName = "varchar(100)")]
         public string Nombre { get; set; }
         [Column(TypeName = "varchar(50)")]
-        public string? DireccionIP { get; set; }
+        public string DireccionIP { get; set; }
         [Column(TypeName = "varchar(50)")]
-        public string? DireccionMAC { get; set; }
+        public string DireccionMAC { get; set; }
         #endregion
 
         #region Relacion con Negocio

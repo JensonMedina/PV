@@ -1,6 +1,4 @@
-﻿using Application.Common;
-using Application.Interfaces;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,13 +11,13 @@ namespace Infrastructure.Data
         {
             _context = context;
         }
-        public async Task<bool> GetByIp(string ip)
+        public async Task<Puesto?> GetByIp(string ip)
         {
-            return await _context.Puestos.AnyAsync(p => p.DireccionIP == ip);
+            return await _context.Puestos.Where(p => p.DireccionIP == ip).FirstOrDefaultAsync();
         }
-        public async Task<bool> GetByMac(string mac)
+        public async Task<Puesto?> GetByMac(string mac)
         {
-            return await _context.Puestos.AnyAsync(p => p.DireccionMAC == mac);
+            return await _context.Puestos.Where(p => p.DireccionMAC == mac).FirstOrDefaultAsync();
         }
         public async Task<Puesto?> GetById(int id, int negocioId)
         {
