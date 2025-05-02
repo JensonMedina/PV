@@ -9,13 +9,13 @@ namespace Application.Mappings
     {
         public static Puesto ToEntity(PuestoRequest request)
         {
-            bool ipVacia = string.IsNullOrWhiteSpace(request.DireccionIP) || request.DireccionIP == "000.0.0.00";
-            bool macVacia = string.IsNullOrWhiteSpace(request.DireccionMAC) || request.DireccionMAC == "AA:0A:0a:AA:0a:Aa";
+            bool ipVacia = string.IsNullOrWhiteSpace(request.DireccionIP);
+            bool macVacia = string.IsNullOrWhiteSpace(request.DireccionMAC);
 
             if (ipVacia && macVacia)
                 throw ExceptionApp.BadRequest("Debe ingresar al menos Dirección IP o Dirección MAC.");
 
-            if (string.IsNullOrWhiteSpace(request.Nombre) || request.Nombre == "string")
+            if (string.IsNullOrWhiteSpace(request.Nombre))
                 throw ExceptionApp.BadRequest("Debe rellenar el campo Nombre.");
 
             return new Puesto
@@ -36,21 +36,22 @@ namespace Application.Mappings
             Activo = entity.Activo,
             DireccionIP = entity.DireccionIP,
             DireccionMAC = entity.DireccionMAC,
+            TipoImpresora = entity.TipoImpresora.ToString(),
             ImpresoraConfigurada = entity.ImpresoraConfigurada,
             NegocioId = entity.NegocioId,
         };
 
-        public static Puesto UpdatePuesto(Puesto entity, PuestoRequest response)
+        public static Puesto UpdatePuesto(Puesto entity, PuestoModifyRequest response)
         {
             //no tienen sentido estas validaciones por la manera en la que esta definido directamente el dto. Directamente no me deja no mandar nombre, ip y mac. Entonces para que se valida si es null ?
-            if (!string.IsNullOrWhiteSpace(response.DireccionIP)) 
+            if (!string.IsNullOrWhiteSpace(response.DireccionIP))
                 entity.DireccionIP = response.DireccionIP;
 
             if (!string.IsNullOrWhiteSpace(response.DireccionMAC))
                 entity.DireccionMAC = response.DireccionMAC;
-
-            entity.Nombre = response.Nombre;
-
+            entity.Nombre = response.Nombre!;
+            if (response.TipoImpresora.HasValue)
+                entity.TipoImpresora = response.TipoImpresora;
             if (!string.IsNullOrWhiteSpace(response.ImpresoraConfigurada))
                 entity.ImpresoraConfigurada = response.ImpresoraConfigurada;
 
@@ -59,6 +60,5 @@ namespace Application.Mappings
             return entity;
         }
 
-        //Las validaciones de los valores por defecto realmente tampoco hace falta, estos valores te los pone swagger solamente, si probas con postman no se mandan esos valores, del front directamente te los van a mandar en null, por lo que lo correcto seria solamente validar si es null
     }
 }

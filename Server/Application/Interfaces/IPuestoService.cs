@@ -9,7 +9,7 @@ namespace Application.Interfaces
         Task<PagedResponse<PuestoResponse>> GetAll(int negocioId, int pageNumber, int pageSize);
         Task<PuestoResponse?> GetById(int negocioId, int id);
         Task<PuestoResponse> Register(PuestoRequest request);
-        Task<PuestoResponse> Modify(int id, PuestoRequest request);
+        Task<PuestoResponse> Modify(int id, PuestoModifyRequest request);
         Task Disable(int negocioId, int id);
     }
 }

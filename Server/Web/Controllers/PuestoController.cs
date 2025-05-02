@@ -57,7 +57,7 @@ namespace Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PuestoResponse>> GetById([FromRoute]int id, [FromQuery]int negocioId)
+        public async Task<ActionResult<PuestoResponse?>> GetById([FromRoute]int id, [FromQuery]int negocioId)
         {
             string contexto = $"{this.GetType().Name} - {nameof(GetById)}";
             _logger.LogInfo(contexto, $"Recuperando puesto con ID {id}.");
@@ -66,7 +66,7 @@ namespace Web.Controllers
             {
                 var response = await _puestoService.GetById(negocioId, id);
                 _logger.LogInfo(contexto, $"Puesto con ID {id} encontrado.");
-                return Ok(Result<PuestoResponse>.Ok(response));
+                return Ok(Result<PuestoResponse?>.Ok(response));
             }
             catch (ExceptionApp ex)
             {
@@ -125,15 +125,15 @@ namespace Web.Controllers
         }
 
         [HttpPut("modify")]
-        public async Task<ActionResult<PuestoResponse>> Modify([FromQuery]int id, [FromBody] PuestoRequest request)
+        public async Task<ActionResult<PuestoResponse>> Modify([FromQuery]int puestoId, [FromBody] PuestoModifyRequest request)
         {
             string contexto = $"{this.GetType().Name} - {nameof(Modify)}";
-            _logger.LogInfo(contexto, $"Actualizando puesto con ID {id}.");
+            _logger.LogInfo(contexto, $"Actualizando puesto con ID {puestoId}.");
 
             try
             {
-                var response = await _puestoService.Modify(id, request);
-                _logger.LogInfo(contexto, $"Puesto con ID {id} actualizado correctamente.");
+                var response = await _puestoService.Modify(puestoId, request);
+                _logger.LogInfo(contexto, $"Puesto con ID {puestoId} actualizado correctamente.");
                 return Ok(Result<PuestoResponse>.Ok(response, "Puesto actualizado correctamente."));
             }
             catch (ExceptionApp ex)
