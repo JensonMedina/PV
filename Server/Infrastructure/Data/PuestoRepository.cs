@@ -7,10 +7,8 @@ namespace Infrastructure.Data
 {
     public class PuestoRepository : EFRepository<Puesto>, IPuestoRepository
     {
-        public ApplicationDbContext _context;
-        public PuestoRepository(ApplicationDbContext context) : base(context)
+        public PuestoRepository(ApplicationDbContext context, ILoggerApp logger) : base(context, logger)
         {
-            _context = context;
         }
         public async Task<Puesto?> GetByIp(string ip)
         {

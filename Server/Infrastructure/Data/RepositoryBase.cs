@@ -45,6 +45,21 @@ namespace Infrastructure.Data
             }
 
         }
+        public async Task<(IEnumerable<T> Items, int TotalCount)> GetPageAsync(int negocioId, int pageNumber, int pageSize, bool onlyActive = true)
+        {
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+
+            query = query.Where(e => EF.Property<int>(e, "NegocioId") == negocioId);
+
+            if (onlyActive)
+            {
+                // Solo si T realmente tiene la propiedad "Activo":
+                query = query.Where(e => EF.Property<bool>(e, "Activo"));
+            }
+            var total = await query.CountAsync();
+            var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return (items, total);
+        }
         public virtual void UpdateAsync(T entity)
         {
             _logger.LogInfo(this.GetType().Name, $"Ejecutando método UpdateAsync desde el RepositoryBase para la entidad {entity}");
