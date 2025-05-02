@@ -14,9 +14,9 @@ namespace Web.Controllers
         private readonly IClienteService _clienteService;
         private readonly ILoggerApp _logger;
 
-        public ClienteController(IClienteService svc, ILoggerApp _loggerApp)
+        public ClienteController(IClienteService clienteService, ILoggerApp _loggerApp)
         {
-            _clienteService = svc;
+            _clienteService = clienteService;
             _logger = _loggerApp;
         }
         
@@ -34,7 +34,7 @@ namespace Web.Controllers
                     onlyActive: true,
                     negocioId);
 
-                _logger.LogInfo(contexto, $"GetAll finalizado. Total registros: {result.TotalCount}");
+                _logger.LogInfo(contexto, $"GetAll finalizado. Total registros: {result.TotalItems}");
                 return Ok(Result<PagedResponse<ClienteResponse>>.Ok(result));
             }
             catch (ExceptionApp ex)

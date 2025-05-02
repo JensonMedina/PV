@@ -147,27 +147,14 @@ namespace Infrastructure.Services
                 _logger.LogInfo(contexto,
                     $"Obteniendo página {pageNumber} (size={pageSize}, onlyActive={onlyActive}) para negocio {negocioId}");
 
-                var (entidades, total) = await _unitOfWork.Clientes
-                    .GetPageAsync(negocioId, pageNumber, pageSize, onlyActive);
+                var (entidades, totalItems) = await _unitOfWork.Clientes.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive: true);
+                var clientesResponse = entidades.Select(ClienteMapping.ToResponse).ToList();
 
-                var dtos = entidades.Select(ClienteMapping.ToResponse);
-
-                var paged = new PagedResponse<ClienteResponse>
-                {
-                    Items = dtos,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    TotalCount = total
-                };
-
+                var pagedResponse = new PagedResponse<ClienteResponse>(clientesResponse, totalItems, pageNumber, pageSize);
                 _logger.LogInfo(contexto,
-                    $"Página {pageNumber} obtenida con éxito. Total registros: {total} para negocio {negocioId}");
+                    $"Página {pageNumber} obtenida con éxito. Total registros: {totalItems} para negocio {negocioId}");
 
-                return paged;
-            }
-            catch (ExceptionApp)
-            {
-                throw;
+                return pagedResponse;
             }
             catch (Exception ex)
             {
