@@ -1,4 +1,5 @@
-﻿using Application.Models.Request;
+﻿using Application.Common;
+using Application.Models.Request;
 using Application.Models.Response;
 
 namespace Application.Interfaces

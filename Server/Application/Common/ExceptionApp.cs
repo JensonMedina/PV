@@ -19,5 +19,14 @@ namespace Application.Common
         {
             return new ExceptionApp(message, ExceptionType.BadRequest);
         }
+        public static ExceptionApp Forbidden(string message)
+        {
+            return new ExceptionApp(message, ExceptionType.Forbidden);
+        }
+        public static ExceptionApp Conflict(string message)
+        {
+            return new ExceptionApp(message, ExceptionType.Conflict);
+
+        }
     }
 }
