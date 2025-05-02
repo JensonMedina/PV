@@ -1,27 +1,46 @@
-﻿namespace Application.Mappings
+﻿using Application.Models.Request;
+using Application.Models.Response;
+using Domain.Entities;
+
+namespace Application.Mappings
 {
     public static class PuestoMapping
     {
-        public static Domain.Entities.Puesto ToEntity(Application.Models.Request.PuestoRequest request) => new()
+        public static Puesto ToEntity(PuestoRequest request)
         {
-            DireccionMAC= request.DireccionMAC,
-            DireccionIP= request.DireccionIP,
-            Nombre = request.Nombre,
-            TipoImpresora= request.TipoImpresora,
-            ImpresoraConfigurada=request.ImpresoraConfigurada,
 
+            return new Puesto
+            {
+                DireccionIP = request.DireccionIP,
+                DireccionMAC = request.DireccionMAC,
+                Nombre = request.Nombre,
+                ImpresoraConfigurada = request.ImpresoraConfigurada,
+                TipoImpresora = request.TipoImpresora,
+                NegocioId = request.NegocioId
+            };
+        }
 
-
-        };
-
-        public static Application.Models.Response.PuestoResponse ToResponse(Domain.Entities.Puesto entity) => new()
+        public static PuestoResponse ToResponse(Puesto entity) => new()
         {
             Id = entity.Id,
             Nombre = entity.Nombre,
             Activo = entity.Activo,
-            DireccionIP= entity.DireccionIP,
-            DireccionMAC= entity.DireccionMAC,
-            ImpresoraConfigurada = entity.ImpresoraConfigurada
+            DireccionIP = entity.DireccionIP,
+            DireccionMAC = entity.DireccionMAC,
+            TipoImpresora = entity.TipoImpresora.ToString(),
+            ImpresoraConfigurada = entity.ImpresoraConfigurada,
+            NegocioId = entity.NegocioId,
         };
+
+        public static Puesto UpdatePuesto(Puesto entity, PuestoModifyRequest request)
+        {
+            entity.Nombre = request.Nombre ?? entity.Nombre;
+            entity.DireccionIP = request.DireccionIP ?? entity.DireccionIP;
+            entity.DireccionMAC = request.DireccionMAC ?? entity.DireccionMAC;
+            entity.TipoImpresora = request.TipoImpresora ?? entity.TipoImpresora;
+            entity.ImpresoraConfigurada = request.ImpresoraConfigurada ?? entity.ImpresoraConfigurada;
+            return entity;
+        }
+
     }
 }

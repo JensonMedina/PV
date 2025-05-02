@@ -35,6 +35,7 @@ public class UnitOfWork : IUnitOfWork
         MedioPagos = medioPagos;
         Rubros = rubros;
         PlanesSaas = planesSaas;
+        Puestos = new PuestoRepository(_context);
         #endregion
     }
 
