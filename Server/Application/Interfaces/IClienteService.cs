@@ -10,6 +10,6 @@ namespace Application.Interfaces
         Task<ClienteResponse> GetClienteByIdAsync(int id);
         Task CreateClienteAsync(ClienteRequest request);
         Task UpdateClienteAsync(int id, ClienteRequest request);
-        Task DeleteClienteAsync(int id);
+        Task DeleteClienteAsync(int id, int negocioId);
     }
 }

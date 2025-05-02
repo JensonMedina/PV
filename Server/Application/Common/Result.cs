@@ -16,7 +16,7 @@
         public int StatusCode { get; set; }
 
         /// Detalles adicionales o errores específicos
-        public object Errors { get; set; }
+        public object? Errors { get; set; }
         #endregion
 
         /// <summary>
@@ -47,10 +47,6 @@
                 Errors = null
             };
         }
-
-
-
-
 
 
         /// <summary>
@@ -122,6 +118,17 @@
                 Errors = null
             };
         }
+        public static Result<T> Forbidden(string message = "Acceso denegado")
+        {
+            return new Result<T>
+            {
+                Success = false,
+                Message = message,
+                Data = default,
+                StatusCode = 403,
+                Errors = null
+            };
+        }
 
         /// <summary>
         /// Constructor para respuesta con error de validación
@@ -137,5 +144,9 @@
                 Errors = errors
             };
         }
+        /// <summary>
+        /// Constructor para respuesta con error de tipo Forbidden
+        /// </summary>
+
     }
 }

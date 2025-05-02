@@ -15,7 +15,7 @@ namespace Application.Mappings
             Email = request.Email,
             Telefono = request.Telefono,
             Moneda = request.Moneda,
-            IdPlanSaas = request.IdPlanSaas
+            PlanSaasId = request.IdPlanSaas
         };
 
         public static NegocioResponse ToResponse(Negocio entity) => new()
@@ -29,7 +29,7 @@ namespace Application.Mappings
             Telefono = entity.Telefono,
             Moneda = entity.Moneda.ToString(),
             TipoFacturacion = entity.TipoFacturacion.ToString(),
-            IdPlanSaas = entity.IdPlanSaas
+            IdPlanSaas = entity.PlanSaasId,
         };
     }
 }

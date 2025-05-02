@@ -24,7 +24,6 @@ namespace Infrastructure.Services
             string contexto = $"{GetType().Name} - {nameof(CreateClienteAsync)}";
             _logger.LogInfo(contexto, "Iniciando método CreateClienteAsync");
 
-
             var negocio = await _unitOfWork.Negocios.GetByIdAsync(newCliente.NegocioId);
             if (negocio == null)
             {
@@ -32,11 +31,12 @@ namespace Infrastructure.Services
                 throw ExceptionApp.NotFound($"El negocio con Id {newCliente.NegocioId} no existe");
             }
 
-            var existeEmail = await _unitOfWork.Clientes.ExistsByEmailAsync(newCliente.Email);
+            var existeEmail = await _unitOfWork.Clientes
+                .ExistsByEmailAsync(newCliente.Email, newCliente.NegocioId);
             if (existeEmail)
             {
-                _logger.LogError(contexto, $"Email ya registrado: {newCliente.Email}");
-                throw ExceptionApp.Conflict($"El correo {newCliente.Email} ya está en uso");
+                _logger.LogError(contexto, $"Email ya registrado en negocio {newCliente.NegocioId}: {newCliente.Email}");
+                throw ExceptionApp.Conflict($"El correo {newCliente.Email} ya está en uso en ese negocio");
             }
 
             try
@@ -57,23 +57,36 @@ namespace Infrastructure.Services
         }
 
 
-        public async Task DeleteClienteAsync(int id)
+        public async Task DeleteClienteAsync(int id, int negocioId)
         {
             string contexto = $"{GetType().Name} - {nameof(DeleteClienteAsync)}";
             _logger.LogInfo(contexto, "Iniciando método DeleteClienteAsync");
+
             if (id <= 0)
-                throw ExceptionApp.BadRequest("Id debe ser mayor que cero");
+                throw ExceptionApp.BadRequest("Id de cliente debe ser mayor que cero");
+            if (negocioId <= 0)
+                throw ExceptionApp.BadRequest("Id de negocio debe ser mayor que cero");
+
             try
             {
                 _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
                 var cliente = await _unitOfWork.Clientes.GetByIdAsync(id);
+
                 if (cliente == null || !cliente.Activo)
                 {
                     _logger.LogError(contexto, $"Cliente no encontrado o inactivo con id:{id}");
                     throw ExceptionApp.NotFound($"El cliente con Id: {id} no existe");
                 }
+
+                if (cliente.NegocioId != negocioId)
+                {
+                    _logger.LogError(contexto, $"Acceso denegado. Cliente {id} no pertenece al negocio {negocioId}");
+                    throw ExceptionApp.Forbidden("No tienes permiso para eliminar este cliente");
+                }
+
                 await _unitOfWork.Clientes.SoftDeleteAsync(id);
                 await _unitOfWork.CompleteAsync();
+
                 _logger.LogInfo(contexto, $"Cliente eliminado con éxito. Id:{id}");
             }
             catch (ExceptionApp)
@@ -84,8 +97,6 @@ namespace Infrastructure.Services
             {
                 _logger.LogError(contexto, $"Error inesperado eliminando cliente. Error: {ex.Message}");
                 throw;
-
-
             }
         }
 
@@ -176,7 +187,16 @@ namespace Infrastructure.Services
         {
             string contexto = $"{GetType().Name} - {nameof(UpdateClienteAsync)}";
             _logger.LogInfo(contexto, "Iniciando método UpdateClienteAsync");
-
+            if (id <= 0)
+            {
+                _logger.LogError(contexto, "Id de cliente inválido (debe ser > 0)");
+                throw ExceptionApp.BadRequest("Id de cliente debe ser mayor que cero");
+            }
+            if (req.NegocioId <= 0)
+            {
+                _logger.LogError(contexto, "Id de negocio debe ser mayor que cero");
+                throw ExceptionApp.BadRequest("Id de negocio debe ser mayor que cero");
+            }
             _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
             var entidad = await _unitOfWork.Clientes.GetByIdAsync(id);
             if (entidad == null || !entidad.Activo)
@@ -186,11 +206,11 @@ namespace Infrastructure.Services
             }
             if (!string.Equals(entidad.Email, req.Email, StringComparison.OrdinalIgnoreCase))
             {
-                var existeEmail = await _unitOfWork.Clientes.ExistsByEmailAsync(req.Email);
+                var existeEmail = await _unitOfWork.Clientes.ExistsByEmailAsync(req.Email, req.NegocioId);
                 if (existeEmail)
                 {
-                    _logger.LogError(contexto, $"Email ya registrado: {req.Email}");
-                    throw ExceptionApp.Conflict($"El correo {req.Email} ya está en uso");
+                    _logger.LogError(contexto, $"Email ya registrado en negocio {req.NegocioId}: {req.Email}");
+                    throw ExceptionApp.Conflict($"El correo {req.Email} ya está en uso en ese negocio");
                 }
             }
 

@@ -124,6 +124,8 @@ namespace Web.Controllers
         {
             string contexto = $"{GetType().Name} - {nameof(Update)}";
             _logger.LogInfo(contexto, "Iniciando método Update");
+
+
             try
             {
                 await _clienteService.UpdateClienteAsync(id, request);
@@ -147,20 +149,27 @@ namespace Web.Controllers
             }
         }
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete([FromRoute] int id)
+        public async Task<ActionResult> Delete([FromRoute] int id, [FromQuery] int negocioId)
         {
             string contexto = $"{GetType().Name} - {nameof(Delete)}";
             _logger.LogInfo(contexto, "Iniciando método Delete");
+
             try
             {
-                await _clienteService.DeleteClienteAsync(id);
-                _logger.LogInfo(contexto, $"Delete finalizado. Id:{id}");
+                await _clienteService.DeleteClienteAsync(id, negocioId);
+                _logger.LogInfo(contexto, $"Delete finalizado. Id:{id} (Negocio:{negocioId})");
                 return Ok(Result<object>.Ok());
             }
             catch (ExceptionApp ex)
             {
                 _logger.LogError(contexto, ex.Message);
-                return ex.Type == ExceptionType.NotFound ? NotFound(Result<object>.NotFound()) : StatusCode(500, Result<object>.Error());
+                return ex.Type switch
+                {
+                    ExceptionType.BadRequest => BadRequest(Result<object>.BadRequest(ex.Message)),
+                    ExceptionType.NotFound => NotFound(Result<object>.NotFound(ex.Message)),
+                    ExceptionType.Forbidden => StatusCode(403, Result<object>.Forbidden(ex.Message)),
+                    _ => StatusCode(500, Result<object>.Error(ex.Message))
+                };
             }
             catch (Exception ex)
             {

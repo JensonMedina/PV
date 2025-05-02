@@ -8,24 +8,22 @@ namespace Application.Mappings
     {
         public static Cliente ToEntity(ClienteRequest request) => new()
         {
-            Nombre = request.Nombre,
-            Apellido = request.Apellido,
-            Email = request.Email,
-            TipoDocumento = request.TipoDocumento,
-            NumeroDocumento = request.NumeroDocumento,
-            Telefono = request.Telefono,
-            Direccion = request.Direccion,
-            Ciudad = request.Ciudad,
-            Provincia = request.Provincia,
-            CodigoPostal = request.CodigoPostal,
+            Nombre = request.Nombre ?? request.Nombre,
+            Apellido = request.Apellido ?? request.Apellido,
+            Email = request.Email ?? request.Email ?? request.Email,
+            TipoDocumento = request.TipoDocumento ?? request.TipoDocumento,
+            NumeroDocumento = request.NumeroDocumento ?? request.NumeroDocumento,
+            Telefono = request.Telefono ?? request.Telefono,
+            Direccion = request.Direccion ?? request.Direccion,
+            Ciudad = request.Ciudad ?? request.Ciudad,
+            Provincia = request.Provincia ?? request.Provincia,
+            CodigoPostal = request.CodigoPostal ?? request.CodigoPostal,
             EsConsumidorFinal = request.EsConsumidorFinal,
-            LimiteCredito = request.LimiteCredito,
-            SaldoActual = request.SaldoActual,
-            Observaciones = request.Observaciones,
-            PuntosFidelidad = request.PuntosFidelidad,
-            NegocioId = request.NegocioId,
-            
-            
+            LimiteCredito = request.LimiteCredito ?? request.LimiteCredito,
+            SaldoActual = request.SaldoActual ?? request.SaldoActual,
+            Observaciones = request.Observaciones ?? request.Observaciones,
+            PuntosFidelidad = request.PuntosFidelidad ?? request.PuntosFidelidad,
+            NegocioId = request.NegocioId
         };
 
         public static ClienteResponse ToResponse(Cliente entity) => new()

@@ -13,9 +13,9 @@ namespace Infrastructure.Data
 
         }
 
-        public async Task<bool> ExistsByEmailAsync(string email)
+        public async Task<bool> ExistsByEmailAsync(string email, int negocioId)
         {
-            return await _context.Clientes.AsNoTracking().AnyAsync(c => c.Email == email && c.Activo);
+            return await _context.Clientes.AsNoTracking().AnyAsync(c => c.Email == email && c.Activo && c.NegocioId == negocioId);
         }
 
         public async Task<(IEnumerable<Cliente> Items, int TotalCount)>
@@ -28,7 +28,7 @@ namespace Infrastructure.Data
             var total = await query.CountAsync();
 
             var items = await query
-                .OrderBy(c => c.Id).Skip((pageNumber - 1) * pageSize) .Take(pageSize).ToListAsync();
+                .OrderBy(c => c.Id).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             return (items, total);
         }

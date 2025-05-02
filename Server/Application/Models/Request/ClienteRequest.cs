@@ -6,6 +6,7 @@ namespace Application.Models.Request
     public class ClienteRequest
     {
         [Required, StringLength(100)]
+
         public string Nombre { get; set; }
         [Required]
         public int NegocioId { get; set; }
@@ -15,12 +16,16 @@ namespace Application.Models.Request
 
         [Required, EmailAddress, StringLength(255)]
         public string Email { get; set; }
+
+        [Range(0, 2, ErrorMessage = "El tipo de documento debe estar entre o y 2")]
         public TipoDocumento? TipoDocumento { get; set; }
 
         [StringLength(20)]
         public string? NumeroDocumento { get; set; }
 
         [Phone]
+        [StringLength(20)]
+
         public string? Telefono { get; set; }
 
         [StringLength(255)]
@@ -37,16 +42,14 @@ namespace Application.Models.Request
 
         public bool EsConsumidorFinal { get; set; }
 
-        [Range(0, double.MaxValue)]
         public decimal? LimiteCredito { get; set; }
 
-        [Range(0, double.MaxValue)]
         public decimal? SaldoActual { get; set; }
 
         [StringLength(500)]
         public string? Observaciones { get; set; }
 
-        [Range(0, int.MaxValue)]
+
         public int? PuntosFidelidad { get; set; }
     }
 }
