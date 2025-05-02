@@ -45,7 +45,7 @@ namespace Domain.Entities
         #region Datos Comerciales
         public decimal? LimiteCredito { get; set; }
         public decimal? SaldoActual { get; set; }
-        public DateTime FechaAlta { get; set; } = DateTime.UtcNow;
+        public DateTime FechaAlta { get; set; }
         [Column(TypeName = "varchar(500)")]
         public string? Observaciones { get; set; }
         #endregion

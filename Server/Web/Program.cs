@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 
 
+
 #region Configuraciones
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -40,6 +41,7 @@ builder.Services.AddScoped<IPlanSaasService, PlanSaasService>();
 builder.Services.AddScoped<IServiceManager, ServiceManager>();
 builder.Services.AddScoped<IMedioPagoService, MedioPagoService>();
 builder.Services.AddScoped<IPuestoService, PuestoService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ValidationFilter>();
 #endregion

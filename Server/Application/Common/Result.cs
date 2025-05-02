@@ -47,6 +47,8 @@
                 Errors = null
             };
         }
+
+
         /// <summary>
         /// Constructor para respuesta con error de tipo BadRquest
         /// </summary>
@@ -90,6 +92,17 @@
                 Errors = null
             };
         }
+        public static Result<T> Conflict(string message = "Error de conflicto", object errors = null, int statusCode = 409)
+        {
+            return new Result<T>
+            {
+                Success = false,
+                Message = message,
+                Data = default,
+                StatusCode = statusCode,
+                Errors = errors
+            };
+        }
 
         /// <summary>
         /// Constructor para respuesta con error no autorizado
@@ -102,6 +115,17 @@
                 Message = message,
                 Data = default,
                 StatusCode = 401,
+                Errors = null
+            };
+        }
+        public static Result<T> Forbidden(string message = "Acceso denegado")
+        {
+            return new Result<T>
+            {
+                Success = false,
+                Message = message,
+                Data = default,
+                StatusCode = 403,
                 Errors = null
             };
         }
@@ -120,5 +144,9 @@
                 Errors = errors
             };
         }
+        /// <summary>
+        /// Constructor para respuesta con error de tipo Forbidden
+        /// </summary>
+
     }
 }

@@ -27,10 +27,11 @@ public class UnitOfWork : IUnitOfWork
     public IVentaRepository Ventas { get; }
     public IMedioPagoRepository MedioPagos { get; }
     #endregion
-    public UnitOfWork(ApplicationDbContext context, INegocioRepository negocioRepository, IMedioPagoRepository medioPagos, IRubroRepository rubros, IPlanSaasRepository planesSaas, IPuestoRepository puestos)
+    public UnitOfWork(ApplicationDbContext context, IClienteRepository clientes, INegocioRepository negocios, INegocioRepository negocioRepository, IMedioPagoRepository medioPagos, IRubroRepository rubros, IPlanSaasRepository planesSaas, IPuestoRepository puestos)
     {
         _context = context;
         #region inyeccion repositorios
+        Clientes = clientes;
         Negocios = negocioRepository;
         MedioPagos = medioPagos;
         Rubros = rubros;
