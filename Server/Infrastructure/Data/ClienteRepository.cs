@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,31 +7,25 @@ namespace Infrastructure.Data
 {
     public class ClienteRepository : EFRepository<Cliente>, IClienteRepository
     {
-        private readonly ApplicationDbContext _context;
-        public ClienteRepository(ApplicationDbContext context) : base(context)
+        private readonly ILoggerApp _logger;
+        public ClienteRepository(ApplicationDbContext context, ILoggerApp logger) : base(context)
         {
-            _context = context;
-
+            _logger = logger;
         }
 
-        public async Task<bool> ExistsByEmailAsync(string email, int negocioId)
+        public async Task<Cliente?> GetByEmail(string email, int negocioId)
         {
-            return await _context.Clientes.AsNoTracking().AnyAsync(c => c.Email == email && c.Activo && c.NegocioId == negocioId);
-        }
-
-        public async Task<(IEnumerable<Cliente> Items, int TotalCount)>
-          GetPageByNegocioAsync(int negocioId, int pageNumber, int pageSize, bool onlyActive)
-        {
-            var query = _context.Clientes
-                .AsNoTracking()
-                .Where(c => c.NegocioId == negocioId && (!onlyActive || c.Activo));
-
-            var total = await query.CountAsync();
-
-            var items = await query
-                .OrderBy(c => c.Id).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-
-            return (items, total);
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método GetByEmail");
+            try
+            {
+                Cliente? cliente = await _context.Clientes.Where(c => c.Email == email && c.Activo && c.NegocioId == negocioId).FirstOrDefaultAsync();
+                return cliente;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error inesperado en el método GetByEmail. Error: {ex}");
+                throw;
+            }
         }
     }
 }

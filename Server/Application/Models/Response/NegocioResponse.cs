@@ -15,7 +15,7 @@
 
         public string? TipoFacturacion { get; set; } 
 
-        public int IdPlanSaas { get; set; }
+        public int PlanSaasId { get; set; }
 
  
         public string? Calle { get; set; }

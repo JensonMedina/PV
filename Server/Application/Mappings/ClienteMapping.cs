@@ -8,23 +8,43 @@ namespace Application.Mappings
     {
         public static Cliente ToEntity(ClienteRequest request) => new()
         {
-            Nombre = request.Nombre ?? request.Nombre,
-            Apellido = request.Apellido ?? request.Apellido,
-            Email = request.Email ?? request.Email ?? request.Email,
-            TipoDocumento = request.TipoDocumento ?? request.TipoDocumento,
-            NumeroDocumento = request.NumeroDocumento ?? request.NumeroDocumento,
-            Telefono = request.Telefono ?? request.Telefono,
-            Direccion = request.Direccion ?? request.Direccion,
-            Ciudad = request.Ciudad ?? request.Ciudad,
-            Provincia = request.Provincia ?? request.Provincia,
-            CodigoPostal = request.CodigoPostal ?? request.CodigoPostal,
+            Nombre = request.Nombre,
+            Apellido = request.Apellido,
+            Email = request.Email,
+            TipoDocumento = request.TipoDocumento,
+            NumeroDocumento = request.NumeroDocumento,
+            Telefono = request.Telefono,
+            Direccion = request.Direccion,
+            Ciudad = request.Ciudad,
+            Provincia = request.Provincia,
+            CodigoPostal = request.CodigoPostal,
             EsConsumidorFinal = request.EsConsumidorFinal,
-            LimiteCredito = request.LimiteCredito ?? request.LimiteCredito,
-            SaldoActual = request.SaldoActual ?? request.SaldoActual,
-            Observaciones = request.Observaciones ?? request.Observaciones,
-            PuntosFidelidad = request.PuntosFidelidad ?? request.PuntosFidelidad,
-            NegocioId = request.NegocioId
+            LimiteCredito = request.LimiteCredito,
+            SaldoActual = request.SaldoActual,
+            Observaciones = request.Observaciones,
+            PuntosFidelidad = request.PuntosFidelidad,
+            NegocioId = request.NegocioId,
+            FechaAlta = DateTime.Now
         };
+        public static Cliente FromUpdatedToEntity(Cliente cliente, ClienteModifyRequest request)
+        {
+            cliente.Nombre = request.Nombre ?? cliente.Nombre;
+            cliente.Apellido = request.Apellido ?? cliente.Apellido;
+            cliente.Email = request.Email ?? cliente.Email;
+            cliente.TipoDocumento = request.TipoDocumento ?? cliente.TipoDocumento;
+            cliente.NumeroDocumento = request.NumeroDocumento ?? cliente.NumeroDocumento;
+            cliente.Telefono = request.Telefono ?? cliente.Telefono;
+            cliente.Direccion = request.Direccion ?? cliente.Direccion;
+            cliente.Ciudad = request.Ciudad ?? cliente.Ciudad;
+            cliente.Provincia = request.Provincia ?? cliente.Provincia;
+            cliente.CodigoPostal = request.CodigoPostal ?? cliente.CodigoPostal;
+            cliente.EsConsumidorFinal = request.EsConsumidorFinal ?? cliente.EsConsumidorFinal;
+            cliente.LimiteCredito = request.LimiteCredito ?? cliente.LimiteCredito;
+            cliente.SaldoActual = request.SaldoActual ?? cliente.SaldoActual;
+            cliente.Observaciones = request.Observaciones ?? cliente.Observaciones;
+            cliente.PuntosFidelidad = request.PuntosFidelidad ?? cliente.PuntosFidelidad;
+            return cliente;
+        }
 
         public static ClienteResponse ToResponse(Cliente entity) => new()
         {

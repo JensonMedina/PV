@@ -16,7 +16,7 @@
         public int StatusCode { get; set; }
 
         /// Detalles adicionales o errores específicos
-        public object? Errors { get; set; }
+        public object Errors { get; set; }
         #endregion
 
         /// <summary>

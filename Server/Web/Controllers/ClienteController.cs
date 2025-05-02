@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Web.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("v1/cliente")]
     public class ClienteController : ControllerBase
     {
         private readonly IClienteService _clienteService;
@@ -19,8 +19,8 @@ namespace Web.Controllers
             _clienteService = svc;
             _logger = _loggerApp;
         }
-        [HttpGet]
-        [HttpGet]
+        
+        [HttpGet("get-all")]
         public async Task<ActionResult<PagedResponse<ClienteResponse>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int negocioId = 0)
         {
             string contexto = $"{GetType().Name} - {nameof(GetAll)}";
@@ -28,7 +28,7 @@ namespace Web.Controllers
 
             try
             {
-                var result = await _clienteService.GetClientesAsync(
+                var result = await _clienteService.GetAll(
                     pageNumber,
                     pageSize,
                     onlyActive: true,
@@ -54,7 +54,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ClienteResponse>> GetById([FromRoute] int id)
         {
             string contexto = $"{GetType().Name} - {nameof(GetById)}";
@@ -69,7 +69,7 @@ namespace Web.Controllers
 
             try
             {
-                var cliente = await _clienteService.GetClienteByIdAsync(id);
+                var cliente = await _clienteService.GetById(id);
                 _logger.LogInfo(contexto, $"GetById finalizado. Id:{id}");
                 return Ok(Result<ClienteResponse>.Ok(cliente));
             }
@@ -90,15 +90,15 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Create([FromBody] ClienteRequest request)
+        [HttpPost("register")]
+        public async Task<ActionResult> Register([FromBody] ClienteRequest request)
         {
-            string contexto = $"{GetType().Name} - {nameof(Create)}";
+            string contexto = $"{GetType().Name} - {nameof(Register)}";
             _logger.LogInfo(contexto, "Iniciando método Create");
 
             try
             {
-                await _clienteService.CreateClienteAsync(request);
+                await _clienteService.Register(request);
                 _logger.LogInfo(contexto, "Create finalizado");
                 return Ok(Result<object>.Ok());
             }
@@ -119,16 +119,15 @@ namespace Web.Controllers
                 return StatusCode(500, Result<object>.Error());
             }
         }
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] ClienteRequest request)
+        [HttpPut("modify")]
+        public async Task<ActionResult> Modify([FromQuery] int id, [FromBody] ClienteModifyRequest request)
         {
-            string contexto = $"{GetType().Name} - {nameof(Update)}";
+            string contexto = $"{GetType().Name} - {nameof(Modify)}";
             _logger.LogInfo(contexto, "Iniciando método Update");
-
 
             try
             {
-                await _clienteService.UpdateClienteAsync(id, request);
+                await _clienteService.Modify(id, request);
                 _logger.LogInfo(contexto, $"Update finalizado. Id:{id}");
                 return Ok(Result<object>.Ok());
             }
@@ -138,6 +137,7 @@ namespace Web.Controllers
                 return ex.Type switch
                 {
                     ExceptionType.NotFound => NotFound(Result<object>.NotFound(ex.Message)),
+                    ExceptionType.Conflict => Conflict(Result<object>.Conflict(ex.Message)),
                     ExceptionType.ValidationError => BadRequest(Result<object>.BadRequest(ex.Message)),
                     _ => BadRequest(Result<object>.BadRequest(ex.Message))
                 };
@@ -148,15 +148,15 @@ namespace Web.Controllers
                 return StatusCode(500, Result<object>.Error());
             }
         }
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete([FromRoute] int id, [FromQuery] int negocioId)
+        [HttpDelete("disable")]
+        public async Task<ActionResult> Disable([FromQuery] int id, [FromQuery] int negocioId)
         {
-            string contexto = $"{GetType().Name} - {nameof(Delete)}";
+            string contexto = $"{GetType().Name} - {nameof(Disable)}";
             _logger.LogInfo(contexto, "Iniciando método Delete");
 
             try
             {
-                await _clienteService.DeleteClienteAsync(id, negocioId);
+                await _clienteService.Disable(id, negocioId);
                 _logger.LogInfo(contexto, $"Delete finalizado. Id:{id} (Negocio:{negocioId})");
                 return Ok(Result<object>.Ok());
             }

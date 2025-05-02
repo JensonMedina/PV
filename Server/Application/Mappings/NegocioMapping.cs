@@ -29,7 +29,7 @@ namespace Application.Mappings
             Telefono = entity.Telefono,
             Moneda = entity.Moneda.ToString(),
             TipoFacturacion = entity.TipoFacturacion.ToString(),
-            IdPlanSaas = entity.PlanSaasId,
+            PlanSaasId = entity.PlanSaasId,
         };
     }
 }

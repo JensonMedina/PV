@@ -26,29 +26,12 @@ public class UnitOfWork : IUnitOfWork
     public IVentaDetalleRepository VentasDetalles { get; }
     public IVentaRepository Ventas { get; }
     #endregion
-    public UnitOfWork(ApplicationDbContext context)
+    public UnitOfWork(ApplicationDbContext context, IClienteRepository clientes, INegocioRepository negocios)
     {
         _context = context;
         #region inyeccion repositorios
-        Categorias = new CategoriaRepository(_context);
-        Clientes = new ClienteRepository(_context);
-        ComprasDetalles = new CompraDetalleRepository(_context);
-        Compras = new CompraRepository(_context);
-        Comprobantes = new ComprobanteRepository(_context);
-        HistoricosPrecios = new HistoricoPrecioRepository(_context);
-        HistoricoStocks = new HistoricoStockRepository(_context);
-        Negocios = new NegocioRepository(_context);
-        PlanesSaas = new PlanSaasRepository(_context);
-        ProductosNegocios = new ProductoNegocioRepository(_context);
-        Productos = new ProductoRepository(_context);
-        Proveedores = new ProveedorRepository(_context);
-        Puestos = new PuestoRepository(_context);
-        Rubros = new RubroRepository(_context);
-        UnidadesMedidas = new UnidadMedidaRepository(_context);
-        UsuariosPuestos = new UsuarioPuestoRepository(_context);
-        Usuarios = new UsuarioRepository(_context);
-        VentasDetalles = new VentaDetalleRepository(_context);
-        Ventas = new VentaRepository(_context);
+        Clientes = clientes;
+        Negocios = negocios;
         #endregion
     }
 

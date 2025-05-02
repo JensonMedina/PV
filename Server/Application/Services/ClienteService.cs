@@ -3,7 +3,7 @@ using Application.Interfaces;
 using Application.Mappings;
 using Application.Models.Request;
 using Application.Models.Response;
-using Domain.Enum;
+using Domain.Entities;
 
 
 namespace Infrastructure.Services
@@ -19,28 +19,27 @@ namespace Infrastructure.Services
             _logger = log;
         }
 
-        public async Task CreateClienteAsync(ClienteRequest newCliente)
+        public async Task Register(ClienteRequest newCliente)
         {
-            string contexto = $"{GetType().Name} - {nameof(CreateClienteAsync)}";
+            string contexto = $"{GetType().Name} - {nameof(Register)}";
             _logger.LogInfo(contexto, "Iniciando método CreateClienteAsync");
-
-            var negocio = await _unitOfWork.Negocios.GetByIdAsync(newCliente.NegocioId);
-            if (negocio == null)
-            {
-                _logger.LogError(contexto, $"Negocio no encontrado. Id:{newCliente.NegocioId}");
-                throw ExceptionApp.NotFound($"El negocio con Id {newCliente.NegocioId} no existe");
-            }
-
-            var existeEmail = await _unitOfWork.Clientes
-                .ExistsByEmailAsync(newCliente.Email, newCliente.NegocioId);
-            if (existeEmail)
-            {
-                _logger.LogError(contexto, $"Email ya registrado en negocio {newCliente.NegocioId}: {newCliente.Email}");
-                throw ExceptionApp.Conflict($"El correo {newCliente.Email} ya está en uso en ese negocio");
-            }
-
             try
             {
+                var negocio = await _unitOfWork.Negocios.GetByIdAsync(newCliente.NegocioId);
+                if (negocio == null)
+                {
+                    _logger.LogError(contexto, $"Negocio no encontrado. Id:{newCliente.NegocioId}");
+                    throw ExceptionApp.NotFound($"El negocio con Id {newCliente.NegocioId} no existe");
+                }
+
+                #region Validacion Email
+                Cliente? clienteExistente = await _unitOfWork.Clientes.GetByEmail(newCliente.Email, newCliente.NegocioId);
+                if (clienteExistente is not null)
+                {
+                    _logger.LogError(contexto, $"Email ya registrado en negocio {newCliente.NegocioId}: {newCliente.Email}");
+                    throw ExceptionApp.Conflict($"El correo {newCliente.Email} ya está en uso en ese negocio");
+                }
+                #endregion
 
                 var entidad = ClienteMapping.ToEntity(newCliente);
                 var creado = await _unitOfWork.Clientes.AddAsync(entidad);
@@ -57,9 +56,9 @@ namespace Infrastructure.Services
         }
 
 
-        public async Task DeleteClienteAsync(int id, int negocioId)
+        public async Task Disable(int id, int negocioId)
         {
-            string contexto = $"{GetType().Name} - {nameof(DeleteClienteAsync)}";
+            string contexto = $"{GetType().Name} - {nameof(Disable)}";
             _logger.LogInfo(contexto, "Iniciando método DeleteClienteAsync");
 
             if (id <= 0)
@@ -100,9 +99,9 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<ClienteResponse> GetClienteByIdAsync(int id)
+        public async Task<ClienteResponse> GetById(int id)
         {
-            string contexto = $"{GetType().Name} - {nameof(GetClienteByIdAsync)}";
+            string contexto = $"{GetType().Name} - {nameof(GetById)}";
             _logger.LogInfo(contexto, "Iniciando método GetClienteByIdAsync");
 
             try
@@ -119,10 +118,6 @@ namespace Infrastructure.Services
                 _logger.LogInfo(contexto, $"Cliente recuperado con éxito. Id:{id}");
                 return dto;
             }
-            catch (ExceptionApp)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
                 _logger.LogError(contexto, $"Error inesperado consultando cliente. Error: {ex.Message}");
@@ -130,9 +125,9 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<PagedResponse<ClienteResponse>> GetClientesAsync(int pageNumber, int pageSize, bool onlyActive = true, int negocioId = 0)
+        public async Task<PagedResponse<ClienteResponse>> GetAll(int pageNumber, int pageSize, bool onlyActive = true, int negocioId = 0)
         {
-            string contexto = $"{GetType().Name} - {nameof(GetClientesAsync)}";
+            string contexto = $"{GetType().Name} - {nameof(GetAll)}";
             _logger.LogInfo(contexto, "Iniciando método GetClientesAsync");
 
             if (pageNumber <= 0 || pageSize <= 0)
@@ -140,21 +135,20 @@ namespace Infrastructure.Services
             if (negocioId <= 0)
                 throw ExceptionApp.BadRequest("NegocioId debe ser mayor que cero");
 
-            // Verifico que exista el negocio
-            var negocio = await _unitOfWork.Negocios.GetByIdAsync(negocioId);
-            if (negocio == null)
-            {
-                _logger.LogError(contexto, $"Negocio no encontrado. Id:{negocioId}");
-                throw ExceptionApp.NotFound($"El negocio con Id {negocioId} no existe");
-            }
-
             try
             {
+                // Verifico que exista el negocio
+                var negocio = await _unitOfWork.Negocios.GetByIdAsync(negocioId);
+                if (negocio == null)
+                {
+                    _logger.LogError(contexto, $"Negocio no encontrado. Id:{negocioId}");
+                    throw ExceptionApp.NotFound($"El negocio con Id {negocioId} no existe");
+                }
                 _logger.LogInfo(contexto,
                     $"Obteniendo página {pageNumber} (size={pageSize}, onlyActive={onlyActive}) para negocio {negocioId}");
 
                 var (entidades, total) = await _unitOfWork.Clientes
-                    .GetPageByNegocioAsync(negocioId, pageNumber, pageSize, onlyActive);
+                    .GetPageAsync(negocioId, pageNumber, pageSize, onlyActive);
 
                 var dtos = entidades.Select(ClienteMapping.ToResponse);
 
@@ -183,64 +177,82 @@ namespace Infrastructure.Services
         }
 
 
-        public async Task UpdateClienteAsync(int id, ClienteRequest req)
+        public async Task Modify(int id, ClienteModifyRequest request)
         {
-            string contexto = $"{GetType().Name} - {nameof(UpdateClienteAsync)}";
-            _logger.LogInfo(contexto, "Iniciando método UpdateClienteAsync");
-            if (id <= 0)
-            {
-                _logger.LogError(contexto, "Id de cliente inválido (debe ser > 0)");
-                throw ExceptionApp.BadRequest("Id de cliente debe ser mayor que cero");
-            }
-            if (req.NegocioId <= 0)
-            {
-                _logger.LogError(contexto, "Id de negocio debe ser mayor que cero");
-                throw ExceptionApp.BadRequest("Id de negocio debe ser mayor que cero");
-            }
-            _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
-            var entidad = await _unitOfWork.Clientes.GetByIdAsync(id);
-            if (entidad == null || !entidad.Activo)
-            {
-                _logger.LogError(contexto, $"Cliente no encontrado o inactivo con id:{id}");
-                throw ExceptionApp.NotFound($"El cliente con Id: {id} no existe");
-            }
-            if (!string.Equals(entidad.Email, req.Email, StringComparison.OrdinalIgnoreCase))
-            {
-                var existeEmail = await _unitOfWork.Clientes.ExistsByEmailAsync(req.Email, req.NegocioId);
-                if (existeEmail)
-                {
-                    _logger.LogError(contexto, $"Email ya registrado en negocio {req.NegocioId}: {req.Email}");
-                    throw ExceptionApp.Conflict($"El correo {req.Email} ya está en uso en ese negocio");
-                }
-            }
-
+            string contexto = $"{GetType().Name} - {nameof(Modify)}";
+            _logger.LogInfo(contexto, "Iniciando");
             try
             {
+                #region Validaciones
+                //Validamos que el id del cliente sea positivo
+                if (id <= 0)
+                {
+                    _logger.LogError(contexto, "Id de cliente inválido (debe ser > 0)");
+                    throw ExceptionApp.BadRequest("Id de cliente debe ser mayor que cero");
+                }
+                //Validamos que el id del negocio sea positivo
+                if (request.NegocioId <= 0)
+                {
+                    _logger.LogError(contexto, "Id de negocio debe ser mayor que cero");
+                    throw ExceptionApp.BadRequest("Id de negocio debe ser mayor que cero");
+                }
 
-                // Mapeo manual de propiedades
-                entidad.Nombre = req.Nombre;
-                entidad.Apellido = req.Apellido;
-                entidad.Email = req.Email;
-                entidad.TipoDocumento = req.TipoDocumento;
-                entidad.NumeroDocumento = req.NumeroDocumento;
-                entidad.Telefono = req.Telefono;
-                entidad.Direccion = req.Direccion;
-                entidad.Ciudad = req.Ciudad;
-                entidad.Provincia = req.Provincia;
-                entidad.CodigoPostal = req.CodigoPostal;
-                entidad.EsConsumidorFinal = req.EsConsumidorFinal;
-                entidad.LimiteCredito = req.LimiteCredito;
-                entidad.SaldoActual = req.SaldoActual;
-                entidad.Observaciones = req.Observaciones;
-                entidad.PuntosFidelidad = req.PuntosFidelidad;
+                #region Validacion Negocio
+                _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
+                var negocio = await _unitOfWork.Negocios.GetByIdAsync(request.NegocioId);
+                if (negocio is null)
+                {
+                    _logger.LogError(contexto, $"El negocio con id: {request.NegocioId} no se encontró.");
+                    throw ExceptionApp.NotFound($"El negocio con id: {request.NegocioId} no se encontró.");
+                }
+                #endregion
 
-                await _unitOfWork.Clientes.UpdateAsync(entidad);
+                #region Validacion Cliente
+                _logger.LogInfo(contexto, $"Consultando cliente con id:{id}");
+                Cliente? cliente = await _unitOfWork.Clientes.GetByIdAsync(id);
+
+                if (cliente == null || !cliente.Activo)
+                {
+                    _logger.LogError(contexto, $"Cliente no encontrado o inactivo con id:{id}");
+                    throw ExceptionApp.NotFound($"El cliente con Id: {id} no existe");
+                }
+
+                if (!cliente.NegocioId.Equals(request.NegocioId))
+                {
+                    _logger.LogError(contexto, "El Cliente no pertenece a este negocio.");
+                    throw ExceptionApp.Conflict("El Cliente no pertenece a este negocio.");
+                }
+                #endregion
+
+                #region Validacion Email
+                if (request.Email is not null)
+                {
+                    Cliente? clienteExistente = await _unitOfWork.Clientes.GetByEmail(request.Email, request.NegocioId);
+                    if (clienteExistente is not null && !clienteExistente.Id.Equals(cliente.Id))
+                    {
+                        _logger.LogError(contexto, $"Email ya registrado en negocio {request.NegocioId}: {request.Email}");
+                        throw ExceptionApp.Conflict($"El correo {request.Email} ya está en uso en ese negocio");
+                    }
+                }
+                #endregion
+
+                #endregion
+
+                #region Mapeamos de modify a entidad
+                try
+                {
+                    _logger.LogInfo(contexto, "Mapeando entidad");
+                    cliente = ClienteMapping.FromUpdatedToEntity(cliente, request);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(contexto, $"Ocurrió un error al mapear: {ex}");
+                    throw;
+                }
+                #endregion
+                await _unitOfWork.Clientes.UpdateAsync(cliente);
                 await _unitOfWork.CompleteAsync();
                 _logger.LogInfo(contexto, $"Cliente actualizado con éxito. Id:{id}");
-            }
-            catch (ExceptionApp)
-            {
-                throw;
             }
             catch (Exception ex)
             {

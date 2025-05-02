@@ -3,23 +3,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.Models.Request
 {
-    public class ClienteRequest
+    public class ClienteModifyRequest
     {
-        [Required(ErrorMessage = "El nombre es obligatorio.")]
         [StringLength(100, ErrorMessage = "El nombre no puede tener más de 100 caracteres.")]
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         [Required(ErrorMessage = "El ID del negocio es obligatorio.")]
         public int NegocioId { get; set; }
 
-        [Required(ErrorMessage = "El apellido es obligatorio.")]
+        
         [StringLength(100, ErrorMessage = "El apellido no puede tener más de 100 caracteres.")]
-        public string Apellido { get; set; }
+        public string? Apellido { get; set; }
 
-        [Required(ErrorMessage = "El email es obligatorio.")]
+        
         [EmailAddress(ErrorMessage = "El email no tiene un formato válido.")]
         [StringLength(255, ErrorMessage = "El email no puede tener más de 255 caracteres.")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Range(0, 2, ErrorMessage = "El tipo de documento debe estar entre 0 y 2.")]
         public TipoDocumento? TipoDocumento { get; set; }
@@ -43,7 +42,7 @@ namespace Application.Models.Request
         [StringLength(10, ErrorMessage = "El código postal no puede tener más de 10 caracteres.")]
         public string? CodigoPostal { get; set; }
 
-        public bool EsConsumidorFinal { get; set; }
+        public bool? EsConsumidorFinal { get; set; }
 
         public decimal? LimiteCredito { get; set; }
 
@@ -53,5 +52,6 @@ namespace Application.Models.Request
         public string? Observaciones { get; set; }
 
         public int? PuntosFidelidad { get; set; }
+
     }
 }
