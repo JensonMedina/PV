@@ -72,7 +72,7 @@ builder.Services.AddScoped<IMedioPagoRepository, MedioPagoRepository>();
 
 
 
-#region DbContext
+#region Agregamos el servicio del DbContext
 
 builder.Services.AddDbContext<ApplicationDbContext>(opts => opts.UseMySql(builder.Configuration.GetConnectionString("BrunoConnectionLocal"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))));
 //builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
