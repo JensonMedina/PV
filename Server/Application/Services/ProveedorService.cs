@@ -80,7 +80,7 @@ namespace Application.Services
                 #endregion
                 _loggerApp.LogInfo(contexto,
                     $"Obteniendo página {pageNumber} (size={pageSize}, onlyActive={onlyActive}) para negocio {negocioId}");
-                var (entidades, totalItems) = await _unitOfWork.Proveedores.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive: true);
+                var (entidades, totalItems) = await _unitOfWork.Proveedores.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive: onlyActive);
                 var proveedoresResponse = entidades.Select(ProveedorMapping.ToResponse).ToList();
                 var pagedResponse = new PagedResponse<ProveedorResponse>(proveedoresResponse, totalItems, pageNumber, pageSize);
                 _loggerApp.LogInfo(contexto,
@@ -102,9 +102,6 @@ namespace Application.Services
             {
                 _loggerApp.LogInfo(contexto, "Iniciando obtención de proveedores por rubro",
                     $"RubroId: {rubroId}, PageNumber: {pageNumber}, PageSize: {pageSize}, OnlyActive: {onlyActive}");
-
-                // Añadir log para verificar el valor de onlyActive
-                _loggerApp.LogInfo(contexto, $"Valor de onlyActive recibido: {onlyActive}");
 
                 #region Validar Rubro
                 _loggerApp.LogInfo(contexto, "Iniciando validación de rubro", $"RubroId: {rubroId}");
