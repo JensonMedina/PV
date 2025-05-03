@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
@@ -8,17 +9,27 @@ namespace Infrastructure.Data
 
         public ProveedorRepository(ApplicationDbContext context) : base(context)
         { }
-            public Task<List<Proveedor>> GetByNegocioAsync(string nombreNegocio)
-            {
-                // implementación pendiente
-                throw new NotImplementedException();
-            }
 
-            public Task<List<Proveedor>> GetByRubroAsync(string rubro)
+
+        public async Task<(IEnumerable<Proveedor> Items, int TotalCount)> GetPageByRubroAsync(int rubroId, int pageNumber, int pageSize, bool onlyActive = true)
+        {
+            IQueryable<Proveedor> query = _context.Proveedores.AsNoTracking();
+            // Filtro por rubro
+            query = query.Where(p => p.RubroId == rubroId);
+
+            if (onlyActive)
             {
-                // implementación pendiente
-                throw new NotImplementedException();
+                query = query.Where(p => p.Activo);
             }
+            var total = await query.CountAsync();
+
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, total);
+        }
     }
 }
 

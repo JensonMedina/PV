@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250418213133_MigracionRelacionClienteNegocio")]
-    partial class MigracionRelacionClienteNegocio
+    [Migration("20250503174642_PruebasProveedor")]
+    partial class PruebasProveedor
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -247,6 +247,50 @@ namespace Infrastructure.Migrations
                     b.ToTable("Comprobante");
                 });
 
+            modelBuilder.Entity("Domain.Entities.HistoricoPrecio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("ProductoNegocioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductoNegocioId");
+
+                    b.ToTable("HistoricosPrecios");
+                });
+
+            modelBuilder.Entity("Domain.Entities.HistoricoStock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ProductoNegocioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductoNegocioId");
+
+                    b.ToTable("HistoricoStocks");
+                });
+
             modelBuilder.Entity("Domain.Entities.Negocio", b =>
                 {
                     b.Property<int>("Id")
@@ -268,6 +312,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CodigoPostal")
                         .HasColumnType("varchar(10)");
 
+                    b.Property<bool>("DebitoAutomaticoActivo")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Descripcion")
                         .HasColumnType("varchar(200)");
 
@@ -277,8 +324,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("FechaAlta")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("IdPlanSaas")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("FechaProximoDebito")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LogoUrl")
                         .HasColumnType("varchar(250)");
@@ -303,9 +350,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp(6)");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("RubroId")
                         .HasColumnType("int");
@@ -316,7 +361,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("TipoDocumento")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("TipoFacturacion")
+                    b.Property<int?>("TipoFacturacion")
                         .HasColumnType("int");
 
                     b.Property<bool?>("UsaFacturacion")
@@ -388,51 +433,76 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Activo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int?>("CategoriaId")
+                    b.Property<int>("CategoriaId")
                         .HasColumnType("int");
-
-                    b.Property<string>("CodigoBarras")
-                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Descripcion")
                         .HasColumnType("varchar(200)");
 
+                    b.Property<bool>("EsPrivado")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime>("FechaAlta")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("FechaVencimiento")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("GestionaStock")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ImagenUrl")
                         .HasColumnType("varchar(250)");
 
-                    b.Property<bool?>("IncluyeImpuestos")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("Marca")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<decimal?>("Margen")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int>("Moneda")
+                    b.Property<int?>("NegocioId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
+                    b.Property<int>("RubroId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnidadMedidaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.HasIndex("NegocioId");
+
+                    b.HasIndex("RubroId");
+
+                    b.HasIndex("UnidadMedidaId");
+
+                    b.ToTable("Productos");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProductoNegocio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaAlta")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("GestionaStock")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Moneda")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NegocioId")
+                        .HasColumnType("int");
+
                     b.Property<decimal?>("PrecioCosto")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<decimal>("PrecioVenta")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("RowVersion")
                         .IsConcurrencyToken()
@@ -448,19 +518,13 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("StockMinimo")
                         .HasColumnType("int");
 
-                    b.Property<bool>("TieneVencimiento")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("UnidadMedidaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoriaId");
+                    b.HasIndex("NegocioId");
 
-                    b.HasIndex("UnidadMedidaId");
+                    b.HasIndex("ProductoId");
 
-                    b.ToTable("Productos");
+                    b.ToTable("ProductosNegocios");
                 });
 
             modelBuilder.Entity("Domain.Entities.Proveedor", b =>
@@ -492,6 +556,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<decimal?>("LimiteCredito")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<int?>("NegocioId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -527,6 +594,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NegocioId");
 
                     b.HasIndex("RubroId");
 
@@ -605,7 +674,7 @@ namespace Infrastructure.Migrations
                             Id = 1,
                             Activo = true,
                             Descripcion = "Productos comestibles, bebidas alcohólicas y no alcohólicas",
-                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(47),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5477),
                             Nombre = "Alimentos y Bebidas"
                         },
                         new
@@ -613,7 +682,7 @@ namespace Infrastructure.Migrations
                             Id = 2,
                             Activo = true,
                             Descripcion = "Artículos eléctricos para el hogar",
-                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(61),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5479),
                             Nombre = "Electrodomésticos"
                         },
                         new
@@ -621,7 +690,7 @@ namespace Infrastructure.Migrations
                             Id = 3,
                             Activo = true,
                             Descripcion = "Ropa y accesorios de moda",
-                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(63),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5481),
                             Nombre = "Indumentaria"
                         },
                         new
@@ -629,7 +698,7 @@ namespace Infrastructure.Migrations
                             Id = 4,
                             Activo = true,
                             Descripcion = "Productos de higiene y limpieza",
-                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(64),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5483),
                             Nombre = "Limpieza"
                         },
                         new
@@ -637,7 +706,7 @@ namespace Infrastructure.Migrations
                             Id = 5,
                             Activo = true,
                             Descripcion = "Herramientas y artículos de construcción",
-                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(65),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5484),
                             Nombre = "Ferretería"
                         },
                         new
@@ -645,7 +714,7 @@ namespace Infrastructure.Migrations
                             Id = 6,
                             Activo = true,
                             Descripcion = "Equipos informáticos, celulares, accesorios",
-                            FechaAlta = new DateTime(2025, 4, 18, 18, 31, 33, 243, DateTimeKind.Local).AddTicks(67),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5486),
                             Nombre = "Tecnología"
                         });
                 });
@@ -939,6 +1008,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Activo")
                         .HasColumnType("tinyint(1)");
 
@@ -949,9 +1021,16 @@ namespace Infrastructure.Migrations
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("FechaAlta")
                         .HasColumnType("datetime(6)");
@@ -959,20 +1038,46 @@ namespace Infrastructure.Migrations
                     b.Property<string>("IpUltimoLogin")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("NegocioId")
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("NegocioId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
                     b.Property<string>("NumeroDocumento")
                         .HasColumnType("varchar(20)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp(6)");
+                        .HasColumnType("timestamp");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Telefono")
                         .HasColumnType("varchar(20)");
@@ -983,14 +1088,28 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("TipoDocumento")
                         .HasColumnType("int");
 
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("UltimoLogin")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NegocioId");
 
-                    b.ToTable("Usuarios");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UsuarioPuesto", b =>
@@ -1105,6 +1224,132 @@ namespace Infrastructure.Migrations
                     b.ToTable("VentasDetalles");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Cliente", b =>
                 {
                     b.HasOne("Domain.Entities.Negocio", "Negocio")
@@ -1164,6 +1409,28 @@ namespace Infrastructure.Migrations
                     b.Navigation("Producto");
                 });
 
+            modelBuilder.Entity("Domain.Entities.HistoricoPrecio", b =>
+                {
+                    b.HasOne("Domain.Entities.ProductoNegocio", "ProductoNegocio")
+                        .WithMany()
+                        .HasForeignKey("ProductoNegocioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductoNegocio");
+                });
+
+            modelBuilder.Entity("Domain.Entities.HistoricoStock", b =>
+                {
+                    b.HasOne("Domain.Entities.ProductoNegocio", "ProductoNegocio")
+                        .WithMany()
+                        .HasForeignKey("ProductoNegocioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductoNegocio");
+                });
+
             modelBuilder.Entity("Domain.Entities.Negocio", b =>
                 {
                     b.HasOne("Domain.Entities.PlanSaas", "PlanSaas")
@@ -1187,7 +1454,19 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Categoria", "Categoria")
                         .WithMany()
-                        .HasForeignKey("CategoriaId");
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Negocio", "Negocio")
+                        .WithMany()
+                        .HasForeignKey("NegocioId");
+
+                    b.HasOne("Domain.Entities.Rubro", "Rubro")
+                        .WithMany()
+                        .HasForeignKey("RubroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.UnidadMedida", "UnidadMedida")
                         .WithMany()
@@ -1197,14 +1476,43 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("Categoria");
 
+                    b.Navigation("Negocio");
+
+                    b.Navigation("Rubro");
+
                     b.Navigation("UnidadMedida");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProductoNegocio", b =>
+                {
+                    b.HasOne("Domain.Entities.Negocio", "Negocio")
+                        .WithMany()
+                        .HasForeignKey("NegocioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Negocio");
+
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("Domain.Entities.Proveedor", b =>
                 {
+                    b.HasOne("Domain.Entities.Negocio", "Negocio")
+                        .WithMany()
+                        .HasForeignKey("NegocioId");
+
                     b.HasOne("Domain.Entities.Rubro", "Rubro")
                         .WithMany()
                         .HasForeignKey("RubroId");
+
+                    b.Navigation("Negocio");
 
                     b.Navigation("Rubro");
                 });
@@ -1224,9 +1532,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Negocio", "Negocio")
                         .WithMany()
-                        .HasForeignKey("NegocioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NegocioId");
 
                     b.Navigation("Negocio");
                 });
@@ -1310,6 +1616,57 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("VentaId");
 
                     b.Navigation("Producto");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.HasOne("Domain.Entities.Usuario", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.HasOne("Domain.Entities.Usuario", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Usuario", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.HasOne("Domain.Entities.Usuario", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Venta", b =>

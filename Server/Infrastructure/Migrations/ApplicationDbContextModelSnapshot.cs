@@ -309,6 +309,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CodigoPostal")
                         .HasColumnType("varchar(10)");
 
+                    b.Property<bool>("DebitoAutomaticoActivo")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Descripcion")
                         .HasColumnType("varchar(200)");
 
@@ -318,8 +321,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("FechaAlta")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("IdPlanSaas")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("FechaProximoDebito")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LogoUrl")
                         .HasColumnType("varchar(250)");
@@ -344,9 +347,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp(6)");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("RubroId")
                         .HasColumnType("int");
@@ -357,7 +358,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("TipoDocumento")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("TipoFacturacion")
+                    b.Property<int?>("TipoFacturacion")
                         .HasColumnType("int");
 
                     b.Property<bool?>("UsaFacturacion")
@@ -670,7 +671,7 @@ namespace Infrastructure.Migrations
                             Id = 1,
                             Activo = true,
                             Descripcion = "Productos comestibles, bebidas alcohólicas y no alcohólicas",
-                            FechaAlta = new DateTime(2025, 4, 26, 11, 57, 58, 309, DateTimeKind.Local).AddTicks(5831),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5477),
                             Nombre = "Alimentos y Bebidas"
                         },
                         new
@@ -678,7 +679,7 @@ namespace Infrastructure.Migrations
                             Id = 2,
                             Activo = true,
                             Descripcion = "Artículos eléctricos para el hogar",
-                            FechaAlta = new DateTime(2025, 4, 26, 11, 57, 58, 309, DateTimeKind.Local).AddTicks(5833),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5479),
                             Nombre = "Electrodomésticos"
                         },
                         new
@@ -686,7 +687,7 @@ namespace Infrastructure.Migrations
                             Id = 3,
                             Activo = true,
                             Descripcion = "Ropa y accesorios de moda",
-                            FechaAlta = new DateTime(2025, 4, 26, 11, 57, 58, 309, DateTimeKind.Local).AddTicks(5835),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5481),
                             Nombre = "Indumentaria"
                         },
                         new
@@ -694,7 +695,7 @@ namespace Infrastructure.Migrations
                             Id = 4,
                             Activo = true,
                             Descripcion = "Productos de higiene y limpieza",
-                            FechaAlta = new DateTime(2025, 4, 26, 11, 57, 58, 309, DateTimeKind.Local).AddTicks(5837),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5483),
                             Nombre = "Limpieza"
                         },
                         new
@@ -702,7 +703,7 @@ namespace Infrastructure.Migrations
                             Id = 5,
                             Activo = true,
                             Descripcion = "Herramientas y artículos de construcción",
-                            FechaAlta = new DateTime(2025, 4, 26, 11, 57, 58, 309, DateTimeKind.Local).AddTicks(5839),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5484),
                             Nombre = "Ferretería"
                         },
                         new
@@ -710,7 +711,7 @@ namespace Infrastructure.Migrations
                             Id = 6,
                             Activo = true,
                             Descripcion = "Equipos informáticos, celulares, accesorios",
-                            FechaAlta = new DateTime(2025, 4, 26, 11, 57, 58, 309, DateTimeKind.Local).AddTicks(5841),
+                            FechaAlta = new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5486),
                             Nombre = "Tecnología"
                         });
                 });

@@ -19,7 +19,6 @@ namespace Application.Mappings
             LimiteCredito = request.LimiteCredito,
             DiasPlazoPago = request.DiasPlazoPago,
             Observaciones = request.Observaciones,
-            Activo = request.Activo
         };
 
         public static ProveedorResponse ToResponse(Proveedor entity) => new()
@@ -36,5 +35,24 @@ namespace Application.Mappings
             Observaciones = entity.Observaciones,
             Activo = entity.Activo
         };
+
+        public static Proveedor ModifiedToEntity(ProveedorModifiedRequest request, Proveedor proveedor)
+        {
+            proveedor.Nombre = request.Nombre ?? proveedor.Nombre;
+            proveedor.RazonSocial = request.RazonSocial ?? proveedor.RazonSocial;
+            proveedor.TipoDocumento = request.TipoDocumento ?? proveedor.TipoDocumento;
+            proveedor.NumeroDocumento = request.NumeroDocumento ?? proveedor.NumeroDocumento;
+            proveedor.Email = request.Email ?? proveedor.Email;
+            proveedor.Telefono = request.Telefono ?? proveedor.Telefono;
+            proveedor.Direccion = request.Direccion ?? proveedor.Direccion;
+            proveedor.Ciudad = request.Ciudad ?? proveedor.Ciudad;
+            proveedor.Provincia = request.Provincia ?? proveedor.Provincia;
+            proveedor.CodigoPostal = request.CodigoPostal ?? proveedor.CodigoPostal;
+            proveedor.RubroId = request.RubroId ?? proveedor.RubroId;
+            proveedor.RowVersion = BitConverter.GetBytes(DateTime.UtcNow.Ticks); // simulando cambio en concurrencia
+
+            return proveedor;
+        }
+
     }
 }

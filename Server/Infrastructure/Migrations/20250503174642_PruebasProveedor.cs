@@ -4,14 +4,38 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class MigracionConEntidades : Migration
+    public partial class PruebasProveedor : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NormalizedName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "Categorias",
                 columns: table => new
@@ -32,50 +56,6 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categorias", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Clientes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "varchar(100)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Apellido = table.Column<string>(type: "varchar(100)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TipoDocumento = table.Column<int>(type: "int", nullable: true),
-                    NumeroDocumento = table.Column<string>(type: "varchar(20)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EsEmpresa = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Email = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Telefono = table.Column<string>(type: "varchar(20)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Direccion = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Ciudad = table.Column<string>(type: "varchar(100)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Provincia = table.Column<string>(type: "varchar(100)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CodigoPostal = table.Column<string>(type: "varchar(10)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EsConsumidorFinal = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    LimiteCredito = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    SaldoActual = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    FechaAlta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Observaciones = table.Column<string>(type: "varchar(500)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PuntosFidelidad = table.Column<int>(type: "int", nullable: true),
-                    UltimaCompra = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    RowVersion = table.Column<DateTime>(type: "timestamp(6)", rowVersion: true, nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
-                    Activo = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clientes", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -163,6 +143,30 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClaimValue = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Negocios",
                 columns: table => new
                 {
@@ -199,11 +203,11 @@ namespace Infrastructure.Migrations
                     Activo = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Moneda = table.Column<int>(type: "int", nullable: false),
                     UsaFacturacion = table.Column<bool>(type: "tinyint(1)", nullable: true),
-                    TipoFacturacion = table.Column<int>(type: "int", nullable: false),
-                    IdPlanSaas = table.Column<int>(type: "int", nullable: false),
+                    TipoFacturacion = table.Column<int>(type: "int", nullable: true),
                     PlanSaasId = table.Column<int>(type: "int", nullable: false),
-                    RowVersion = table.Column<DateTime>(type: "timestamp(6)", rowVersion: true, nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
+                    DebitoAutomaticoActivo = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    FechaProximoDebito = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    RowVersion = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -218,6 +222,167 @@ namespace Infrastructure.Migrations
                         name: "FK_Negocios_Rubros_RubroId",
                         column: x => x.RubroId,
                         principalTable: "Rubros",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(type: "varchar(50)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Apellido = table.Column<string>(type: "varchar(50)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Telefono = table.Column<string>(type: "varchar(20)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TipoDocumento = table.Column<int>(type: "int", nullable: true),
+                    NumeroDocumento = table.Column<string>(type: "varchar(20)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Tipo = table.Column<int>(type: "int", nullable: false),
+                    Activo = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    FechaAlta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    NegocioId = table.Column<int>(type: "int", nullable: true),
+                    AvatarUrl = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UltimoLogin = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    IpUltimoLogin = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RowVersion = table.Column<DateTime>(type: "timestamp", rowVersion: true, nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
+                    UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NormalizedEmail = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SecurityStamp = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Negocios_NegocioId",
+                        column: x => x.NegocioId,
+                        principalTable: "Negocios",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Clientes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(type: "varchar(100)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Apellido = table.Column<string>(type: "varchar(100)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TipoDocumento = table.Column<int>(type: "int", nullable: true),
+                    NumeroDocumento = table.Column<string>(type: "varchar(20)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EsEmpresa = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Email = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Telefono = table.Column<string>(type: "varchar(20)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Direccion = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Ciudad = table.Column<string>(type: "varchar(100)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Provincia = table.Column<string>(type: "varchar(100)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CodigoPostal = table.Column<string>(type: "varchar(10)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NegocioId = table.Column<int>(type: "int", nullable: false),
+                    EsConsumidorFinal = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    LimiteCredito = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
+                    SaldoActual = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
+                    FechaAlta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Observaciones = table.Column<string>(type: "varchar(500)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PuntosFidelidad = table.Column<int>(type: "int", nullable: true),
+                    UltimaCompra = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    RowVersion = table.Column<DateTime>(type: "timestamp(6)", rowVersion: true, nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
+                    Activo = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clientes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Clientes_Negocios_NegocioId",
+                        column: x => x.NegocioId,
+                        principalTable: "Negocios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Productos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(type: "varchar(100)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Descripcion = table.Column<string>(type: "varchar(200)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Marca = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CategoriaId = table.Column<int>(type: "int", nullable: false),
+                    RubroId = table.Column<int>(type: "int", nullable: false),
+                    UnidadMedidaId = table.Column<int>(type: "int", nullable: false),
+                    EsPrivado = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    NegocioId = table.Column<int>(type: "int", nullable: true),
+                    ImagenUrl = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaAlta = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Productos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Productos_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Productos_Negocios_NegocioId",
+                        column: x => x.NegocioId,
+                        principalTable: "Negocios",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Productos_Rubros_RubroId",
+                        column: x => x.RubroId,
+                        principalTable: "Rubros",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Productos_UnidadesMedidas_UnidadMedidaId",
+                        column: x => x.UnidadMedidaId,
+                        principalTable: "UnidadesMedidas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -252,6 +417,7 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FechaAlta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     RubroId = table.Column<int>(type: "int", nullable: true),
+                    NegocioId = table.Column<int>(type: "int", nullable: true),
                     LimiteCredito = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
                     DiasPlazoPago = table.Column<int>(type: "int", nullable: true),
                     Observaciones = table.Column<string>(type: "varchar(500)", nullable: true)
@@ -264,61 +430,15 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Proveedores", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Proveedores_Negocios_NegocioId",
+                        column: x => x.NegocioId,
+                        principalTable: "Negocios",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Proveedores_Rubros_RubroId",
                         column: x => x.RubroId,
                         principalTable: "Rubros",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Productos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CodigoBarras = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Nombre = table.Column<string>(type: "varchar(100)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Descripcion = table.Column<string>(type: "varchar(200)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Marca = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CategoriaId = table.Column<int>(type: "int", nullable: true),
-                    UnidadMedidaId = table.Column<int>(type: "int", nullable: false),
-                    TieneVencimiento = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    FechaVencimiento = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    PrecioVenta = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    PrecioCosto = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    Margen = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    Moneda = table.Column<int>(type: "int", nullable: false),
-                    IncluyeImpuestos = table.Column<bool>(type: "tinyint(1)", nullable: true),
-                    GestionaStock = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    StockActual = table.Column<int>(type: "int", nullable: false),
-                    StockMinimo = table.Column<int>(type: "int", nullable: true),
-                    StockMaximo = table.Column<int>(type: "int", nullable: true),
-                    Activo = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ImagenUrl = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    FechaAlta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    RowVersion = table.Column<DateTime>(type: "timestamp(6)", rowVersion: true, nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Productos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Productos_Categorias_CategoriaId",
-                        column: x => x.CategoriaId,
-                        principalTable: "Categorias",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Productos_UnidadesMedidas_UnidadMedidaId",
-                        column: x => x.UnidadMedidaId,
-                        principalTable: "UnidadesMedidas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -355,41 +475,97 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Usuarios",
+                name: "AspNetUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "varchar(50)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Apellido = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(100)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Telefono = table.Column<string>(type: "varchar(20)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TipoDocumento = table.Column<int>(type: "int", nullable: true),
-                    NumeroDocumento = table.Column<string>(type: "varchar(20)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Tipo = table.Column<int>(type: "int", nullable: false),
-                    Activo = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    FechaAlta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    NegocioId = table.Column<int>(type: "int", nullable: false),
-                    AvatarUrl = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UltimoLogin = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    IpUltimoLogin = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RowVersion = table.Column<DateTime>(type: "timestamp(6)", rowVersion: true, nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
+                    ClaimValue = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Negocios_NegocioId",
-                        column: x => x.NegocioId,
-                        principalTable: "Negocios",
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProviderKey = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProviderDisplayName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Value = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -411,6 +587,43 @@ namespace Infrastructure.Migrations
                     table.PrimaryKey("PK_ComprasDetalles", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ComprasDetalles_Productos_ProductoId",
+                        column: x => x.ProductoId,
+                        principalTable: "Productos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ProductosNegocios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NegocioId = table.Column<int>(type: "int", nullable: false),
+                    ProductoId = table.Column<int>(type: "int", nullable: false),
+                    PrecioVenta = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    PrecioCosto = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
+                    Moneda = table.Column<int>(type: "int", nullable: false),
+                    GestionaStock = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    StockActual = table.Column<int>(type: "int", nullable: false),
+                    StockMinimo = table.Column<int>(type: "int", nullable: true),
+                    StockMaximo = table.Column<int>(type: "int", nullable: true),
+                    FechaAlta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    RowVersion = table.Column<DateTime>(type: "timestamp(6)", rowVersion: true, nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductosNegocios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductosNegocios_Negocios_NegocioId",
+                        column: x => x.NegocioId,
+                        principalTable: "Negocios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductosNegocios_Productos_ProductoId",
                         column: x => x.ProductoId,
                         principalTable: "Productos",
                         principalColumn: "Id",
@@ -446,6 +659,11 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Compras", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Compras_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Compras_Comprobante_ComprobanteAnulacionId",
                         column: x => x.ComprobanteAnulacionId,
                         principalTable: "Comprobante",
@@ -467,11 +685,6 @@ namespace Infrastructure.Migrations
                         column: x => x.ProveedorId,
                         principalTable: "Proveedores",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Compras_Usuarios_UsuarioId",
-                        column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -486,15 +699,15 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_UsuariosPuestos", x => new { x.UsuarioId, x.PuestoId });
                     table.ForeignKey(
-                        name: "FK_UsuariosPuestos_Puestos_PuestoId",
-                        column: x => x.PuestoId,
-                        principalTable: "Puestos",
+                        name: "FK_UsuariosPuestos_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UsuariosPuestos_Usuarios_UsuarioId",
-                        column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
+                        name: "FK_UsuariosPuestos_Puestos_PuestoId",
+                        column: x => x.PuestoId,
+                        principalTable: "Puestos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -526,6 +739,12 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Ventas", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Ventas_AspNetUsers_EmpleadoId",
+                        column: x => x.EmpleadoId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Ventas_Clientes_ClienteId",
                         column: x => x.ClienteId,
                         principalTable: "Clientes",
@@ -553,10 +772,48 @@ namespace Infrastructure.Migrations
                         principalTable: "Puestos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "HistoricosPrecios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ProductoNegocioId = table.Column<int>(type: "int", nullable: false),
+                    Precio = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoricosPrecios", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ventas_Usuarios_EmpleadoId",
-                        column: x => x.EmpleadoId,
-                        principalTable: "Usuarios",
+                        name: "FK_HistoricosPrecios_ProductosNegocios_ProductoNegocioId",
+                        column: x => x.ProductoNegocioId,
+                        principalTable: "ProductosNegocios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "HistoricoStocks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ProductoNegocioId = table.Column<int>(type: "int", nullable: false),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoricoStocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HistoricoStocks_ProductosNegocios_ProductoNegocioId",
+                        column: x => x.ProductoNegocioId,
+                        principalTable: "ProductosNegocios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -591,6 +848,105 @@ namespace Infrastructure.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.InsertData(
+                table: "Rubros",
+                columns: new[] { "Id", "Activo", "Descripcion", "FechaAlta", "Nombre" },
+                values: new object[,]
+                {
+                    { 1, true, "Productos comestibles, bebidas alcohólicas y no alcohólicas", new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5477), "Alimentos y Bebidas" },
+                    { 2, true, "Artículos eléctricos para el hogar", new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5479), "Electrodomésticos" },
+                    { 3, true, "Ropa y accesorios de moda", new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5481), "Indumentaria" },
+                    { 4, true, "Productos de higiene y limpieza", new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5483), "Limpieza" },
+                    { 5, true, "Herramientas y artículos de construcción", new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5484), "Ferretería" },
+                    { 6, true, "Equipos informáticos, celulares, accesorios", new DateTime(2025, 5, 3, 14, 46, 41, 412, DateTimeKind.Local).AddTicks(5486), "Tecnología" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UnidadesMedidas",
+                columns: new[] { "Id", "Abreviatura", "Activo", "Nombre", "TipoUnidadMedida" },
+                values: new object[,]
+                {
+                    { 1, "u", true, "Unidad", 0 },
+                    { 2, "pr", true, "Par", 1 },
+                    { 3, "dz", true, "Docena", 2 },
+                    { 4, "g", true, "Gramo", 3 },
+                    { 5, "kg", true, "Kilogramo", 4 },
+                    { 6, "mg", true, "Miligramo", 5 },
+                    { 7, "t", true, "Tonelada", 6 },
+                    { 8, "ml", true, "Mililitro", 7 },
+                    { 9, "l", true, "Litro", 8 },
+                    { 10, "m³", true, "Metro Cúbico", 9 },
+                    { 11, "cm³", true, "Centímetro Cúbico", 10 },
+                    { 12, "mm", true, "Milímetro", 11 },
+                    { 13, "cm", true, "Centímetro", 12 },
+                    { 14, "m", true, "Metro", 13 },
+                    { 15, "km", true, "Kilómetro", 14 },
+                    { 16, "m²", true, "Metro Cuadrado", 15 },
+                    { 17, "cm²", true, "Centímetro Cuadrado", 16 },
+                    { 18, "min", true, "Minuto", 17 },
+                    { 19, "h", true, "Hora", 18 },
+                    { 20, "d", true, "Día", 19 },
+                    { 21, "sem", true, "Semana", 20 },
+                    { 22, "mes", true, "Mes", 21 },
+                    { 23, "caja", true, "Caja", 22 },
+                    { 24, "paq", true, "Paquete", 23 },
+                    { 25, "blst", true, "Blíster", 24 },
+                    { 26, "fras", true, "Frasco", 25 },
+                    { 27, "rll", true, "Rollo", 26 },
+                    { 28, "tira", true, "Tira", 27 },
+                    { 29, "serv", true, "Servicio", 28 },
+                    { 30, "MB", true, "Megabyte", 29 },
+                    { 31, "GB", true, "Gigabyte", 30 },
+                    { 32, "TB", true, "Terabyte", 31 }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_NegocioId",
+                table: "AspNetUsers",
+                column: "NegocioId");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clientes_NegocioId",
+                table: "Clientes",
+                column: "NegocioId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Compras_ComprobanteAnulacionId",
                 table: "Compras",
@@ -622,6 +978,16 @@ namespace Infrastructure.Migrations
                 column: "ProductoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_HistoricosPrecios_ProductoNegocioId",
+                table: "HistoricosPrecios",
+                column: "ProductoNegocioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HistoricoStocks_ProductoNegocioId",
+                table: "HistoricoStocks",
+                column: "ProductoNegocioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Negocios_PlanSaasId",
                 table: "Negocios",
                 column: "PlanSaasId");
@@ -637,9 +1003,34 @@ namespace Infrastructure.Migrations
                 column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Productos_NegocioId",
+                table: "Productos",
+                column: "NegocioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Productos_RubroId",
+                table: "Productos",
+                column: "RubroId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Productos_UnidadMedidaId",
                 table: "Productos",
                 column: "UnidadMedidaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductosNegocios_NegocioId",
+                table: "ProductosNegocios",
+                column: "NegocioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductosNegocios_ProductoId",
+                table: "ProductosNegocios",
+                column: "ProductoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Proveedores_NegocioId",
+                table: "Proveedores",
+                column: "NegocioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Proveedores_RubroId",
@@ -649,11 +1040,6 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Puestos_NegocioId",
                 table: "Puestos",
-                column: "NegocioId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_NegocioId",
-                table: "Usuarios",
                 column: "NegocioId");
 
             migrationBuilder.CreateIndex(
@@ -706,10 +1092,31 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
                 name: "Compras");
 
             migrationBuilder.DropTable(
                 name: "ComprasDetalles");
+
+            migrationBuilder.DropTable(
+                name: "HistoricosPrecios");
+
+            migrationBuilder.DropTable(
+                name: "HistoricoStocks");
 
             migrationBuilder.DropTable(
                 name: "UsuariosPuestos");
@@ -718,19 +1125,22 @@ namespace Infrastructure.Migrations
                 name: "VentasDetalles");
 
             migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "Proveedores");
 
             migrationBuilder.DropTable(
-                name: "Productos");
+                name: "ProductosNegocios");
 
             migrationBuilder.DropTable(
                 name: "Ventas");
 
             migrationBuilder.DropTable(
-                name: "Categorias");
+                name: "Productos");
 
             migrationBuilder.DropTable(
-                name: "UnidadesMedidas");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Clientes");
@@ -742,7 +1152,10 @@ namespace Infrastructure.Migrations
                 name: "Puestos");
 
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Categorias");
+
+            migrationBuilder.DropTable(
+                name: "UnidadesMedidas");
 
             migrationBuilder.DropTable(
                 name: "Negocios");

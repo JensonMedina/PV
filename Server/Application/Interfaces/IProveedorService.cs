@@ -1,22 +1,19 @@
 ﻿using Application.Common;
 using Application.Models.Request;
 using Application.Models.Response;
-using Domain.Entities;
 
 namespace Application.Interfaces
 {
     public interface IProveedorService
     {  
-        Task RegistrarProveedorAsync(ProveedorRequest proveedorRequest);
+        Task Register(ProveedorRequest proveedorRequest);
 
-        Task<ProveedorResponse> ConsultarProveedorPorIdAsync(int id);
+        Task<PagedResponse<ProveedorResponse>> GetByNegocio(int pageNumber, int pageSize, bool onlyActive = true, int negocioId = 0);
 
-        Task<List<ProveedorResponse>> ConsultarProveedorPorNegocioAsync(string negocio);
+        Task<PagedResponse<ProveedorResponse>> GetByRubro(int pageNumber, int pageSize, bool onlyActive = true, int rubroId = 0);
 
-        Task<List<ProveedorResponse>> ConsultarProveedorPorRubroAsync(string rubro);
+        Task Disable(int idNegocio, int idProveedor);
 
-        Task EliminarProveedorAsync(int id);
-
-        Task ModificarProveedorAsync(int id, ProveedorRequest proveedorRequest); 
+        Task Modify(int proveedorId, ProveedorModifiedRequest proveedorModifiedRequest); 
     }
 }

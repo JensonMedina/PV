@@ -4,7 +4,6 @@ namespace Domain.Interfaces
 {
     public interface IProveedorRepository : IRepositoryBase<Proveedor>
     {
-        Task<List<Proveedor>> GetByNegocioAsync(string nombreNegocio);
-        Task<List<Proveedor>> GetByRubroAsync(string rubro);
+        Task<(IEnumerable<Proveedor> Items, int TotalCount)> GetPageByRubroAsync(int rubroId, int pageNumber, int pageSize, bool onlyActive = true);
     }
 }
