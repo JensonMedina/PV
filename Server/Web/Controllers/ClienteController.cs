@@ -19,9 +19,9 @@ namespace Web.Controllers
             _clienteService = clienteService;
             _logger = _loggerApp;
         }
-        
+
         [HttpGet("get-all")]
-        public async Task<ActionResult<PagedResponse<ClienteResponse>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int negocioId = 0)
+        public async Task<ActionResult<PagedResponse<ClienteResponse>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int negocioId = 0, [FromQuery] bool onlyActive = true)
         {
             string contexto = $"{GetType().Name} - {nameof(GetAll)}";
             _logger.LogInfo(contexto, "Iniciando método GetAll");
@@ -31,7 +31,7 @@ namespace Web.Controllers
                 var result = await _clienteService.GetAll(
                     pageNumber,
                     pageSize,
-                    onlyActive: true,
+                    onlyActive,
                     negocioId);
 
                 _logger.LogInfo(contexto, $"GetAll finalizado. Total registros: {result.TotalItems}");
