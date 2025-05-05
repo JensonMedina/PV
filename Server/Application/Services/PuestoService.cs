@@ -18,7 +18,7 @@ namespace Application.Services
             _logger = logger;
         }
 
-        public async Task<PagedResponse<PuestoResponse>> GetAll(int negocioId, int pageNumber, int pageSize)
+        public async Task<PagedResponse<PuestoResponse>> GetAll(int negocioId, int pageNumber, int pageSize, bool onlyActive)
         {
             string contexto = $"{this.GetType().Name} - {nameof(GetAll)}";
 
@@ -46,7 +46,7 @@ namespace Application.Services
             #endregion
             try
             {
-                var (puestos, totalItems) = await _unitOfWork.Puestos.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive: true);
+                var (puestos, totalItems) = await _unitOfWork.Puestos.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive);
                 #region Validaciones
                 if (totalItems == 0)
                 {
@@ -125,7 +125,7 @@ namespace Application.Services
             try
             {
                 Puesto? puesto = await _unitOfWork.Puestos.GetByMac(mac);
-                
+
                 _logger.LogInfo(contexto, "Fin método");
                 return puesto;
             }
@@ -177,7 +177,7 @@ namespace Application.Services
                     }
                 }
                 if (request.DireccionMAC is not null)
-                { 
+                {
                     Puesto? puestoExistente = await GetByMac(request.DireccionMAC);
                     if (puestoExistente is not null)
                     {

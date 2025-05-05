@@ -6,7 +6,7 @@ namespace Application.Interfaces
 {
     public interface IPuestoService
     {
-        Task<PagedResponse<PuestoResponse>> GetAll(int negocioId, int pageNumber, int pageSize);
+        Task<PagedResponse<PuestoResponse>> GetAll(int negocioId, int pageNumber, int pageSize, bool onlyActive);
         Task<PuestoResponse?> GetById(int negocioId, int id);
         Task<PuestoResponse> Register(PuestoRequest request);
         Task<PuestoResponse> Modify(int id, PuestoModifyRequest request);
