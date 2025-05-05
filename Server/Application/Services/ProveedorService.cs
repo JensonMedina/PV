@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Mappings;
 using Application.Models.Request;
 using Application.Models.Response;
+using Domain.Entities;
 
 namespace Application.Services
 {
@@ -16,21 +17,21 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
             _loggerApp = loggerApp;
         }
-        public async Task Register(ProveedorRequest newProveedor)
+        public async Task Register(ProveedorRequest newProveedor, int negocioId)
         {
             string contexto = $"{this.GetType().Name} - {nameof(Register)}";
 
             try
             {
-                _loggerApp.LogInfo(contexto, "Iniciando registro de nuevo proveedor", $"NegocioId: {newProveedor.NegocioId}, RubroId: {newProveedor.RubroId}");
+                _loggerApp.LogInfo(contexto, "Iniciando registro de nuevo proveedor", $"NegocioId: {negocioId}, RubroId: {newProveedor.RubroId}");
 
                 #region Validar Negocio
-                _loggerApp.LogInfo(contexto, "Iniciando validación de negocio", $"NegocioId: {newProveedor.NegocioId}");
-                var negocio = await _unitOfWork.Negocios.GetByIdAsync(newProveedor.NegocioId);
+                _loggerApp.LogInfo(contexto, "Iniciando validación de negocio", $"NegocioId: {negocioId}");
+                var negocio = await _unitOfWork.Negocios.GetByIdAsync(negocioId);
                 if (negocio == null)
                 {
-                    _loggerApp.LogError(contexto, "Negocio no encontrado", $"NegocioId: {newProveedor.NegocioId}");
-                    throw ExceptionApp.NotFound($"El negocio con id: {newProveedor.NegocioId} no existe");
+                    _loggerApp.LogError(contexto, "Negocio no encontrado", $"NegocioId: {negocioId}");
+                    throw ExceptionApp.NotFound($"El negocio con id: {negocioId} no existe");
                 }
                 _loggerApp.LogInfo(contexto, "Negocio encontrado", $"NegocioId: {negocio.Id}");
                 #endregion
@@ -50,8 +51,16 @@ namespace Application.Services
 
                 await _unitOfWork.Proveedores.AddAsync(proveedor);
                 await _unitOfWork.CompleteAsync();
+                var proveedorNegocio = new ProveedorNegocio
+                {
+                    ProveedorId = proveedor.Id,
+                    NegocioId = negocioId
+                };
+                await _unitOfWork.ProveedoresNegocio.AddAsync(proveedorNegocio);              
+                await _unitOfWork.CompleteAsync();
 
                 _loggerApp.LogInfo(contexto, "Proveedor registrado exitosamente", $"ProveedorId: {proveedor.Id}");
+                
             }
             catch (Exception ex)
             {
@@ -80,7 +89,8 @@ namespace Application.Services
                 #endregion
                 _loggerApp.LogInfo(contexto,
                     $"Obteniendo página {pageNumber} (size={pageSize}, onlyActive={onlyActive}) para negocio {negocioId}");
-                var (entidades, totalItems) = await _unitOfWork.Proveedores.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive: onlyActive);
+                var (entidades, totalItems) = await _unitOfWork.ProveedoresNegocio.GetPageByNegocioAsync(negocioId, pageNumber, pageSize, onlyActive: onlyActive);
+
                 var proveedoresResponse = entidades.Select(ProveedorMapping.ToResponse).ToList();
                 var pagedResponse = new PagedResponse<ProveedorResponse>(proveedoresResponse, totalItems, pageNumber, pageSize);
                 _loggerApp.LogInfo(contexto,
@@ -143,7 +153,7 @@ namespace Application.Services
             string contexto = $"{this.GetType().Name} - {nameof(Disable)}";
             try
             {
-                _loggerApp.LogInfo(contexto, "Iniciando desactivación de proveedor",
+                _loggerApp.LogInfo(contexto, "Iniciando desactivación de proveedor del negocio",
                     $"NegocioId: {idNegocio}, ProveedorId: {idProveedor}");
 
                 #region Validar Negocio
@@ -154,48 +164,43 @@ namespace Application.Services
                     _loggerApp.LogError(contexto, "Negocio no encontrado", $"NegocioId: {idNegocio}");
                     throw ExceptionApp.NotFound($"El negocio con id: {idNegocio} no existe");
                 }
-                _loggerApp.LogInfo(contexto, "Negocio encontrado", $"NegocioId: {negocio.Id}");
                 #endregion
 
-                #region Validar Proveedor
-                _loggerApp.LogInfo(contexto, "Iniciando validación de proveedor", $"ProveedorId: {idProveedor}");
-                var proveedor = await _unitOfWork.Proveedores.GetByIdAsync(idProveedor);
+                #region Validar Relación Proveedor-Negocio
+                _loggerApp.LogInfo(contexto, "Buscando relación proveedor-negocio",
+                    $"NegocioId: {idNegocio}, ProveedorId: {idProveedor}");
 
-                if (proveedor == null)
+                var proveedorNegocio = await _unitOfWork.ProveedoresNegocio.GetByIdsAsync(idProveedor, idNegocio);
+                if (proveedorNegocio == null)
                 {
-                    _loggerApp.LogError(contexto, "Proveedor no encontrado", $"ProveedorId: {idProveedor}");
-                    throw ExceptionApp.NotFound($"El proveedor con id: {idProveedor} no existe");
+                    _loggerApp.LogError(contexto, "Relación proveedor-negocio no encontrada",
+                        $"NegocioId: {idNegocio}, ProveedorId: {idProveedor}");
+                    throw ExceptionApp.NotFound($"El proveedor con id: {idProveedor} no está relacionado con el negocio {idNegocio}");
                 }
 
-                if (proveedor.NegocioId != idNegocio)
+                if (!proveedorNegocio.Activo)
                 {
-                    _loggerApp.LogError(contexto, "El proveedor no pertenece al negocio especificado",
-                        $"ProveedorId: {idProveedor}, NegocioId: {idNegocio}, ProveedorNegocioId: {proveedor.NegocioId}");
-                    throw ExceptionApp.BadRequest($"El proveedor con id: {idProveedor} no pertenece al negocio con id: {idNegocio}");
-                }
-
-                if (!proveedor.Activo)
-                {
-                    _loggerApp.LogInfo(contexto, "El proveedor ya está desactivado", $"ProveedorId: {idProveedor}");
+                    _loggerApp.LogInfo(contexto, "La relación ya está desactivada", $"ProveedorId: {idProveedor}, NegocioId: {idNegocio}");
                     return;
                 }
                 #endregion
 
-                // Desactivar proveedor
-                proveedor.Activo = false;
-                _unitOfWork.Proveedores.UpdateAsync(proveedor);
+                proveedorNegocio.Activo = false;
+                _unitOfWork.ProveedoresNegocio.UpdateAsync(proveedorNegocio);
                 await _unitOfWork.CompleteAsync();
 
-                _loggerApp.LogInfo(contexto, "Proveedor desactivado exitosamente", $"ProveedorId: {idProveedor}");
+                _loggerApp.LogInfo(contexto, "Proveedor desactivado para el negocio exitosamente",
+                    $"ProveedorId: {idProveedor}, NegocioId: {idNegocio}");
             }
             catch (Exception ex)
             {
-                _loggerApp.LogError(contexto, "Error inesperado en la desactivación de proveedor", ex.ToString());
+                _loggerApp.LogError(contexto, "Error inesperado en la desactivación de proveedor para el negocio", ex.ToString());
                 throw;
             }
         }
 
-        public async Task Modify(int proveedorId, ProveedorModifiedRequest proveedorModifiedRequest)
+
+        public async Task Modify(int negocioId,int proveedorId, ProveedorModifiedRequest proveedorModifiedRequest)
         {
             string contexto = $"{this.GetType().Name} - {nameof(Modify)}";
             try
@@ -224,9 +229,19 @@ namespace Application.Services
                     _loggerApp.LogError(contexto, "Proveedor no encontrado", $"ProveedorId: {proveedorId}");
                     throw ExceptionApp.NotFound($"El proveedor con id: {proveedorId} no existe");
                 }
-
                 #endregion
+                #region Validar relación proveedor-negocio
+                _loggerApp.LogInfo(contexto, "Validando relación proveedor-negocio",
+                    $"ProveedorId: {proveedorId}, NegocioId: {negocioId}");
 
+                var proveedorNegocio = await _unitOfWork.ProveedoresNegocio.GetByIdsAsync(proveedorId, negocioId);
+                if (proveedorNegocio == null)
+                {
+                    _loggerApp.LogError(contexto, "El proveedor no pertenece al negocio",
+                        $"ProveedorId: {proveedorId}, NegocioId: {negocioId}");
+                    throw ExceptionApp.BadRequest($"El proveedor con id: {proveedorId} no pertenece al negocio con id: {negocioId}");
+                }
+                #endregion
                 #region Mapeamos de modify a entidad
 
                 _loggerApp.LogInfo(contexto, "Mapeando entidad");

@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
@@ -19,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
     public IProductoRepository Productos { get; }
     public IPuestoRepository Puestos { get; }
     public IProveedorRepository Proveedores { get; }
+    public IProveedorNegocioRepository ProveedoresNegocio { get; }
     public IRubroRepository Rubros { get; }
     public IUnidadMedidaRepository UnidadesMedidas { get; }
     public IUsuarioPuestoRepository UsuariosPuestos { get; }
@@ -42,6 +44,7 @@ public class UnitOfWork : IUnitOfWork
         ProductosNegocios = new ProductoNegocioRepository(_context);
         Productos = new ProductoRepository(_context);
         Proveedores = new ProveedorRepository(_context);
+        ProveedoresNegocio = new ProveedorNegocioRepository(_context);
         Puestos = new PuestoRepository(_context);
         Rubros = new RubroRepository(_context);
         UnidadesMedidas = new UnidadMedidaRepository(_context);

@@ -63,5 +63,9 @@ namespace Domain.Entities
 
         //Manejar Concurrencia
         public DateTime RowVersion { get; set; }
+
+        #region Relación con Proveedores
+        public ICollection<ProveedorNegocio> ProveedoresNegocio { get; set; }
+        #endregion
     }
 }

@@ -44,9 +44,6 @@ namespace Application.Models.Request
         [Required(ErrorMessage = "El RubroId es obligatorio.")]
         public int RubroId { get; set; }
 
-        [Required(ErrorMessage = "El NegocioId es obligatorio.")]
-        public int NegocioId { get; set; }
-
         [Range(0, double.MaxValue, ErrorMessage = "El límite de crédito debe ser un valor positivo.")]
         public decimal? LimiteCredito { get; set; }
 

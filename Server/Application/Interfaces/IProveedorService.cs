@@ -6,7 +6,7 @@ namespace Application.Interfaces
 {
     public interface IProveedorService
     {  
-        Task Register(ProveedorRequest proveedorRequest);
+        Task Register(ProveedorRequest proveedorRequest, int negocioId);
 
         Task<PagedResponse<ProveedorResponse>> GetByNegocio(int pageNumber, int pageSize, bool onlyActive = true, int negocioId = 0);
 
@@ -14,6 +14,6 @@ namespace Application.Interfaces
 
         Task Disable(int idNegocio, int idProveedor);
 
-        Task Modify(int proveedorId, ProveedorModifiedRequest proveedorModifiedRequest); 
+        Task Modify(int negocioId,int proveedorId, ProveedorModifiedRequest proveedorModifiedRequest); 
     }
 }

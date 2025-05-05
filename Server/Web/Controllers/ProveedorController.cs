@@ -21,15 +21,17 @@ namespace API.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] ProveedorRequest proveedorRequest)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] ProveedorRequest proveedorRequest, [FromQuery] int negocioId)
         {
             string contexto = $"{this.GetType().Name} - {nameof(Register)}";
 
             try
             {
                 _logger.LogInfo(contexto, "Iniciando método.");
-                await _proveedorService.Register(proveedorRequest);
+
+                // Llamamos al servicio para registrar el proveedor y asociarlo al negocio
+                await _proveedorService.Register(proveedorRequest, negocioId);
 
                 _logger.LogInfo(contexto, "Registro de proveedor finalizado exitosamente.", $"ProveedorNombre: {proveedorRequest.Nombre}");
 
@@ -50,10 +52,10 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(nameof(Register), "Error al registrar proveedor.", ex.ToString());
-
                 return StatusCode(500, Result<string>.Error("Ocurrió un error inesperado al registrar el proveedor.", ex.Message));
             }
         }
+
         [HttpGet("negocio/{negocioId}")]
         public async Task<ActionResult<Result<PagedResponse<ProveedorResponse>>>> GetByNegocio(
             int negocioId,
@@ -163,14 +165,14 @@ namespace API.Controllers
             }
         }
         [HttpPut("modify")]
-        public async Task<ActionResult<PuestoResponse>> Modify([FromQuery] int proveedorId, [FromBody] ProveedorModifiedRequest request)
+        public async Task<ActionResult<PuestoResponse>> Modify([FromQuery] int negocioId, [FromQuery] int proveedorId, [FromBody] ProveedorModifiedRequest request)
         {
             string contexto = $"{this.GetType().Name} - {nameof(Modify)}";
             _logger.LogInfo(contexto, $"Actualizando Proveedor con ID {proveedorId}.");
 
             try
             {
-                await _proveedorService.Modify(proveedorId, request);
+                await _proveedorService.Modify(negocioId,proveedorId, request);
                 _logger.LogInfo(contexto, $"Proveedor con ID {proveedorId} actualizado correctamente.");
                 return Ok(Result<PuestoResponse>.Ok("Proveedor actualizado correctamente."));
             }

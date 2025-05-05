@@ -16,12 +16,14 @@ namespace Application.Interfaces
         IProductoRepository Productos { get; }
         IPuestoRepository Puestos { get; }
         IProveedorRepository Proveedores { get; }
+        IProveedorNegocioRepository ProveedoresNegocio { get; }
         IRubroRepository Rubros { get; }
         IUnidadMedidaRepository UnidadesMedidas { get; }
         IUsuarioPuestoRepository UsuariosPuestos { get; }
         IUsuarioRepository Usuarios { get; }
         IVentaDetalleRepository VentasDetalles { get; }
         IVentaRepository Ventas { get; }
+        
         Task<int> CompleteAsync(); // Guarda todos los cambios en una transacción
     }
 }
