@@ -19,10 +19,6 @@ namespace Infrastructure.Repositories
                 .Include(pn => pn.Proveedor)
                 .Where(pn => pn.NegocioId == negocioId);
 
-            if (onlyActive)
-            {
-                query = query.Where(pn => pn.Activo && pn.Proveedor.Activo);
-            }
 
             var total = await query.CountAsync();
 

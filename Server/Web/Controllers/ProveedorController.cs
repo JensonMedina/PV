@@ -30,31 +30,34 @@ namespace API.Controllers
             {
                 _logger.LogInfo(contexto, "Iniciando método.");
 
-                // Llamamos al servicio para registrar el proveedor y asociarlo al negocio
                 await _proveedorService.Register(proveedorRequest, negocioId);
 
                 _logger.LogInfo(contexto, "Registro de proveedor finalizado exitosamente.", $"ProveedorNombre: {proveedorRequest.Nombre}");
 
-                return Ok(Result<Object>.Ok());
+                return Ok(Result<object>.Ok());
             }
             catch (ExceptionApp ex)
             {
-                switch (ex.Type)
+                _logger.LogError(contexto, $"[{ex.Type}] {ex.Message}");
+
+                return ex.Type switch
                 {
-                    case ExceptionType.NotFound:
-                        _logger.LogError(contexto, ex.Message);
-                        return NotFound(Result<object>.NotFound());
-                    default:
-                        _logger.LogError(contexto, "Error inesperado creando el proveedor.", ex.Message);
-                        return StatusCode(500, Result<string>.Error("Ocurrió un error inesperado al registrar el proveedor.", ex.Message));
-                }
+                    ExceptionType.NotFound => NotFound(Result<string>.NotFound(ex.Message)),
+                    ExceptionType.Conflict => StatusCode(409, Result<string>.Error(ex.Message, null, 409)),
+                    ExceptionType.BadRequest => BadRequest(Result<string>.BadRequest(ex.Message)),
+                    ExceptionType.Forbidden => StatusCode(403, Result<string>.Error(ex.Message, null, 403)),
+                    ExceptionType.Unauthorized => Unauthorized(Result<string>.Unauthorized(ex.Message)),
+                    _ => StatusCode(500, Result<string>.Error("Ocurrió un error inesperado al registrar el proveedor.", ex.Message))
+                };
             }
             catch (Exception ex)
             {
-                _logger.LogError(nameof(Register), "Error al registrar proveedor.", ex.ToString());
+                _logger.LogError(contexto, "Error inesperado al registrar proveedor.", ex.ToString());
                 return StatusCode(500, Result<string>.Error("Ocurrió un error inesperado al registrar el proveedor.", ex.Message));
             }
         }
+
+
 
         [HttpGet("negocio/{negocioId}")]
         public async Task<ActionResult<Result<PagedResponse<ProveedorResponse>>>> GetByNegocio(

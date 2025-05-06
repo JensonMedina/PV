@@ -30,8 +30,13 @@ namespace Infrastructure.Data
 
             return (items, total);
         }
+        public async Task<Proveedor?> GetByNumeroDocumentoAsync(string numeroDocumento)
+        {
+            return await _context.Proveedores
+                .FirstOrDefaultAsync(p => p.NumeroDocumento == numeroDocumento);
+        }
 
-        
+
 
 
     }
