@@ -14,7 +14,6 @@ namespace Infrastructure.Data
         public async Task<(IEnumerable<Proveedor> Items, int TotalCount)> GetPageByRubroAsync(int rubroId, int pageNumber, int pageSize, bool onlyActive = true)
         {
             IQueryable<Proveedor> query = _context.Proveedores.AsNoTracking();
-            // Filtro por rubro
             query = query.Where(p => p.RubroId == rubroId);
 
             if (onlyActive)
@@ -36,8 +35,11 @@ namespace Infrastructure.Data
                 .FirstOrDefaultAsync(p => p.NumeroDocumento == numeroDocumento);
         }
 
-
-
+        public async Task<Proveedor?> GetByEmailAsync(string email)
+        {
+            return await _context.Proveedores
+                .FirstOrDefaultAsync(p => p.Email == email);
+        }
 
     }
 }

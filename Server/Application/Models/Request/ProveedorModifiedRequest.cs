@@ -48,7 +48,6 @@ namespace Application.Models.Request
 
         [StringLength(500, ErrorMessage = "Las observaciones no pueden superar los 500 caracteres.")]
         public string? Observaciones { get; set; }
-        [Required(ErrorMessage = "El RubroId es obligatorio.")]
         public int? RubroId { get; set; }
     }
 }

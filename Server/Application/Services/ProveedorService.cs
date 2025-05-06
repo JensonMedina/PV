@@ -34,6 +34,17 @@ namespace Application.Services
                 _loggerApp.LogInfo(contexto, "Iniciando validación de rubro", $"RubroId: {newProveedor.RubroId}");
                 var rubro = await ObtenerRubroValidadoAsync(newProveedor.RubroId, contexto);
                 #endregion
+                #region Validar Email
+                _loggerApp.LogInfo(contexto, "Validando si ya existe proveedor con el mismo email", $"Email: {newProveedor.Email}");
+
+                var proveedorConEmail = await _unitOfWork.Proveedores.GetByEmailAsync(newProveedor.Email);
+
+                if (proveedorConEmail != null)
+                {
+                    _loggerApp.LogInfo(contexto, "Proveedor ya existe con ese email", $"ProveedorId: {proveedorConEmail.Id}");
+                    throw ExceptionApp.Conflict($"Ya existe un proveedor registrado con el email {newProveedor.Email}.");
+                }
+                #endregion
 
                 #region Validar número de documento de proveedor
                 _loggerApp.LogInfo(contexto, "Validando si ya existe proveedor con el mismo documento",
@@ -90,7 +101,7 @@ namespace Application.Services
                 #region Validar Proveedor
                 var proveedor = await ObtenerProveedorValidadoAsync(proveedorId, contexto);
                 #endregion
-
+                
                 #region Verificar si ya existe relación
                 var relacionExistente = await _unitOfWork.ProveedoresNegocio
                     .GetByIdsAsync(proveedorId, negocioId);
@@ -309,7 +320,11 @@ namespace Application.Services
                 _loggerApp.LogError(contexto, "Proveedor no encontrado", $"ProveedorId: {proveedorId}");
                 throw ExceptionApp.NotFound($"El proveedor con id: {proveedorId} no existe");
             }
-            _loggerApp.LogInfo(contexto, "Proveedor encontrado", $"ProveedorId: {proveedor.Id}");
+            if(!proveedor.Activo) {
+                _loggerApp.LogError(contexto, "Proveedor Inactivo", $"ProveedorId: {proveedorId}");
+                throw ExceptionApp.BadRequest($"El proveedor con id: {proveedorId} está Inactivo actualmente");
+            }     
+            _loggerApp.LogInfo(contexto, "Proveedor encontrado y disponible ", $"ProveedorId: {proveedor.Id}");
             return proveedor;
         }
 
