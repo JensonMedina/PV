@@ -16,6 +16,7 @@ namespace Application.Interfaces
         IProductoRepository Productos { get; }
         IPuestoRepository Puestos { get; }
         IProveedorRepository Proveedores { get; }
+        IProveedorNegocioRepository ProveedoresNegocio { get; }
         IRubroRepository Rubros { get; }
         IUnidadMedidaRepository UnidadesMedidas { get; }
         IUsuarioPuestoRepository UsuariosPuestos { get; }
