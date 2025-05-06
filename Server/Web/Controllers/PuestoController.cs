@@ -21,14 +21,14 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<PuestoResponse>>> GetAll([FromQuery] int negocioId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<PagedResponse<PuestoResponse>>> GetAll([FromQuery] int negocioId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] bool onlyActive = true)
         {
             string contexto = $"{this.GetType().Name} - {nameof(GetAll)}";
             _logger.LogInfo(contexto, "Inicializando método.");
 
             try
             {
-                var response = await _puestoService.GetAll(negocioId, pageNumber, pageSize);
+                var response = await _puestoService.GetAll(negocioId, pageNumber, pageSize, onlyActive);
                 _logger.LogInfo(contexto, $"Se recuperaron {response.Data.Count()} puestos.");
                 return Ok(Result<PagedResponse<PuestoResponse>>.Ok(response));
             }
@@ -56,7 +56,7 @@ namespace Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PuestoResponse?>> GetById([FromRoute]int id, [FromQuery]int negocioId)
+        public async Task<ActionResult<PuestoResponse?>> GetById([FromRoute] int id, [FromQuery] int negocioId)
         {
             string contexto = $"{this.GetType().Name} - {nameof(GetById)}";
             _logger.LogInfo(contexto, $"Recuperando puesto con ID {id}.");
@@ -124,7 +124,7 @@ namespace Web.Controllers
         }
 
         [HttpPut("modify")]
-        public async Task<ActionResult<PuestoResponse>> Modify([FromQuery]int puestoId, [FromBody] PuestoModifyRequest request)
+        public async Task<ActionResult<PuestoResponse>> Modify([FromQuery] int puestoId, [FromBody] PuestoModifyRequest request)
         {
             string contexto = $"{this.GetType().Name} - {nameof(Modify)}";
             _logger.LogInfo(contexto, $"Actualizando puesto con ID {puestoId}.");
@@ -158,7 +158,7 @@ namespace Web.Controllers
         }
 
         [HttpDelete("disable")]
-        public async Task<IActionResult> Disable([FromQuery]int negocioId, [FromQuery]int id)
+        public async Task<IActionResult> Disable([FromQuery] int negocioId, [FromQuery] int id)
         {
             string contexto = $"{this.GetType().Name} - {nameof(Disable)}";
             _logger.LogInfo(contexto, $"Eliminando puesto con ID {id}.");
