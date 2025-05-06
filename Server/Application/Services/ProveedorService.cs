@@ -30,17 +30,16 @@ namespace Application.Services
                 var negocio = await ObtenerNegocioValidadoAsync(negocioId, contexto);
                 #endregion
 
-
                 #region Validar Rubro
                 _loggerApp.LogInfo(contexto, "Iniciando validación de rubro", $"RubroId: {newProveedor.RubroId}");
-                var rubro = await ObtenerRubroValidadoAsync(newProveedor.RubroId, contexto);            
+                var rubro = await ObtenerRubroValidadoAsync(newProveedor.RubroId, contexto);
                 #endregion
+
                 #region Validar número de documento de proveedor
                 _loggerApp.LogInfo(contexto, "Validando si ya existe proveedor con el mismo documento",
                     $"Documento: {newProveedor.NumeroDocumento}");
 
                 var proveedorExistente = await _unitOfWork.Proveedores.GetByNumeroDocumentoAsync(newProveedor.NumeroDocumento);
-                    
 
                 if (proveedorExistente != null)
                 {
@@ -56,30 +55,21 @@ namespace Application.Services
                         throw ExceptionApp.Conflict($"El proveedor con documento {newProveedor.NumeroDocumento} ya está registrado en este negocio.");
                     }
 
-                    var nuevaRelacion = new ProveedorNegocio
-                    {
-                        ProveedorId = proveedorExistente.Id,
-                        NegocioId = negocioId
-                    };
-
-                    await _unitOfWork.ProveedoresNegocio.AddAsync(nuevaRelacion);
-                    await _unitOfWork.CompleteAsync();
-
-                    _loggerApp.LogInfo(contexto, "Relación proveedor-negocio creada exitosamente",
-                        $"ProveedorId: {proveedorExistente.Id}, NegocioId: {negocioId}");
-
-                    return;
+                    throw ExceptionApp.Conflict($"El proveedor con documento {newProveedor.NumeroDocumento} ya existe. Si desea asociarlo al negocio, utilice el endpoint de asociación.");
                 }
                 #endregion
+                _loggerApp.LogInfo(contexto, "Validaciones correctas. Mapeando Request a Entidad", $"Documento Proveedor: {newProveedor.NumeroDocumento}, NegocioId: {negocioId}");
+
                 var proveedor = ProveedorMapping.ToEntity(newProveedor);
 
                 await _unitOfWork.Proveedores.AddAsync(proveedor);
+                await _unitOfWork.CompleteAsync();
                 var proveedorNegocio = new ProveedorNegocio
                 {
                     ProveedorId = proveedor.Id,
                     NegocioId = negocioId
                 };
-                await _unitOfWork.ProveedoresNegocio.AddAsync(proveedorNegocio);              
+                await _unitOfWork.ProveedoresNegocio.AddAsync(proveedorNegocio);
                 await _unitOfWork.CompleteAsync();
 
                 _loggerApp.LogInfo(contexto, "Proveedor registrado exitosamente", $"ProveedorId: {proveedor.Id}");
@@ -90,6 +80,56 @@ namespace Application.Services
                 throw;
             }
         }
+
+
+        public async Task AsociarProveedorExistenteAsync(int proveedorId, int negocioId)
+        {
+            string contexto = $"{this.GetType().Name} - {nameof(AsociarProveedorExistenteAsync)}";
+
+            try
+            {
+                _loggerApp.LogInfo(contexto, "Iniciando asociación de proveedor existente a negocio",
+                    $"ProveedorId: {proveedorId}, NegocioId: {negocioId}");
+
+                #region Validar Negocio
+                var negocio = await ObtenerNegocioValidadoAsync(negocioId, contexto);
+                #endregion
+
+                #region Validar Proveedor
+                var proveedor = await ObtenerProveedorValidadoAsync(proveedorId, contexto);
+                #endregion
+
+                #region Verificar si ya existe relación
+                var relacionExistente = await _unitOfWork.ProveedoresNegocio
+                    .GetByIdsAsync(proveedorId, negocioId);
+
+                if (relacionExistente != null)
+                {
+                    _loggerApp.LogError(contexto, "Proveedor ya está asociado al negocio",
+                        $"ProveedorId: {proveedorId}, NegocioId: {negocioId}");
+                    throw ExceptionApp.Conflict("El proveedor ya está asociado a este negocio.");
+                }
+                #endregion
+
+                var nuevaRelacion = new ProveedorNegocio
+                {
+                    ProveedorId = proveedorId,
+                    NegocioId = negocioId
+                };
+
+                await _unitOfWork.ProveedoresNegocio.AddAsync(nuevaRelacion);
+                await _unitOfWork.CompleteAsync();
+
+                _loggerApp.LogInfo(contexto, "Asociación proveedor-negocio creada exitosamente",
+                    $"ProveedorId: {proveedorId}, NegocioId: {negocioId}");
+            }
+            catch (Exception ex)
+            {
+                _loggerApp.LogError(contexto, "Error en la asociación proveedor-negocio", ex.ToString());
+                throw;
+            }
+        }
+
         public async Task<PagedResponse<ProveedorResponse>> GetByNegocio(int pageNumber, int pageSize, bool onlyActive = true, int negocioId = 0)
         {
             string contexto = $"{this.GetType().Name} - {nameof(GetByNegocio)}";
@@ -229,7 +269,7 @@ namespace Application.Services
                 #endregion
                 #region Mapeamos de modify a entidad
 
-                _loggerApp.LogInfo(contexto, "Mapeando entidad");
+                _loggerApp.LogInfo(contexto, "Mapeando de Modified a Entidad");
                 proveedor = ProveedorMapping.ModifiedToEntity(proveedorModifiedRequest, proveedor);
 
                 #endregion

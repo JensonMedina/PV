@@ -14,6 +14,8 @@ namespace Application.Interfaces
 
         Task Disable(int idNegocio, int idProveedor);
 
-        Task Modify(int negocioId,int proveedorId, ProveedorModifiedRequest proveedorModifiedRequest); 
+        Task Modify(int negocioId,int proveedorId, ProveedorModifiedRequest proveedorModifiedRequest);
+        Task AsociarProveedorExistenteAsync(int proveedorId, int negocioId);
+
     }
 }

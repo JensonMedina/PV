@@ -57,6 +57,42 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost("asociar")]
+        public async Task<IActionResult> AsociarProveedorExistente([FromQuery] int proveedorId, [FromQuery] int negocioId)
+        {
+            string contexto = $"{this.GetType().Name} - {nameof(AsociarProveedorExistente)}";
+
+            try
+            {
+                _logger.LogInfo(contexto, "Iniciando método.", $"ProveedorId: {proveedorId}, NegocioId: {negocioId}");
+
+                await _proveedorService.AsociarProveedorExistenteAsync(proveedorId, negocioId);
+
+                _logger.LogInfo(contexto, "Asociación proveedor-negocio finalizada exitosamente.");
+
+                return Ok(Result<object>.Ok());
+            }
+            catch (ExceptionApp ex)
+            {
+                _logger.LogError(contexto, $"[{ex.Type}] {ex.Message}");
+
+                return ex.Type switch
+                {
+                    ExceptionType.NotFound => NotFound(Result<string>.NotFound(ex.Message)),
+                    ExceptionType.Conflict => StatusCode(409, Result<string>.Error(ex.Message, null, 409)),
+                    ExceptionType.BadRequest => BadRequest(Result<string>.BadRequest(ex.Message)),
+                    ExceptionType.Forbidden => StatusCode(403, Result<string>.Error(ex.Message, null, 403)),
+                    ExceptionType.Unauthorized => Unauthorized(Result<string>.Unauthorized(ex.Message)),
+                    _ => StatusCode(500, Result<string>.Error("Ocurrió un error inesperado al asociar el proveedor.", ex.Message))
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(contexto, "Error inesperado al asociar proveedor.", ex.ToString());
+                return StatusCode(500, Result<string>.Error("Ocurrió un error inesperado al asociar el proveedor.", ex.Message));
+            }
+        }
+
 
 
         [HttpGet("negocio/{negocioId}")]
