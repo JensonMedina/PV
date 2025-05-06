@@ -45,17 +45,9 @@ namespace Application.Services
                 {
                     _loggerApp.LogInfo(contexto, "Proveedor ya existe", $"ProveedorId: {proveedorExistente.Id}");
 
-                    var relacionExistente = await _unitOfWork.ProveedoresNegocio
-                        .GetByIdsAsync(proveedorExistente.Id, negocioId);
-
-                    if (relacionExistente != null)
-                    {
-                        _loggerApp.LogError(contexto, "Proveedor ya registrado para este negocio",
-                            $"ProveedorId: {proveedorExistente.Id}, NegocioId: {negocioId}");
-                        throw ExceptionApp.Conflict($"El proveedor con documento {newProveedor.NumeroDocumento} ya está registrado en este negocio.");
-                    }
-
-                    throw ExceptionApp.Conflict($"El proveedor con documento {newProveedor.NumeroDocumento} ya existe. Si desea asociarlo al negocio, utilice el endpoint de asociación.");
+                    throw ExceptionApp.Conflict(
+                        $"El proveedor con documento {newProveedor.NumeroDocumento} ya existe. " +
+                        $"Si desea asociarlo al negocio, utilice el endpoint de asociación.");
                 }
                 #endregion
                 _loggerApp.LogInfo(contexto, "Validaciones correctas. Mapeando Request a Entidad", $"Documento Proveedor: {newProveedor.NumeroDocumento}, NegocioId: {negocioId}");
