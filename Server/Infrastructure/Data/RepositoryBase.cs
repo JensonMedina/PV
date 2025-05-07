@@ -38,6 +38,22 @@ namespace Infrastructure.Data
                 _logger.LogInfo(this.GetType().Name, $"Se ejecutó con éxito el método AddAsync desde el RepositoryBase para la entidad {entity}");
                 return entity;
             }
+
+        public async Task<(IEnumerable<T> Items, int TotalCount)> GetPageAsync(int negocioId, int pageNumber, int pageSize, bool onlyActive = true)
+        {
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+
+            query = query.Where(e => EF.Property<int>(e, "NegocioId") == negocioId);
+
+            if (onlyActive)
+            {
+                // Solo si T realmente tiene la propiedad "Activo":
+                query = query.Where(e => EF.Property<bool>(e, "Activo"));
+            }
+            var total = await query.CountAsync();
+            var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return (items, total);
+        }
             catch (Exception ex)
             {
                 _logger.LogError(this.GetType().Name, $"Ocurrió un error al intentar agregar un nuevo registro en el método AddAsync desde el RepositoryBase para la entidad {entity}. Error: {ex}");

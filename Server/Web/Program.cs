@@ -39,6 +39,7 @@ builder.Services.AddScoped<IRubroService, RubroService>();
 builder.Services.AddScoped<IPlanSaasService, PlanSaasService>();
 builder.Services.AddScoped<IServiceManager, ServiceManager>();
 builder.Services.AddScoped<IMedioPagoService, MedioPagoService>();
+builder.Services.AddScoped<IPuestoService, PuestoService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ValidationFilter>();
 #endregion
