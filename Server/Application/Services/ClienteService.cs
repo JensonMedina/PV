@@ -25,12 +25,15 @@ namespace Infrastructure.Services
             _logger.LogInfo(contexto, "Iniciando método CreateClienteAsync");
             try
             {
+                #region Validacion Negocio
+
                 var negocio = await _unitOfWork.Negocios.GetByIdAsync(newCliente.NegocioId);
                 if (negocio == null)
                 {
                     _logger.LogError(contexto, $"Negocio no encontrado. Id:{newCliente.NegocioId}");
                     throw ExceptionApp.NotFound($"El negocio con Id {newCliente.NegocioId} no existe");
                 }
+                #endregion
 
                 #region Validacion Email
                 Cliente? clienteExistente = await _unitOfWork.Clientes.GetByEmail(newCliente.Email, newCliente.NegocioId);
@@ -40,6 +43,21 @@ namespace Infrastructure.Services
                     throw ExceptionApp.Conflict($"El correo {newCliente.Email} ya está en uso en ese negocio");
                 }
                 #endregion
+                #region Validacion Documento
+
+                if (newCliente.NumeroDocumento is not null)
+                {
+                    _logger.LogInfo(contexto, $"Validando número de documento: {newCliente.NumeroDocumento}");
+
+                    bool existe = await _unitOfWork.Clientes.NumeroDocumentoExist(newCliente.NumeroDocumento, newCliente.NegocioId);
+                    if (existe)
+                    {
+                        _logger.LogError(contexto, $"Número de documento ya registrado en negocio {newCliente.NegocioId}: {newCliente.NumeroDocumento}");
+                        throw ExceptionApp.Conflict($"El número de documento {newCliente.NumeroDocumento} ya está en uso en ese negocio");
+                    }
+                }
+                #endregion
+
 
                 var entidad = ClienteMapping.ToEntity(newCliente);
                 var creado = await _unitOfWork.Clientes.AddAsync(entidad);
@@ -222,7 +240,19 @@ namespace Infrastructure.Services
                     }
                 }
                 #endregion
+                #region Validacion Documento
+                // Validamos que el número de documento no esté en uso por otro cliente
+                if (request.NumeroDocumento is not null)
+                {
+                    _logger.LogInfo(contexto, $"Validando número de documento: {request.NumeroDocumento}");
 
+                    bool existe = await _unitOfWork.Clientes.NumeroDocumentoExist(request.NumeroDocumento, request.NegocioId);
+                    if (existe && !cliente.NumeroDocumento.Equals(request.NumeroDocumento))
+                    {
+                        _logger.LogError(contexto, $"Número de documento ya registrado en negocio {request.NegocioId}: {request.NumeroDocumento}");
+                        throw ExceptionApp.Conflict($"El número de documento {request.NumeroDocumento} ya está en uso en ese negocio");
+                    }
+                }
                 #endregion
 
                 #region Mapeamos de modify a entidad
@@ -250,3 +280,4 @@ namespace Infrastructure.Services
 
     }
 }
+#endregion

@@ -108,6 +108,7 @@ namespace Web.Controllers
                 return ex.Type switch
                 {
                     ExceptionType.ValidationError => BadRequest(Result<object>.BadRequest(ex.Message)),
+                    ExceptionType.NotFound => NotFound(Result<object>.NotFound(ex.Message)),
                     ExceptionType.Conflict => Conflict(Result<object>.Conflict(ex.Message)),
                     ExceptionType.Unauthorized => StatusCode(401, Result<object>.Unauthorized(ex.Message)),
                     _ => BadRequest(Result<object>.BadRequest(ex.Message))
@@ -138,6 +139,8 @@ namespace Web.Controllers
                 {
                     ExceptionType.NotFound => NotFound(Result<object>.NotFound(ex.Message)),
                     ExceptionType.Conflict => Conflict(Result<object>.Conflict(ex.Message)),
+                    ExceptionType.Unauthorized => StatusCode(401, Result<object>.Unauthorized(ex.Message)),
+                    ExceptionType.Forbidden => StatusCode(403, Result<object>.Forbidden(ex.Message)),
                     ExceptionType.ValidationError => BadRequest(Result<object>.BadRequest(ex.Message)),
                     _ => BadRequest(Result<object>.BadRequest(ex.Message))
                 };
