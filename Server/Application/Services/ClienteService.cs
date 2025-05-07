@@ -49,8 +49,8 @@ namespace Infrastructure.Services
                 {
                     _logger.LogInfo(contexto, $"Validando número de documento: {newCliente.NumeroDocumento}");
 
-                    bool existe = await _unitOfWork.Clientes.NumeroDocumentoExist(newCliente.NumeroDocumento, newCliente.NegocioId);
-                    if (existe)
+                    clienteExistente = await _unitOfWork.Clientes.NumeroDocumentoExist(newCliente.NumeroDocumento, newCliente.NegocioId);
+                    if (clienteExistente is not null)
                     {
                         _logger.LogError(contexto, $"Número de documento ya registrado en negocio {newCliente.NegocioId}: {newCliente.NumeroDocumento}");
                         throw ExceptionApp.Conflict($"El número de documento {newCliente.NumeroDocumento} ya está en uso en ese negocio");
@@ -246,8 +246,8 @@ namespace Infrastructure.Services
                 {
                     _logger.LogInfo(contexto, $"Validando número de documento: {request.NumeroDocumento}");
 
-                    bool existe = await _unitOfWork.Clientes.NumeroDocumentoExist(request.NumeroDocumento, request.NegocioId);
-                    if (existe && !cliente.NumeroDocumento.Equals(request.NumeroDocumento))
+                    Cliente? clienteExistente = await _unitOfWork.Clientes.NumeroDocumentoExist(request.NumeroDocumento, request.NegocioId);
+                    if (clienteExistente is not null && !clienteExistente.Id.Equals(cliente.Id))
                     {
                         _logger.LogError(contexto, $"Número de documento ya registrado en negocio {request.NegocioId}: {request.NumeroDocumento}");
                         throw ExceptionApp.Conflict($"El número de documento {request.NumeroDocumento} ya está en uso en ese negocio");

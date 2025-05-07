@@ -13,13 +13,13 @@ namespace Infrastructure.Data
             _logger = logger;
         }
 
-        public async Task<bool> NumeroDocumentoExist(string numeroDocumento, int negocioId)
+        public async Task<Cliente?> NumeroDocumentoExist(string numeroDocumento, int negocioId)
         {
             _logger.LogInfo(this.GetType().Name, $"Ejecutando método NumeroDocumentoExist");
             try
             {
-                bool existe = await _context.Clientes.AnyAsync(c => c.NumeroDocumento == numeroDocumento && c.Activo && c.NegocioId == negocioId);
-                return existe;
+                Cliente? cliente = await _context.Clientes.Where(c => c.NumeroDocumento == numeroDocumento && c.NegocioId == negocioId).FirstOrDefaultAsync();
+                return cliente;
             }
             catch (Exception ex)
             {
