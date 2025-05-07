@@ -1,9 +1,8 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
-using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Data
 {
     public class ProveedorNegocioRepository : EFRepository<ProveedorNegocio>, IProveedorNegocioRepository
     {

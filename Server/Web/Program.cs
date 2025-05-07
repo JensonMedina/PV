@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Infrastructure.Logging;
 using Domain.Interfaces;
 using Application.Services;
-using Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
