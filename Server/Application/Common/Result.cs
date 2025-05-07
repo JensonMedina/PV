@@ -64,7 +64,7 @@
         /// <summary>
         /// Constructor para respuesta con error inesperado
         /// </summary>
-        public static Result<T> Error(string message = "Ha ocurrido un error", object errors = null, int statusCode = 500)
+        public static Result<T> Error(string message = "Ha ocurrido un error inesperado", object errors = null, int statusCode = 500)
         {
             return new Result<T>
             {

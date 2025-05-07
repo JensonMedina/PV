@@ -1,4 +1,5 @@
-﻿using Domain.Interfaces;
+﻿using Application.Interfaces;
+using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
@@ -6,45 +7,108 @@ namespace Infrastructure.Data
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         private readonly DbContext _context;
-        public RepositoryBase(DbContext context)
+        private readonly ILoggerApp _logger;
+        public RepositoryBase(DbContext context, ILoggerApp logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public virtual async Task<List<T>> ListAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método ListAsync desde el RepositoryBase para la entidad {typeof(T).Name}");
+            try
+            {
+                return await _context.Set<T>().ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método ListAsync desde el RepositoryBase para la entidad {typeof(T).Name}. Error: {ex}");
+                throw;
+            }
 
         }
         public virtual async Task<T> AddAsync(T entity)
         {
-            _context.Set<T>().Add(entity);
-            return entity;
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método AddAsync desde el RepositoryBase para la entidad {entity}");
+            try
+            {
+                await _context.Set<T>().AddAsync(entity);
+                _logger.LogInfo(this.GetType().Name, $"Se ejecutó con éxito el método AddAsync desde el RepositoryBase para la entidad {entity}");
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error al intentar agregar un nuevo registro en el método AddAsync desde el RepositoryBase para la entidad {entity}. Error: {ex}");
+                throw;
+            }
+
         }
-        public virtual async Task UpdateAsync(T entity)
+        public virtual void UpdateAsync(T entity)
         {
-            _context.Set<T>().Update(entity);
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método UpdateAsync desde el RepositoryBase para la entidad {entity}");
+            try
+            {
+                _context.Set<T>().Update(entity);
+                _logger.LogInfo(this.GetType().Name, $"Se ejecutó con éxito el método UpdateAsync desde el RepositoryBase para la entidad {entity}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método UpdateAsync desde el RepositoryBase para la entidad {entity}. Error: {ex}");
+                throw;
+            }
         }
-        public virtual async Task HardDeleteAsync(T entity)
+        public virtual void HardDeleteAsync(T entity)
         {
-            _context.Set<T>().Remove(entity);
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método HardDeleteAsync desde el RepositoryBase para la entidad {entity}");
+            try
+            {
+
+                _context.Set<T>().Remove(entity);
+                _logger.LogInfo(this.GetType().Name, $"Se ejecutó con éxito el método HardDeleteAsync desde el RepositoryBase para la entidad {entity}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método HardDeleteAsync desde el RepositoryBase para la entidad {entity}. Error: {ex}");
+                throw;
+            }
         }
         public virtual async Task SoftDeleteAsync<TId>(TId id) where TId : notnull
         {
-            var entity = await _context.Set<T>().FindAsync(new object[] { id });
-            var property = typeof(T).GetProperty("Activo");
-
-            if (entity != null && property != null && property.PropertyType == typeof(bool))
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método SoftDeleteAsync desde el RepositoryBase para el Id: {id}");
+            try
             {
-                property.SetValue(entity, false);
-                _context.Set<T>().Update(entity);
+                var entity = await _context.Set<T>().FindAsync(new object[] { id });
+                var property = typeof(T).GetProperty("Activo");
+
+                if (entity != null && property != null && property.PropertyType == typeof(bool))
+                {
+                    property.SetValue(entity, false);
+                    _context.Set<T>().Update(entity);
+                }
+                _logger.LogInfo(this.GetType().Name, $"Se ejecutó con éxito el método SoftDeleteAsync desde el RepositoryBase para el Id: {id}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método SoftDeleteAsync desde el RepositoryBase para el Id: {id}. Error: {ex}");
+                throw;
             }
         }
 
         public virtual async Task<T?> GetByIdAsync<TId>(TId id) where TId : notnull
         {
-            return await _context.Set<T>().FindAsync(new object[] { id });
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método GetByIdAsync desde el RepositoryBase para el Id: {id}");
+            try
+            {
+                return await _context.Set<T>().FindAsync(new object[] { id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error en el método GetByIdAsync desde el RepositoryBase para el Id: {id}. Error: {ex}");
+                throw;
+            }
         }
-        
+
     }
 }

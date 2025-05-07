@@ -9,21 +9,41 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Infrastructure.Logging;
 using Domain.Interfaces;
+using Application.Services;
+using Application.Common;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
+#region Configuraciones
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
-#region Services
-builder.Services.AddControllers();
+#endregion
+
+#region Inyección de Servicios
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<INegocioService, NegocioService>();
+builder.Services.AddScoped<IRubroService, RubroService>();
+builder.Services.AddScoped<IPlanSaasService, PlanSaasService>();
+builder.Services.AddScoped<IServiceManager, ServiceManager>();
+builder.Services.AddScoped<IMedioPagoService, MedioPagoService>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ValidationFilter>();
 #endregion
+
+
 
 #region Inyección de repositorios
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
@@ -45,16 +65,26 @@ builder.Services.AddScoped<IUsuarioPuestoRepository, UsuarioPuestoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IVentaDetalleRepository, VentaDetalleRepository>();
 builder.Services.AddScoped<IVentaRepository, VentaRepository>();
+builder.Services.AddScoped<IMedioPagoRepository, MedioPagoRepository>();
 #endregion
 
 
+
+
 #region DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("JensonConnectionLocal"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
-    )
-);
+
+builder.Services.AddDbContext<ApplicationDbContext>(opts => opts.UseMySql(builder.Configuration.GetConnectionString("JensonConnectionLocal"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))));
+//builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
+//{
+//    var _logger = serviceProvider.GetRequiredService<ILoggerApp>();
+
+//    options.UseMySql(
+//            builder.Configuration.GetConnectionString("JensonConnectionLocal"),
+//            ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("JensonConnectionLocal"))
+//        )
+//        .EnableSensitiveDataLogging()
+//        .LogTo(log => _logger.LogInfo("EFCore", log), LogLevel.Information); // Ahora sí, usando una instancia
+//});
 #endregion
 
 #region IdentityCore

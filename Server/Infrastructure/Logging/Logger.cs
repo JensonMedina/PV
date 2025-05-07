@@ -1,13 +1,11 @@
 ﻿using Application.Interfaces;
-using System;
-using System.IO;
 
 namespace Infrastructure.Logging
 {
     public class Logger : ILoggerApp
     {
         private static readonly object _lock = new object();
-        private readonly string logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+        private readonly string logDirectory = Path.Combine(@"C:\PUNTO DE VENTA - LOGS");
         private const long MaxFileSize = 5 * 1024 * 1024; // 5 MB
 
         public Logger()
