@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 
 
+
 #region Configuraciones
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -34,6 +35,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<INegocioService, NegocioService>();
 builder.Services.AddScoped<IRubroService, RubroService>();
 builder.Services.AddScoped<IPlanSaasService, PlanSaasService>();
@@ -186,6 +188,7 @@ var app = builder.Build();
 // Configuracion del pipeline
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
