@@ -10,7 +10,6 @@ namespace Infrastructure.Data
         
         public PuestoRepository(ApplicationDbContext context, ILoggerApp logger) : base(context, logger)
         {
-            _context = context;
         }
         public async Task<Puesto?> GetByIp(string ip)
         {

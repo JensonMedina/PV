@@ -251,7 +251,7 @@ namespace Application.Services
 
                 var puestoUpdated = PuestoMapping.UpdatePuesto(puesto, request);
 
-                await _unitOfWork.Puestos.UpdateAsync(puestoUpdated);
+                 _unitOfWork.Puestos.UpdateAsync(puestoUpdated);
                 await _unitOfWork.CompleteAsync();
 
                 _logger.LogInfo(contexto, $"Se actualizó el puesto con id {id} correctamente.");
