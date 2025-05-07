@@ -1,13 +1,13 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Interfaces;
-using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Data
 {
     public class ProveedorNegocioRepository : EFRepository<ProveedorNegocio>, IProveedorNegocioRepository
     {
-        public ProveedorNegocioRepository(ApplicationDbContext context) : base(context)
+        public ProveedorNegocioRepository(ApplicationDbContext context, ILoggerApp logger) : base(context, logger)
         {
         }
 
@@ -39,7 +39,5 @@ namespace Infrastructure.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(pn => pn.ProveedorId == proveedorId && pn.NegocioId == negocioId);
         }
-
-
     }
 }

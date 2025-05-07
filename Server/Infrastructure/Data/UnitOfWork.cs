@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Interfaces;
 using Infrastructure.Data;
-using Infrastructure.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
@@ -29,36 +28,18 @@ public class UnitOfWork : IUnitOfWork
     public IVentaRepository Ventas { get; }
     public IMedioPagoRepository MedioPagos { get; }
     #endregion
-    public UnitOfWork(ApplicationDbContext context, IClienteRepository clientes, INegocioRepository negocios, INegocioRepository negocioRepository, IMedioPagoRepository medioPagos, IRubroRepository rubros, IPlanSaasRepository planesSaas, IPuestoRepository puestos)
+    public UnitOfWork(ApplicationDbContext context, IClienteRepository clientes, INegocioRepository negocios, INegocioRepository negocioRepository, IMedioPagoRepository medioPagos, IRubroRepository rubros, IPlanSaasRepository planesSaas, IPuestoRepository puestos, IProveedorRepository proveedores, IProveedorNegocioRepository proveedoresNegocio)
     {
         _context = context;
         #region inyeccion repositorios
-        Categorias = new CategoriaRepository(_context);
-        Clientes = new ClienteRepository(_context);
-        ComprasDetalles = new CompraDetalleRepository(_context);
-        Compras = new CompraRepository(_context);
-        Comprobantes = new ComprobanteRepository(_context);
-        HistoricosPrecios = new HistoricoPrecioRepository(_context);
-        HistoricoStocks = new HistoricoStockRepository(_context);
-        Negocios = new NegocioRepository(_context);
-        PlanesSaas = new PlanSaasRepository(_context);
-        ProductosNegocios = new ProductoNegocioRepository(_context);
-        Productos = new ProductoRepository(_context);
-        Proveedores = new ProveedorRepository(_context);
-        ProveedoresNegocio = new ProveedorNegocioRepository(_context);
-        Puestos = new PuestoRepository(_context);
-        Rubros = new RubroRepository(_context);
-        UnidadesMedidas = new UnidadMedidaRepository(_context);
-        UsuariosPuestos = new UsuarioPuestoRepository(_context);
-        Usuarios = new UsuarioRepository(_context);
-        VentasDetalles = new VentaDetalleRepository(_context);
-        Ventas = new VentaRepository(_context);
         Clientes = clientes;
         Negocios = negocioRepository;
         MedioPagos = medioPagos;
         Rubros = rubros;
         PlanesSaas = planesSaas;
         Puestos = puestos;
+        Proveedores = proveedores;
+        ProveedoresNegocio = proveedoresNegocio;
         #endregion
     }
 

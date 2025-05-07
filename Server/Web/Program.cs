@@ -42,6 +42,7 @@ builder.Services.AddScoped<IServiceManager, ServiceManager>();
 builder.Services.AddScoped<IMedioPagoService, MedioPagoService>();
 builder.Services.AddScoped<IPuestoService, PuestoService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IProveedorService, ProveedorService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ValidationFilter>();
 #endregion
@@ -61,6 +62,7 @@ builder.Services.AddScoped<IPlanSaasRepository, PlanSaasRepository>();
 builder.Services.AddScoped<IProductoNegocioRepository, ProductoNegocioRepository>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
+builder.Services.AddScoped<IProveedorNegocioRepository, ProveedorNegocioRepository>();
 builder.Services.AddScoped<IPuestoRepository, PuestoRepository>();
 builder.Services.AddScoped<IRubroRepository, RubroRepository>();
 builder.Services.AddScoped<IUnidadMedidaRepository, UnidadMedidaRepository>();
