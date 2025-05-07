@@ -23,11 +23,7 @@ namespace Application.Interfaces
         IUsuarioRepository Usuarios { get; }
         IVentaDetalleRepository VentasDetalles { get; }
         IVentaRepository Ventas { get; }
-<<<<<<< HEAD
         IMedioPagoRepository MedioPagos { get; }
-=======
-        
->>>>>>> PDVS-16-CRUD-para-Proveedores
         Task<int> CompleteAsync(); // Guarda todos los cambios en una transacción
     }
 }

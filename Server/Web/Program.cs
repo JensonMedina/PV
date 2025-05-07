@@ -10,12 +10,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Infrastructure.Logging;
 using Domain.Interfaces;
 using Application.Services;
-<<<<<<< HEAD
 using Application.Common;
 using Microsoft.AspNetCore.Mvc;
-=======
-using Infrastructure.Repositories;
->>>>>>> PDVS-16-CRUD-para-Proveedores
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +35,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoggerApp, Logger>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-<<<<<<< HEAD
 builder.Services.AddScoped<INegocioService, NegocioService>();
 builder.Services.AddScoped<IRubroService, RubroService>();
 builder.Services.AddScoped<IPlanSaasService, PlanSaasService>();
@@ -47,10 +42,6 @@ builder.Services.AddScoped<IServiceManager, ServiceManager>();
 builder.Services.AddScoped<IMedioPagoService, MedioPagoService>();
 builder.Services.AddScoped<IPuestoService, PuestoService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
-=======
-builder.Services.AddScoped<IProveedorService, ProveedorService>();
-
->>>>>>> PDVS-16-CRUD-para-Proveedores
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ValidationFilter>();
 #endregion
@@ -70,7 +61,6 @@ builder.Services.AddScoped<IPlanSaasRepository, PlanSaasRepository>();
 builder.Services.AddScoped<IProductoNegocioRepository, ProductoNegocioRepository>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
-builder.Services.AddScoped<IProveedorNegocioRepository, ProveedorNegocioRepository>();
 builder.Services.AddScoped<IPuestoRepository, PuestoRepository>();
 builder.Services.AddScoped<IRubroRepository, RubroRepository>();
 builder.Services.AddScoped<IUnidadMedidaRepository, UnidadMedidaRepository>();
@@ -82,7 +72,6 @@ builder.Services.AddScoped<IMedioPagoRepository, MedioPagoRepository>();
 #endregion
 
 
-<<<<<<< HEAD
 
 
 #region Agregamos el servicio del DbContext
@@ -99,15 +88,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(opts => opts.UseMySql(builde
 //        .EnableSensitiveDataLogging()
 //        .LogTo(log => _logger.LogInfo("EFCore", log), LogLevel.Information); // Ahora sí, usando una instancia
 //});
-=======
-#region DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("BrunoConnectionLocal"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("BrunoConnectionLocal"))
-    )
-);
->>>>>>> PDVS-16-CRUD-para-Proveedores
 #endregion
 
 #region IdentityCore

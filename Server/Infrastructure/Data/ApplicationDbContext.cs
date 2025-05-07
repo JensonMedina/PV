@@ -89,10 +89,7 @@ namespace Infrastructure.Data
         public DbSet<HistoricoStock> HistoricoStocks { get; set; }
         public DbSet<ProveedorNegocio> ProveedoresNegocios { get; set; }
 
-<<<<<<< HEAD
         public DbSet<MedioPago> MediosPagos { get; set; }
-=======
->>>>>>> PDVS-16-CRUD-para-Proveedores
         #endregion
     }
 }
