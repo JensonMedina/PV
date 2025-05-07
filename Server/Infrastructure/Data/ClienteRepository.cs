@@ -13,6 +13,21 @@ namespace Infrastructure.Data
             _logger = logger;
         }
 
+        public async Task<bool> NumeroDocumentoExist(string numeroDocumento, int negocioId)
+        {
+            _logger.LogInfo(this.GetType().Name, $"Ejecutando método NumeroDocumentoExist");
+            try
+            {
+                bool existe = await _context.Clientes.AnyAsync(c => c.NumeroDocumento == numeroDocumento && c.Activo && c.NegocioId == negocioId);
+                return existe;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(this.GetType().Name, $"Ocurrió un error inesperado en el método NumeroDocumentoExist. Error: {ex}");
+                throw;
+            }
+
+        }
         public async Task<Cliente?> GetByEmail(string email, int negocioId)
         {
             _logger.LogInfo(this.GetType().Name, $"Ejecutando método GetByEmail");
