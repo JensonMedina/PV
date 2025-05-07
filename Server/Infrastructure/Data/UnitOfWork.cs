@@ -29,7 +29,11 @@ public class UnitOfWork : IUnitOfWork
     public IVentaRepository Ventas { get; }
     public IMedioPagoRepository MedioPagos { get; }
     #endregion
+<<<<<<< HEAD
     public UnitOfWork(ApplicationDbContext context, IClienteRepository clientes, INegocioRepository negocios, INegocioRepository negocioRepository, IMedioPagoRepository medioPagos, IRubroRepository rubros, IPlanSaasRepository planesSaas, IPuestoRepository puestos)
+=======
+    public UnitOfWork(ApplicationDbContext context, IProveedorRepository proveedores, IProveedorNegocioRepository proveedoresNegocio)
+>>>>>>> PDVS-16-CRUD-para-Proveedores
     {
         _context = context;
         #region inyeccion repositorios
@@ -44,8 +48,13 @@ public class UnitOfWork : IUnitOfWork
         PlanesSaas = new PlanSaasRepository(_context);
         ProductosNegocios = new ProductoNegocioRepository(_context);
         Productos = new ProductoRepository(_context);
+<<<<<<< HEAD
         Proveedores = new ProveedorRepository(_context);
         ProveedoresNegocio = new ProveedorNegocioRepository(_context);
+=======
+        Proveedores = proveedores;
+        ProveedoresNegocio = proveedoresNegocio;
+>>>>>>> PDVS-16-CRUD-para-Proveedores
         Puestos = new PuestoRepository(_context);
         Rubros = new RubroRepository(_context);
         UnidadesMedidas = new UnidadMedidaRepository(_context);

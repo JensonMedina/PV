@@ -8,7 +8,11 @@ namespace Infrastructure.Data
     public class ProveedorRepository : EFRepository<Proveedor>, IProveedorRepository
     {
 
+<<<<<<< HEAD
         public ProveedorRepository(ApplicationDbContext context, ILoggerApp logger) : base(context, logger)
+=======
+        public ProveedorRepository(ApplicationDbContext context) : base(context)
+>>>>>>> PDVS-16-CRUD-para-Proveedores
         { }
 
 
