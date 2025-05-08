@@ -267,7 +267,7 @@ namespace Infrastructure.Services
                     throw;
                 }
                 #endregion
-                await _unitOfWork.Clientes.UpdateAsync(cliente);
+                 _unitOfWork.Clientes.UpdateAsync(cliente);
                 await _unitOfWork.CompleteAsync();
                 _logger.LogInfo(contexto, $"Cliente actualizado con éxito. Id:{id}");
             }
