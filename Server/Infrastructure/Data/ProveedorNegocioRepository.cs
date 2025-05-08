@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ namespace Infrastructure.Data
 {
     public class ProveedorNegocioRepository : EFRepository<ProveedorNegocio>, IProveedorNegocioRepository
     {
-        public ProveedorNegocioRepository(ApplicationDbContext context) : base(context)
+        public ProveedorNegocioRepository(ApplicationDbContext context, ILoggerApp logger) : base(context, logger)
         {
         }
 

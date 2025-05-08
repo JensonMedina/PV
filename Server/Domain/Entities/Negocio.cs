@@ -55,7 +55,11 @@ namespace Domain.Entities
         public int PlanSaasId { get; set; }
         public PlanSaas PlanSaas { get; set; }
         #endregion
-
+        
+        #region Relación con Proveedores
+        public ICollection<ProveedorNegocio> ProveedoresNegocio { get; set; }
+        #endregion
+        
         #region Facturación Automática
         public bool DebitoAutomaticoActivo { get; set; } = false;
         public DateTime? FechaProximoDebito { get; set; }
