@@ -1,11 +1,10 @@
-﻿using Domain.Enum;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.Enum;
 
 namespace Application.Models.Request
 {
-    public class ProveedorRequest
+    public class ProveedorModifiedRequest
     {
-        [Required(ErrorMessage = "El nombre es obligatorio.")]
         [StringLength(100, ErrorMessage = "El nombre no puede superar los 100 caracteres.")]
         public string Nombre { get; set; }
 
@@ -41,9 +40,6 @@ namespace Application.Models.Request
         [StringLength(100, ErrorMessage = "La página web no puede superar los 100 caracteres.")]
         public string? Web { get; set; }
 
-        [Required(ErrorMessage = "El RubroId es obligatorio.")]
-        public int RubroId { get; set; }
-
         [Range(0, double.MaxValue, ErrorMessage = "El límite de crédito debe ser un valor positivo.")]
         public decimal? LimiteCredito { get; set; }
 
@@ -52,5 +48,6 @@ namespace Application.Models.Request
 
         [StringLength(500, ErrorMessage = "Las observaciones no pueden superar los 500 caracteres.")]
         public string? Observaciones { get; set; }
+        public int? RubroId { get; set; }
     }
 }

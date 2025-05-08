@@ -17,6 +17,20 @@ namespace Infrastructure.Data
             // Claves compuestas
             modelBuilder.Entity<UsuarioPuesto>()
                 .HasKey(up => new { up.UsuarioId, up.PuestoId });
+            // Configuración de la relación muchos-a-muchos Negocio <-> Proveedor
+            modelBuilder.Entity<ProveedorNegocio>()
+                .HasKey(pn => new { pn.ProveedorId, pn.NegocioId });
+
+            modelBuilder.Entity<ProveedorNegocio>()
+                .HasOne(pn => pn.Proveedor)
+                .WithMany(p => p.ProveedoresNegocio)
+                .HasForeignKey(pn => pn.ProveedorId);
+
+            modelBuilder.Entity<ProveedorNegocio>()
+                .HasOne(pn => pn.Negocio)
+                .WithMany(n => n.ProveedoresNegocio)
+                .HasForeignKey(pn => pn.NegocioId);
+
 
             // Conversión de enums a int
             modelBuilder.Entity<Usuario>()
@@ -73,6 +87,8 @@ namespace Infrastructure.Data
         public DbSet<ProductoNegocio> ProductosNegocios { get; set; }
         public DbSet<HistoricoPrecio> HistoricosPrecios { get; set; }
         public DbSet<HistoricoStock> HistoricoStocks { get; set; }
+        public DbSet<ProveedorNegocio> ProveedoresNegocios { get; set; }
+
         public DbSet<MedioPago> MediosPagos { get; set; }
         #endregion
     }

@@ -19,6 +19,7 @@ public class UnitOfWork : IUnitOfWork
     public IProductoRepository Productos { get; }
     public IPuestoRepository Puestos { get; }
     public IProveedorRepository Proveedores { get; }
+    public IProveedorNegocioRepository ProveedoresNegocio { get; }
     public IRubroRepository Rubros { get; }
     public IUnidadMedidaRepository UnidadesMedidas { get; }
     public IUsuarioPuestoRepository UsuariosPuestos { get; }
@@ -28,7 +29,7 @@ public class UnitOfWork : IUnitOfWork
     public IMedioPagoRepository MedioPagos { get; }
 
     #endregion
-    public UnitOfWork(ApplicationDbContext context, IClienteRepository clientes, INegocioRepository negocios, IMedioPagoRepository medioPagos, IRubroRepository rubros, IPlanSaasRepository planesSaas, IPuestoRepository puestos)
+    public UnitOfWork(ApplicationDbContext context, IProveedorRepository proveedores, IProveedorNegocioRepository proveedoresNegocio, IClienteRepository clientes, INegocioRepository negocios, IMedioPagoRepository medioPagos, IRubroRepository rubros, IPlanSaasRepository planesSaas, IPuestoRepository puestos)
     {
         _context = context;
         #region inyeccion repositorios
@@ -38,6 +39,8 @@ public class UnitOfWork : IUnitOfWork
         MedioPagos = medioPagos;
         Puestos = puestos;
         Clientes = clientes;
+        Proveedores = proveedores;
+        ProveedoresNegocio = proveedoresNegocio;
         #endregion
     }
 
