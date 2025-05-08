@@ -165,7 +165,7 @@ namespace Infrastructure.Services
                 _logger.LogInfo(contexto,
                     $"Obteniendo página {pageNumber} (size={pageSize}, onlyActive={onlyActive}) para negocio {negocioId}");
 
-                var (entidades, totalItems) = await _unitOfWork.Clientes.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive: true);
+                var (entidades, totalItems) = await _unitOfWork.Clientes.GetPageAsync(negocioId, pageNumber, pageSize, onlyActive);
                 var clientesResponse = entidades.Select(ClienteMapping.ToResponse).ToList();
 
                 var pagedResponse = new PagedResponse<ClienteResponse>(clientesResponse, totalItems, pageNumber, pageSize);

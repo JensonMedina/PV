@@ -2,13 +2,12 @@
 using Application.Interfaces;
 using Application.Models.Request;
 using Application.Models.Response;
-using Domain.Entities;
 using Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("v1/proveedor")]
     [ApiController]
     public class ProveedorController : ControllerBase
     {
@@ -57,7 +56,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("asociar")]
+        [HttpPost("associate")]
         public async Task<IActionResult> AsociarProveedorExistente([FromQuery] int proveedorId, [FromQuery] int negocioId)
         {
             string contexto = $"{this.GetType().Name} - {nameof(AsociarProveedorExistente)}";

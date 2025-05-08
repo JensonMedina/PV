@@ -1,12 +1,11 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
 using Microsoft.AspNetCore.Mvc;
-using Application.Common;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("v1/auth")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
